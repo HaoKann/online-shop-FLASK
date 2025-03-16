@@ -41,3 +41,7 @@ docker-compose.override.yml
 Thumbs.db
 
 migrations/
+
+
+подсказка для гита.md 
+идеи.md
