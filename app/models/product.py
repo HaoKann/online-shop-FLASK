@@ -9,6 +9,13 @@ class Product(db.Model):
     price = db.Column(db.Integer())
     discount = db.Column(db.Integer(), default=0)
 
+    # db.ForeignKey - создает связь на стороне 'Много'
+    # user_id = db.Column(db.Integer(), db.ForeignKey('users.id')) 
+    
+    photos = db.relationship('Photo', backref='product', lazy='dynamic')
+    characteristics = db.relationship('Characteristic', backref='product', lazy='dynamic')
+    product_in_carts = db.relationship('ProductInCart', backref='product', lazy='dynamic')
+
 class Characteristic(db.Model):
     __tablename__ = 'characteristics'
 
@@ -17,7 +24,7 @@ class Characteristic(db.Model):
     int_value = db.Column(db.Integer())
     str_value = db.Column(db.String(30))
 
-    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'))
+    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
     
 
 class Photo(db.Model):
@@ -28,4 +35,4 @@ class Photo(db.Model):
     photo_path = db.Column(db.String(100))
     description = db.Column(db.String(100))
 
-    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'))
+    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
