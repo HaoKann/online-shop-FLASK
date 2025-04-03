@@ -23,7 +23,6 @@ class Characteristic(db.Model):
     name = db.Column(db.String(100))
     int_value = db.Column(db.Integer())
     str_value = db.Column(db.String(30))
-
     prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
     
 
