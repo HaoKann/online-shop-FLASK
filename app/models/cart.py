@@ -16,7 +16,7 @@ class Cart(db.Model):
     # secondary=cart_products — указывает, что связь через промежуточную таблицу
     # products = db.relationship('Product', secondary=cart_products, backref='cart')
 
-    products_in_cart = db.relationship('ProdcutInCart', backref='cart', lazy='dynamic')
+    products_in_cart = db.relationship('ProductInCart', backref='cart', lazy='dynamic')
 
 
 class ProductInCart(db.Model):
