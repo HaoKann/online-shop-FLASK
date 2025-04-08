@@ -3,9 +3,19 @@
 {% block content %}
 
 {% for product in products %}
-    <p>{{product.name}}</p>
+    <p>
+        {{ product.name }}
+        <a href="{{ url_for('admin_product', id=product.id) }}">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        
+        <!-- Исправленный блок с удалением товара -->
+        <a href="{{ url_for('admin_delete_products', id=product.id) }}">
+            <i class="bi bi-x-circle"></i>
+        </a>
+    </p>
 {% else %}
-Товаров нет
+    Товаров нет
 {% endfor %}
 
 {% endblock %}

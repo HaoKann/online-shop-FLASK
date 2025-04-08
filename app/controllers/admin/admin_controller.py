@@ -1,6 +1,7 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from app.forms.admin.add_product_form import AddProduct
+from app.forms.confirm_form import ConfirmForm
 from app.models.product import Product
 
 @app.route('/admin')
@@ -32,3 +33,16 @@ def admin_add_product():
         flash('Продукт успешно добавлен!', 'success')
         return redirect(url_for('admin_product', id=product.id))
     return render_template('admin/add_product.html', form=form)
+
+@app.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
+def admin_delete_products(id):
+    deleted_product = Product.query.get_or_404(id)
+
+    form = ConfirmForm()
+
+    if form.validate_on_submit():
+        db.session.delete(deleted_product)
+        db.session.commit()
+        flash('Товар удален успешно!','success')
+        return redirect (url_for('admin_products_list'))
+    return render_template('admin/admin_delete_product.html', form=form, sub_title = f'Вы точно хотите удалить продукт "{deleted_product.name}"?')
