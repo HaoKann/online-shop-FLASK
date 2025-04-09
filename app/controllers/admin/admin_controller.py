@@ -2,6 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from app.forms.admin.add_product_form import AddProduct
 from app.forms.confirm_form import ConfirmForm
+from app.forms.admin.edit_product_form import EditProduct
 from app.models.product import Product
 
 @app.route('/admin')
@@ -33,6 +34,29 @@ def admin_add_product():
         flash('Продукт успешно добавлен!', 'success')
         return redirect(url_for('admin_product', id=product.id))
     return render_template('admin/add_product.html', form=form)
+
+
+@app.route('/admin/edit_product/<int:id>', methods=['GET','POST'])
+def admin_edit_product(id):
+    edited_product = Product.query.get_or_404(id)
+
+    form = EditProduct()
+
+    if form.validate_on_submit():
+        edited_product.name = form.name.data
+        edited_product.category = form.category.data
+        edited_product.price = form.price.data
+        edited_product.discount = form.discount.data
+        db.session.add(edited_product)
+        db.session.commit()
+        flash('Товар успешно изменён!', 'success')
+        return redirect(url_for('admin_products_list'))
+    form.name.data = edited_product.name
+    form.category.data = edited_product.category
+    form.price.data = edited_product.price
+    form.discount.data = edited_product.discount
+    return render_template('admin/edit_product.html', form=form, sub_title='Изменение товара')
+        
 
 @app.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
 def admin_delete_products(id):

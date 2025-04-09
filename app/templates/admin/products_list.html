@@ -5,11 +5,12 @@
 {% for product in products %}
     <p>
         {{ product.name }}
+
         <a href="{{ url_for('admin_product', id=product.id) }}">
             <i class="bi bi-pencil-square"></i>
         </a>
         
-        <!-- Исправленный блок с удалением товара -->
+        
         <a href="{{ url_for('admin_delete_products', id=product.id) }}">
             <i class="bi bi-x-circle"></i>
         </a>
@@ -17,5 +18,7 @@
 {% else %}
     Товаров нет
 {% endfor %}
+
+<a class="btn btn-primary" href="{{url_for('main')}}">Главная страница</a>
 
 {% endblock %}

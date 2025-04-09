@@ -37,8 +37,20 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{ url_for('main') }}">Главная</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('catalog') }}">Каталог</a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{{ url_for('catalog') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Каталог
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{{ url_for('graphics_card') }}">Видеокарты</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('processor') }}">Процессоры</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('motherboard') }}">Материнские платы </a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('power_supply_unit') }}">Блоки питания</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('random_access_memory') }}">Оперативная память</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('cooling_system') }}">Кулеры и системы охлаждения</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('storage') }}">Жесткие диски и твердотельные накопители</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('computer_case') }}">Корпуса</a></li>
+                </ul>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('promotions') }}">Акции</a>
@@ -58,6 +70,9 @@
                   <li><a class="dropdown-item" href="{{ url_for('user_orders') }}">Заказы</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('favourites') }}">Изранное</a></li>
                 </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
               </li>
             </ul>
             <form class="d-flex" role="search">
