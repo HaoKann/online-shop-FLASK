@@ -1,11 +1,30 @@
 {% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
 
-<p>{{product.name}}</p>
-<p>{{product.category}}</p>
-<p>{{product.price}}</p>
-<p>{{product.discount}}</p>
+<div class="row">
+    <div class="col-md-4">
+        <p>{{product.name}}</p>
+        <p>{{product.category}}</p>
+        <p>{{product.price}}</p>
+        <p>{{product.discount}}</p>
 
-<a  class="btn btn-primary" href="{{url_for('admin_edit_product', id=product.id)}}">Изменить товар</a>
+        <a  class="btn btn-primary" href="{{url_for('admin_edit_product', id=product.id)}}">Изменить товар</a>
+    </div>
+
+    <div class="col-md-4">
+        <p>Характеристики</p>
+        {{ render_form(сharacteristics_form) }}
+    </div>
+
+    <div class="col-md-4">
+        <p>Фото</p>
+        {{ render_form(photo_form) }}
+    </div>
+
+</div>
+
+
+
 {% endblock %}

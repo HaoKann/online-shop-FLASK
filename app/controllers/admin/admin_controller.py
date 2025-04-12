@@ -1,9 +1,10 @@
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request
-from app.forms.admin.add_product_form import AddProduct
+from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm, PhotoForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
 from app.models.product import Product
+
 
 @app.route('/admin')
 def admin():
@@ -11,16 +12,18 @@ def admin():
 
 @app.route('/admin/products')
 def admin_products_list():
-    page = int(request.args.get('page', 1))
+    page = request.args.get('page', 1, type=int)
     products = db.paginate(db.session.query(Product), page=page, per_page=10, error_out=False)
-    print(page)
     return render_template('admin/products_list.html', products=products.items)
 
 
 @app.route('/admin/products/<int:id>')
 def admin_product(id):
+    сharacteristics_form = CharacteristicsForm(prefix='characteristics_form')
+    photo_form = PhotoForm(prefix='photo_form')
+
     product = Product.query.get_or_404(id)
-    return render_template('admin/product_details.html', product=product)
+    return render_template('admin/product_details.html', product=product, сharacteristics_form=сharacteristics_form, photo_form=photo_form)
 
 
 @app.route('/admin/add_product', methods=['GET','POST'])
@@ -32,7 +35,20 @@ def admin_add_product():
         db.session.add(product)
         db.session.commit()
         flash('Продукт успешно добавлен!', 'success')
-        return redirect(url_for('admin_product', id=product.id))
+
+        category_routes = {
+            'gpu': 'graphics_card',
+            'cpu': 'processor',
+            'motherboard': 'motherboard',
+            'psu': 'power_supply_unit',
+            'ram': 'random_access_memory',
+            'cooler': 'cooling_system',
+            'storage': 'storage',
+            'pc_case': 'computer_case',
+        }
+
+        route_name = category_routes.get(product.category, 'catalog')
+        return redirect(url_for(route_name))
     return render_template('admin/add_product.html', form=form)
 
 

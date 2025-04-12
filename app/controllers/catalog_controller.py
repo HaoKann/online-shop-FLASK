@@ -1,5 +1,6 @@
-from app import app
+from app import app, db
 from flask import render_template
+from app.models.product import Product
 
 @app.route('/catalog')
 def catalog():
@@ -7,7 +8,8 @@ def catalog():
 
 @app.route('/gpu')
 def graphics_card():
-    return render_template('catalog/gpu.html',sub_title ='Видеокарты')
+    gpu_products = Product.query.filter_by(category='gpu').all()
+    return render_template('catalog/gpu.html', sub_title ='Видеокарты', products=gpu_products)
 
 @app.route('/cpu')
 def processor():

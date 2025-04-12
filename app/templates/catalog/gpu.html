@@ -4,5 +4,19 @@
 
 <h1>{{sub_title}}</h1>
     
+{% if products %}
+    {% for product in products %}
+        <div>
+            <h3>{{product.name}}</h3>
+            <p>Цена: {{product.price}}</p>
+            {% if product.discount %}
+                <p>Скидка: {{product.discount}}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% else %}
+        <p>Нет товаров в этой категории</p>
+{% endif %}
+
 
 {% endblock %}
