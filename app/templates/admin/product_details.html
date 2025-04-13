@@ -15,11 +15,26 @@
 
     <div class="col-md-4">
         <p>Характеристики</p>
+        {% for characteristic in product.characteristics.all() %}
+            <p>{{characteristic.name}}</p>
+            <p>{{characteristic.int_value}}</p>
+            <p>{{characteristic.str_value}}</p>
+            <hr>
+        {% endfor %}
+
+
+
         {{ render_form(сharacteristics_form) }}
+    
     </div>
 
     <div class="col-md-4">
         <p>Фото</p>
+        {% for photo in product.photos.all() %}
+            <img width="250" src="{{url_for('static', filename='products_photo/' ~ product.category ~ '/' ~ product.id ~ '/' ~ photo.photo_path )}}" alt="{{photo.description}}">
+        {% endfor %}
+
+
         {{ render_form(photo_form) }}
     </div>
 

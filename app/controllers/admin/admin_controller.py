@@ -3,8 +3,9 @@ from flask import render_template, flash, redirect, url_for, request
 from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm, PhotoForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
-from app.models.product import Product
-
+from app.models.product import Product, Characteristic, Photo
+import os
+from werkzeug.utils import secure_filename
 
 @app.route('/admin')
 def admin():
@@ -17,12 +18,38 @@ def admin_products_list():
     return render_template('admin/products_list.html', products=products.items)
 
 
-@app.route('/admin/products/<int:id>')
+@app.route('/admin/products/<int:id>', methods=['GET','POST'])
 def admin_product(id):
     сharacteristics_form = CharacteristicsForm(prefix='characteristics_form')
     photo_form = PhotoForm(prefix='photo_form')
 
     product = Product.query.get_or_404(id)
+
+    if сharacteristics_form.validate_on_submit() and сharacteristics_form.submit_сharacteristics.data:
+        сharacteristic = Characteristic(name=сharacteristics_form.name.data,
+                                        int_value=сharacteristics_form.int_value.data, 
+                                        str_value=сharacteristics_form.str_value.data, 
+                                        prod_id=id )
+        db.session.add(сharacteristic)
+        db.session.commit()
+        flash('Характеристика успешно добавлена!', 'succcess')
+        return redirect(url_for('admin_product', id=id))
+    
+    if photo_form.validate_on_submit() and photo_form.submit_photo.data:
+        f = photo_form.photo.data
+        if f:
+            photo_path = os.path.join(
+                os.path.dirname(app.instance_path), 'app','static', 'products_photo', 
+                product.category, str(product.id)
+            )
+            filename = secure_filename(f.filename)
+            os.makedirs(photo_path, exist_ok=True)
+            f.save(os.path.join( photo_path, filename ))
+            photo = Photo(photo_path=filename,description=photo_form.description.data, prod_id=id )
+            db.session.add(photo)
+            db.session.commit()
+            flash('Фото успешно добавлено', 'success')
+            return redirect(url_for('admin_product', id=id))
     return render_template('admin/product_details.html', product=product, сharacteristics_form=сharacteristics_form, photo_form=photo_form)
 
 
