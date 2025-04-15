@@ -13,29 +13,36 @@ def graphics_card():
 
 @app.route('/cpu')
 def processor():
-    return render_template('catalog/cpu.html',sub_title='Процессоры')
+    processor_products = Product.query.filter_by(category='cpu').all()
+    return render_template('catalog/cpu.html',sub_title='Процессоры', products=processor_products)
 
 @app.route('/motherboard')
 def motherboard():
-    return render_template('catalog/motherboard.html',sub_title='Материнские платы ')
+    motherboard_products = Product.query.filter_by(category='motherboard').all()
+    return render_template('catalog/motherboard.html',sub_title='Материнские платы', products=motherboard_products)
 
 @app.route('/psu')
 def power_supply_unit():
-    return render_template('catalog/psu.html',sub_title='Блоки питания')
+    psu_products = Product.query.filter_by(category='psu').all()
+    return render_template('catalog/psu.html',sub_title='Блоки питания', products=psu_products)
 
 @app.route('/ram')
 def random_access_memory():
-    return render_template('catalog/ram.html',sub_title='Оперативная память')
+    ram_products = Product.query.filter_by(category='ram').all()
+    return render_template('catalog/ram.html',sub_title='Оперативная память', products=ram_products)
 
 @app.route('/cooler')
 def cooling_system():
-    return render_template('catalog/cooler.html',sub_title='Кулеры и системы охлаждения ')
+    cooler_products = Product.query.filter_by(category='cooler').all()
+    return render_template('catalog/cooler.html',sub_title='Кулеры и системы охлаждения', products=cooler_products)
 
 @app.route('/storage')
 def storage():
-    return render_template('catalog/storage.html',sub_title='Жесткие диски и твердотельные накопители')
+    storage_products = Product.query.filter_by(category='storage').all()
+    return render_template('catalog/storage.html',sub_title='Жесткие диски и твердотельные накопители', products=storage_products)
 
 @app.route('/pc_case')
 def computer_case():
-    return render_template('catalog/pc_case.html',sub_title='Корпуса')
+    case_products = Product.query.filter_by(category='pc_case').all()
+    return render_template('catalog/pc_case.html',sub_title='Корпуса', products=case_products)
 
