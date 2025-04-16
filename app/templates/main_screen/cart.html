@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block content %}
-
-<h1>{{sub_title}}</h1>
-    
 {% if products %}
     {% for product in products %}
         <div style="display: inline-block; width: 280px; margin: 20px; vertical-align: top; text-align: left;">
@@ -16,19 +12,11 @@
                 <p>Фото нет</p>
             {% endif %}
 
-            <a style="width: 50px; height: 40px;" class="btn btn-success" href="{{url_for('user_cart')}}"><i class="bi bi-cart-plus-fill"></i></a>
-            <a style="width: 50px; height: 40px;" class="btn btn-danger" href="{{url_for('favourites')}}"><i class="bi bi-heart-fill"></i></a>
-            <a style="width: 50px; height: 40px;" class="btn btn-primary" href="{{url_for('favourites')}}"><i class="bi bi-info-circle-fill"></i></a>
-            
-            
             {% if product.discount %}
                 <p>Скидка: {{product.discount}}</p>
             {% endif %}
         </div>
     {% endfor %}
 {% else %}
-        <p>Нет товаров в этой категории</p>
+        <p>Корзина пустая</p>
 {% endif %}
-
-
-{% endblock %}
