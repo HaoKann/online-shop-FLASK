@@ -4,6 +4,6 @@ from flask_login import login_required
 
 
 @app.route('/')
-# @login_required
+@login_required
 def main():
     return render_template('main.html')

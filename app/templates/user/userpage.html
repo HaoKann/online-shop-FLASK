@@ -1,1 +1,28 @@
 {% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        .nowrap {
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h2 class="text-center">Добро пожаловать, {{current_user.name}}!</h2>
+    <div class="d-flex justify-content-center mt-4">
+        <div class="col-md-2">
+            <h5 class="nowrap">Имя: {{current_user.name}}</h5>
+            <h5 class="nowrap">Логин: {{current_user.nickname}}</h5>
+            <h5 class="nowrap">Дата рождения: {{current_user.date_of_birth.strftime('%d.%m.%y')}}</h5>
+            <h5 class="nowrap">Почта: {{current_user.email}}</h5>
+            <h5 class="nowrap">Номер телефона: {{current_user.phone_number}}</h5>
+            <h5 class="nowrap">Дата регистрации: {{ current_user.creation_date.strftime('%d.%m.%y %H:%M') }}</h5>
+            <h5 class="nowrap">Дата обновления данных: {{ current_user.update_date.strftime('%d.%m.%y %H:%M') }}</h5>
+        </div>
+    </div>
+
+{% endblock %}

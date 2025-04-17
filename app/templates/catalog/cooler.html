@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>{{sub_title}}</h1>
+<h2>{{sub_title}}</h2>
     
 {% if products %}
     {% for product in products %}
@@ -24,6 +24,7 @@
             {% if product.discount %}
                 <p>Скидка: {{product.discount}}</p>
             {% endif %}
+            
         </div>
     {% endfor %}
 {% else %}
