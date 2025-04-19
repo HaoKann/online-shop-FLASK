@@ -10,7 +10,7 @@ class Cart(db.Model):
     __tablename__='carts'
 
     id = db.Column(db.Integer(), primary_key=True)
-    price = db.Column(db.Integer())
+    price = db.Column(db.Integer(), default=0)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), nullable=False)
 
     # secondary=cart_products — указывает, что связь через промежуточную таблицу
@@ -23,7 +23,7 @@ class ProductInCart(db.Model):
     __tablename__='productsincart'
 
     id = db.Column(db.Integer(), primary_key=True)
-    amount = db.Column(db.Integer())
+    amount = db.Column(db.Integer(), default=1)
     product_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
     cart_id = db.Column(db.Integer(), db.ForeignKey('carts.id'))
     order_id = db.Column(db.Integer(), db.ForeignKey('orders.id'))

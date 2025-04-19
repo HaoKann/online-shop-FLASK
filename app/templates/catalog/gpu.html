@@ -16,7 +16,7 @@
                 <p>Фото нет</p>
             {% endif %}
 
-            <a style="width: 50px; height: 40px;" class="btn btn-success" href="{{url_for('user_cart')}}"><i class="bi bi-cart-plus-fill"></i></a>
+            <a style="width: 50px; height: 40px;" class="btn btn-success" href="{{url_for('add_product', product_id=product.id)}}"><i class="bi bi-cart-plus-fill"></i></a>
             <a style="width: 50px; height: 40px;" class="btn btn-danger" href="{{url_for('favourites')}}"><i class="bi bi-heart-fill"></i></a>
             <a style="width: 50px; height: 40px;" class="btn btn-primary" href="{{url_for('favourites')}}"><i class="bi bi-info-circle-fill"></i></a>
             

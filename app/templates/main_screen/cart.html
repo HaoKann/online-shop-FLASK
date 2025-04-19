@@ -1,22 +1,14 @@
 {% extends 'base.html' %}
 
-{% if products %}
-    {% for product in products %}
-        <div style="display: inline-block; width: 280px; margin: 20px; vertical-align: top; text-align: left;">
-            <h4>{{product.name}}</h4>
-            <p>Цена: {{product.price}}₸</p>
 
-            {% if product.photos.first() %}
-                <img width="300" src="{{ url_for('static', filename='products_photo/' ~ product.category ~ '/' ~ product.id ~ '/' ~ product.photos.first().photo_path ) }}" alt="{{ product.photos.first().description }}" style='margin-bottom: 10px;'>
-            {% else %}
-                <p>Фото нет</p>
-            {% endif %}
+{% block content %}
 
-            {% if product.discount %}
-                <p>Скидка: {{product.discount}}</p>
-            {% endif %}
-        </div>
+    <h1>{{sub_title}}</h1>
+    
+    {% for product_in_cart in current_user.cart.products_in_cart %}
+
+        <p>{{product_in_cart.product.name}}</p>
+        
     {% endfor %}
-{% else %}
-        <p>Корзина пустая</p>
-{% endif %}
+{% endblock %}
+

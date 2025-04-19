@@ -24,6 +24,7 @@ class User(db.Model, UserMixin):
     creation_date = db.Column(db.DateTime(), default=lambda: datetime.now(timezone.utc))
     update_date = db.Column(db.DateTime(), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     avatar = db.Column(db.String(256))
+    is_admin = db.Column(db.Boolean(), default=False)
 
     # db.relationship - описывает связь на стороне 'Один'
     # Если нужно из User('1') обратиться к Product('Много') то использую products

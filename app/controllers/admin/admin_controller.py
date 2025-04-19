@@ -1,25 +1,35 @@
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort
 from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm, PhotoForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
 from app.models.product import Product, Characteristic, Photo
 import os
 from werkzeug.utils import secure_filename
+from flask_login import login_required, current_user
 
 @app.route('/admin')
+@login_required
 def admin():
+    if not current_user.is_admin:
+        abort(403)
     return render_template('admin/admin.html')
 
 @app.route('/admin/products')
+@login_required
 def admin_products_list():
+    if not current_user.is_admin:
+        abort(403)
     page = request.args.get('page', 1, type=int)
     products = db.paginate(db.session.query(Product), page=page, per_page=10, error_out=False)
     return render_template('admin/products_list.html', products=products.items)
 
 
 @app.route('/admin/products/<int:id>', methods=['GET','POST'])
+@login_required
 def admin_product(id):
+    if not current_user.is_admin:
+        abort(403)
     сharacteristics_form = CharacteristicsForm(prefix='characteristics_form')
     photo_form = PhotoForm(prefix='photo_form')
 
@@ -54,7 +64,10 @@ def admin_product(id):
 
 
 @app.route('/admin/add_product', methods=['GET','POST'])
+@login_required
 def admin_add_product():
+    if not current_user.is_admin:
+        abort(403)
     form = AddProduct()
 
     if form.validate_on_submit():
@@ -80,7 +93,10 @@ def admin_add_product():
 
 
 @app.route('/admin/edit_product/<int:id>', methods=['GET','POST'])
+@login_required
 def admin_edit_product(id):
+    if not current_user.is_admin:
+        abort(403)
     edited_product = Product.query.get_or_404(id)
 
     form = EditProduct()
@@ -102,7 +118,10 @@ def admin_edit_product(id):
         
 
 @app.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
+@login_required
 def admin_delete_products(id):
+    if not current_user.is_admin:
+        abort(403)
     deleted_product = Product.query.get_or_404(id)
 
     form = ConfirmForm()
