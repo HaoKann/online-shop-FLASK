@@ -5,10 +5,23 @@
 
     <h1>{{sub_title}}</h1>
     
+    
     {% for product_in_cart in current_user.cart.products_in_cart %}
-
-        <p>{{product_in_cart.product.name}}</p>
+        <div class="row">
+            <div class="col-md-1">
+               <img style="width: 100px;" src="  {{ product_in_cart.product.get_first_photo() }}" > 
+            </div>
+            <div class="col-md-4">
+                <p>{{product_in_cart.product.name}}</p>
+            </div>
+            <div class="col-md-1">
+                {{product_in_cart.amount}}
+            </div>
+        </div>
         
+        
+
+
     {% endfor %}
 {% endblock %}
 

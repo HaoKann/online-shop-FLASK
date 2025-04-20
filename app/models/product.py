@@ -16,6 +16,12 @@ class Product(db.Model):
     characteristics = db.relationship('Characteristic', backref='product', lazy='dynamic')
     product_in_carts = db.relationship('ProductInCart', backref='product', lazy='dynamic')
 
+    def get_first_photo(self):
+        if self.photos.first():
+            return self.photos.first().get_photo()
+        else:
+            return '/static/img/default.webp'
+
 class Characteristic(db.Model):
     __tablename__ = 'characteristics'
 
@@ -35,3 +41,8 @@ class Photo(db.Model):
     description = db.Column(db.String(100), nullable=False)
 
     prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
+
+    def get_photo(self):
+        return  '/static/products_photo/' + self.product.category + '/' + str(self.product.id) + '/' + self.photo_path 
+    
+    
