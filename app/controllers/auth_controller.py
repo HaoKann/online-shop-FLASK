@@ -111,10 +111,12 @@ def user_change_info():
             os.makedirs(photo_path, exist_ok=True)
             f.save(os.path.join( photo_path, filename ))
             current_user.avatar = filename
+
         db.session.commit()
         return redirect(url_for('user'))
     form.name.data = current_user.name
     form.nickname.data =  current_user.nickname
     form.date_of_birth.data = current_user.date_of_birth
     form.email.data = current_user.email
+    form.phone_number.data = current_user.phone_number
     return render_template('user/change_user_info.html', form=form, sub_title='Изменение пользовательской информации')
