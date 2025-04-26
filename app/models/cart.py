@@ -18,6 +18,16 @@ class Cart(db.Model):
 
     products_in_cart = db.relationship('ProductInCart', backref='cart', lazy='dynamic')
 
+    def sum_of_products_in_cart(self):
+
+        sum_of_products = 0
+
+        for product_in_cart in self.products_in_cart.all():
+            sum_of_products += product_in_cart.amount * product_in_cart.product.price
+        return sum_of_products
+
+
+
 
 class ProductInCart(db.Model):
     __tablename__='productsincart'
