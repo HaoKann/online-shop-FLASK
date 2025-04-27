@@ -46,3 +46,9 @@ def computer_case():
     case_products = Product.query.filter_by(category='pc_case').all()
     return render_template('catalog/products_in_catalog.html',sub_title='Корпуса', products=case_products)
 
+
+@app.route('/product_details/<int:prod_id>')
+def show_prod_details(prod_id):
+    product = Product.query.get_or_404(prod_id)
+    return render_template('catalog/product_details.html', product=product)
+

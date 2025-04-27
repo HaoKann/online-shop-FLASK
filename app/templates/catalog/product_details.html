@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{product.name}}
+{{product.category}}
+
+{% for photo in product.photos.all() %}
+    <img style="width: 150px;" src="{{ photo.get_photo() }}" alt="{{ photo.description }}">
+{% endfor %}
+
+{% endblock %}

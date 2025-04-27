@@ -26,6 +26,13 @@ class Cart(db.Model):
             sum_of_products += product_in_cart.amount * product_in_cart.product.price
         return sum_of_products
 
+    def sum_of_products_amount(self):
+
+        prod_amount = 0
+
+        for product_in_cart in self.products_in_cart.all():
+            prod_amount += product_in_cart.amount
+        return prod_amount
 
 
 
