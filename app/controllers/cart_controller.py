@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, redirect, flash, url_for, request
+from flask import render_template, redirect, flash, url_for, request, abort
 from app.models.product import Product
 from app.models.cart import Cart, ProductInCart
 from flask_login import login_required, current_user
@@ -47,3 +47,34 @@ def delete_products(product_id):
         flash(f'Продукт {product_name} удалён из корзины', 'info')
         return redirect(url_for('user_cart'))
     return render_template('main_screen/confirm.html', form=form, sub_title=f'Вы точно хотите удалить {product_name}?' )
+
+@app.route('/cart/increase_amount/<int:product_id>', methods=['GET','POST'])
+@login_required
+def increase_amount(product_id):
+
+    added_product = ProductInCart.query.get_or_404(product_id)
+
+    if added_product.cart_id != current_user.cart.id:
+        abort(403)
+    
+    added_product.amount += 1
+    db.session.commit()
+    return redirect(url_for('user_cart'))
+
+
+@app.route('/cart/decrease_amount/<int:product_id>', methods=['GET','POST'])
+@login_required
+def decrease_amount(product_id):
+
+    deleted_product = ProductInCart.query.get_or_404(product_id)
+
+    if deleted_product.cart_id != current_user.cart.id:
+        abort(403)
+
+    deleted_product.amount -= 1
+    if deleted_product.amount <= 0:
+        db.session.delete(deleted_product)
+        flash(f'Вы удалили продукт {deleted_product.product.name}!', 'danger')
+    else:
+        db.session.commit()
+    return redirect(url_for('user_cart'))
