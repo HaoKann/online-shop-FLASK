@@ -5,7 +5,9 @@
 
     <h1>{{sub_title}}</h1>
     
-    {% if current_user.cart.products_in_cart%}
+    {% if current_user.cart.products_in_cart.count() == 0 %}
+        <p>В корзине нет товаров</p>
+    {% else %}
     <div class="row">
             <div class="col-md-4 offset-md-1">
                 <p>Название</p>
@@ -17,6 +19,9 @@
                 <p>Цена</p>
             </div>
         </div>
+    {% endif %}
+
+
 
     {% for product_in_cart in current_user.cart.products_in_cart %}
         {% if product_in_cart.amount > 0 %}
@@ -43,21 +48,19 @@
                 <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('delete_products', product_id=product_in_cart.id) }}"> <i class="bi bi-trash3-fill"></i></a>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-2 offset-4 fw-bold">
+                <p class="text-end" >Всего к оплате</p>
+            </div>
+            <div class="col-md-1 fw-bold">
+                {{current_user.cart.sum_of_products_in_cart()}}₸
+            </div>
+        </div>
         {% endif %}
     {% endfor %}
 
-    <div class="row">
-        <div class="col-md-2 offset-4 fw-bold">
-            <p class="text-end" >Всего к оплате</p>
-        </div>
-        <div class="col-md-1 fw-bold">
-            {{current_user.cart.sum_of_products_in_cart()}}₸
-        </div>
-    </div>
-
-    {% else %}
-    <p>Товаров в корзине нет</p>
-    {% endif %}
+    
 
 {% endblock %}
 

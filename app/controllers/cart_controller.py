@@ -68,13 +68,19 @@ def decrease_amount(product_id):
 
     deleted_product = ProductInCart.query.get_or_404(product_id)
 
+    # Проверка, принадлежит ли товар корзине текущего пользователя
     if deleted_product.cart_id != current_user.cart.id:
         abort(403)
 
-    deleted_product.amount -= 1
-    if deleted_product.amount <= 0:
+    if deleted_product.amount <=0:
+        flash('Некорректное количество товара. Операция отменена.', 'warning')
+        return redirect(url_for('user_cart'))
+
+    if deleted_product.amount <= 1:
         db.session.delete(deleted_product)
-        flash(f'Вы удалили продукт {deleted_product.product.name}!', 'danger')
+        flash(f'Вы удалили продукт {deleted_product.product.name}', 'danger')
     else:
-        db.session.commit()
+        deleted_product.amount -= 1
+
+    db.session.commit()
     return redirect(url_for('user_cart'))
