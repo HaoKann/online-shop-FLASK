@@ -15,6 +15,7 @@ class Product(db.Model):
     photos = db.relationship('Photo', backref='product', lazy='dynamic')
     characteristics = db.relationship('Characteristic', backref='product', lazy='dynamic')
     product_in_carts = db.relationship('ProductInCart', backref='product', lazy='dynamic')
+    favourite_by_users = db.relationship('FavouriteProduct', backref='product', lazy='dynamic')
 
     def get_first_photo(self):
         if self.photos.first():

@@ -33,6 +33,8 @@ class User(db.Model, UserMixin):
 
     cart = db.relationship('Cart', backref='user', uselist=False)
     orders = db.relationship('Order', backref='user', lazy='dynamic')
+    favourite_products = db.relationship('FavouriteProduct', backref='favourite', lazy='dynamic')
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -42,3 +44,11 @@ class User(db.Model, UserMixin):
     
     def get_avatar(self):
         return 'avatars/' + str(self.id) + '/' + self.avatar
+    
+class FavouriteProduct(db.Model):
+    __tablename__ = 'favourite_products'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), nullable=False )
+    product_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
+    

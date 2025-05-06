@@ -1,1 +1,17 @@
 {% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{sub_title}}</h1>
+
+{% for favourite_product in favourite_products  %}
+
+    <p>Название: {{ favourite_product.product.name }}</p>
+    <p>Категория: {{ favourite_product.product.category }}</p>
+    <p>Цена: {{ favourite_product.product.price }}</p>
+
+    <img width="300px" src="{{ favourite_product.product.get_first_photo() }}">
+    <hr>
+{% endfor %}
+
+{% endblock %}

@@ -30,7 +30,8 @@
                <img style="width: 100px;" src="{{ product_in_cart.product.get_first_photo() }}" > 
             </div>
             <div class="col-md-4">
-                <p>{{product_in_cart.product.name}}</p>
+                <!-- <p>{{product_in_cart.product.name}}</p> -->
+                <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}">{{product_in_cart.product.name}}</a>
             </div>
             <div class="col-md-1">
                 <p>{{product_in_cart.amount}} </p>
@@ -49,18 +50,18 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-2 offset-4 fw-bold">
-                <p class="text-end" >Всего к оплате</p>
-            </div>
-            <div class="col-md-1 fw-bold">
-                {{current_user.cart.sum_of_products_in_cart()}}₸
-            </div>
-        </div>
+        
         {% endif %}
     {% endfor %}
 
-    
+    <div class="row">
+        <div class="col-md-2 offset-4 fw-bold">
+            <p class="text-end" >Всего к оплате</p>
+        </div>
+        <div class="col-md-1 fw-bold">
+            {{current_user.cart.sum_of_products_in_cart()}}₸
+        </div>
+    </div>
 
 {% endblock %}
 
