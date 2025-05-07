@@ -5,13 +5,22 @@
 <h1>{{sub_title}}</h1>
 
 {% for favourite_product in favourite_products  %}
+    <div style="margin-bottom: 30px;">
+        <p>Название: {{ favourite_product.product.name }}</p>
+        <p>Категория: {{ favourite_product.product.category }}</p>
+        <p>Цена: {{ favourite_product.product.price }}₸</p>
 
-    <p>Название: {{ favourite_product.product.name }}</p>
-    <p>Категория: {{ favourite_product.product.category }}</p>
-    <p>Цена: {{ favourite_product.product.price }}</p>
+        <div>
+            <img width="300px" src="{{ favourite_product.product.get_first_photo() }}">
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <a class="btn btn-danger mt-2 d-block" style="width: 50px; height: 40px;" href="{{ url_for('delete_product_from_favourites', product_id=favourite_product.product.id) }}"><i class="bi bi-trash3-fill"></i></a>
+            <a class="btn btn-success mt-2 d-block" style="width: 50px; height: 40px;" href="{{ url_for('add_favourite_product_to_cart',product_id=favourite_product.product.id ) }}"><i class="bi bi-cart-plus-fill"></i></a>
+        </div>    
+        </div>
 
-    <img width="300px" src="{{ favourite_product.product.get_first_photo() }}">
     <hr>
+
+</div>
 {% endfor %}
 
 {% endblock %}

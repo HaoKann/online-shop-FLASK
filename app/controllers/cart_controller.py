@@ -44,7 +44,7 @@ def delete_products(product_id):
     if form.validate_on_submit():
         db.session.delete(deleted_product)
         db.session.commit()
-        flash(f'Продукт {product_name} удалён из корзины', 'info')
+        flash(f'Продукт {product_name} удалён из корзины', 'danger')
         return redirect(url_for('user_cart'))
     return render_template('main_screen/confirm.html', form=form, sub_title=f'Вы точно хотите удалить {product_name}?' )
 
