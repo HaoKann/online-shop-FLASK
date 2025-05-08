@@ -1,4 +1,4 @@
-from app import app, db
+from app import app
 from flask import render_template
 from app.models.product import Product
 

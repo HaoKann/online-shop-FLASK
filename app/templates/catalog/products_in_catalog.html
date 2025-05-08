@@ -21,6 +21,7 @@
             <a style="width: 50px; height: 40px;" class="btn btn-success" href="{{url_for('add_products', product_id=product.id)}}"><i class="bi bi-cart-plus-fill"></i></a>
             <a style="width: 50px; height: 40px;" class="btn btn-danger" href="{{url_for('add_to_favourites', product_id=product.id)}}"><i class="bi bi-heart-fill"></i></a>
             <a style="width: 50px; height: 40px;" class="btn btn-primary" href="{{url_for('show_prod_details', prod_id=product.id)}}"><i class="bi bi-info-circle-fill"></i></a>
+
             
             
             {% if product.discount %}
@@ -28,6 +29,7 @@
             {% endif %}
         </div>
     {% endfor %}
+    <a class="btn btn-primary" href="{{ url_for('pc_help') }}"> Помощь в выборе комплектующих </a>
 {% else %}
         <p>Нет товаров в этой категории</p>
 {% endif %}
