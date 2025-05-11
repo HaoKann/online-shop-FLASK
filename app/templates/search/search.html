@@ -3,7 +3,18 @@
 {% block content %}
 
 
-<p>{{result}}</p>
-<p>{{q}}</p>
+<p>Результаты поиска по запросу "{{q}}"</p>
+
+    {% for product in result  %}
+        
+    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}">{ro{pduct.name}}</a> <br>
+
+    {% else %}
+        <p>Товар не найден</p>
+    {% endfor %}
+
+
+
+
 
 {% endblock %}
