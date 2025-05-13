@@ -24,7 +24,7 @@ login_manager.login_message = 'Войдите в аккаунт для полу�
 
 from app.controllers import main_controller, catalog_controller, pc_help_controller, promotions_controller, \
 ready_pc_controller, user_controller, user_orders_controller, favourites_controller,cart_controller, \
-auth_controller, search_controller
+auth_controller, search_controller, theme_controller
 
 from app.controllers.admin import admin_controller
 from app.models import cart, order, product, user

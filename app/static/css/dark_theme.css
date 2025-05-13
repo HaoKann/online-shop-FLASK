@@ -1,0 +1,31 @@
+body {
+    background-color: rgb(15, 15, 15);
+    color: white;
+}
+
+.navbar {
+  background-color:rgb(74, 0, 0) !important;
+}
+
+.navbar .nav-item .nav-link {
+    color: white !important;
+}
+.navbar-brand{
+    color: white;
+}
+
+footer .nav{
+    color: white;
+}
+
+footer .nav-link {
+    color: white !important;
+}
+
+footer .copyright {
+    color: white !important;
+}
+
+.accordion-item{
+    background-color: black;
+}
