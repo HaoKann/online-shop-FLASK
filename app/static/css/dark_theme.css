@@ -29,3 +29,64 @@ footer .copyright {
 .accordion-item{
     background-color: black;
 }
+
+.accordion-body{
+    background-color:rgb(15, 15, 15);
+    color: white;
+}
+
+.accordion-button {
+    background-color: #600018 !important; 
+    color: white !important;
+}
+
+.dropdown-menu {
+    background-color:#600018;
+    
+}
+
+.dropdown-item{
+    color: white !important;
+}
+
+/* Форма поиска в навбаре */
+.navbar .d-flex {
+    margin-left: 15px;
+}
+
+.navbar .form-control {
+    color: white !important;
+    border-color: rgb(15, 15, 15) !important; 
+    background-color: rgb(15, 15, 15) !important; 
+    transition: all 0.3s ease;
+}
+
+.navbar .form-control:focus {
+    background-color: white !important; /* Белый фон при наведении */
+    color: rgb(15, 15, 15) !important; /* Тёмный текст при наведении */
+    border-color: white !important;
+}
+
+.navbar .btn-outline-success {
+    color: white !important;
+    border-color: rgb(15, 15, 15) !important; 
+    background-color: rgb(15, 15, 15) !important; 
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-success:hover {
+    background-color: white !important; /* Белый фон при наведении */
+    color: rgb(15, 15, 15) !important; /* Тёмный текст при наведении */
+    border-color: white !important;
+}
+
+.navbar .form-control::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+.form-select{
+    background-color: rgb(15, 15, 15);
+    color: white;
+    border-color: rgb(15, 15, 15) !important;
+}

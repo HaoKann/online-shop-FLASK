@@ -7,7 +7,8 @@
 
     {% for product in result  %}
         
-    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}">{ro{pduct.name}}</a> <br>
+    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}">{{product.name}}</a> <br>
+    <img class="product-img" src="{{ product.get_first_photo() }}">
 
     {% else %}
         <p>Товар не найден</p>

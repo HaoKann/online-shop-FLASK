@@ -42,7 +42,7 @@ class ProductInCart(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     amount = db.Column(db.Integer(), default=1)
-    product_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
+    product_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     cart_id = db.Column(db.Integer(), db.ForeignKey('carts.id'))
     order_id = db.Column(db.Integer(), db.ForeignKey('orders.id'))
 

@@ -12,10 +12,15 @@ class Product(db.Model):
     # db.ForeignKey - создает связь на стороне 'Много'
     # user_id = db.Column(db.Integer(), db.ForeignKey('users.id')) 
     
-    photos = db.relationship('Photo', backref='product', lazy='dynamic')
-    characteristics = db.relationship('Characteristic', backref='product', lazy='dynamic')
-    product_in_carts = db.relationship('ProductInCart', backref='product', lazy='dynamic')
-    favourite_by_users = db.relationship('FavouriteProduct', backref='product', lazy='dynamic')
+    photos = db.relationship('Photo', backref='product', lazy='dynamic', 
+                           cascade='all, delete-orphan', passive_deletes=True)
+    characteristics = db.relationship('Characteristic', backref='product', lazy='dynamic',
+                                    cascade='all, delete-orphan', passive_deletes=True)
+    product_in_carts = db.relationship('ProductInCart', backref='product', lazy='dynamic',
+                                     cascade='all, delete-orphan', passive_deletes=True)
+    favourite_by_users = db.relationship('FavouriteProduct', backref='product', lazy='dynamic',
+                                       cascade='all, delete-orphan', passive_deletes=True)
+    
 
     def get_first_photo(self):
         if self.photos.first():
@@ -30,7 +35,7 @@ class Characteristic(db.Model):
     name = db.Column(db.String(100), nullable=False)
     int_value = db.Column(db.Integer(), nullable=False)
     str_value = db.Column(db.String(30), nullable=False)
-    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
+    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     
 
 class Photo(db.Model):
@@ -41,7 +46,7 @@ class Photo(db.Model):
     photo_path = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False)
 
-    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
+    prod_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
 
     def get_photo(self):
         return  '/static/products_photo/' + self.product.category + '/' + str(self.product.id) + '/' + self.photo_path 

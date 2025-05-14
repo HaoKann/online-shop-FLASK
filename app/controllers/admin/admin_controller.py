@@ -30,17 +30,17 @@ def admin_products_list():
 def admin_product(id):
     if not current_user.is_admin:
         abort(403)
-    сharacteristics_form = CharacteristicsForm(prefix='characteristics_form')
+    characteristics_form  = CharacteristicsForm(prefix='characteristics_form')
     photo_form = PhotoForm(prefix='photo_form')
 
     product = Product.query.get_or_404(id)
 
-    if сharacteristics_form.validate_on_submit() and сharacteristics_form.submit_сharacteristics.data:
-        сharacteristic = Characteristic(name=сharacteristics_form.name.data,
-                                        int_value=сharacteristics_form.int_value.data, 
-                                        str_value=сharacteristics_form.str_value.data, 
+    if characteristics_form.validate_on_submit() and characteristics_form.submit_characteristics.data:
+        characteristic = Characteristic(name=characteristics_form.name.data,
+                                        int_value=characteristics_form.int_value.data, 
+                                        str_value=characteristics_form.str_value.data, 
                                         prod_id=id )
-        db.session.add(сharacteristic)
+        db.session.add(characteristic)
         db.session.commit()
         flash('Характеристика успешно добавлена!', 'succcess')
         return redirect(url_for('admin_product', id=id))
@@ -48,19 +48,69 @@ def admin_product(id):
     if photo_form.validate_on_submit() and photo_form.submit_photo.data:
         f = photo_form.photo.data
         if f:
-            photo_path = os.path.join(
-                os.path.dirname(app.instance_path), 'app','static', 'products_photo', 
-                product.category, str(product.id)
-            )
-            filename = secure_filename(f.filename)
-            os.makedirs(photo_path, exist_ok=True)
-            f.save(os.path.join( photo_path, filename ))
-            photo = Photo(photo_path=filename,description=photo_form.description.data, prod_id=id )
-            db.session.add(photo)
-            db.session.commit()
-            flash('Фото успешно добавлено', 'success')
-            return redirect(url_for('admin_product', id=id))
-    return render_template('admin/product_details.html', product=product, сharacteristics_form=сharacteristics_form, photo_form=photo_form)
+        # 1. Удаляем старое фото, если оно есть
+            old_photo = Photo.query.filter_by(prod_id=id).first()
+            if old_photo:
+                old_photo_path = os.path.join(
+                    os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
+                    product.category, str(product.id), old_photo.photo_path
+                )
+                try:
+                    os.remove(old_photo_path)
+                except FileNotFoundError:
+                    pass  # Если файла нет — просто пропускаем
+                db.session.delete(old_photo)
+                db.session.commit()
+
+        # 2. Сохраняем новое фото
+        photo_path = os.path.join(
+            os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
+            product.category, str(product.id)
+        )
+        filename = secure_filename(f.filename)
+        os.makedirs(photo_path, exist_ok=True)
+        f.save(os.path.join(photo_path, filename))
+
+        # 3. Добавляем запись в БД
+        photo = Photo(photo_path=filename, description=photo_form.description.data, prod_id=id)
+        db.session.add(photo)
+        db.session.commit()
+        flash('Фото успешно заменено', 'success')
+        return redirect(url_for('admin_product', id=id))
+    return render_template('admin/product_details.html', product=product, сharacteristics_form=characteristics_form, photo_form=photo_form)
+
+
+    #     if f:
+            
+    #         # 1 Удаление старого фото если есть 
+    #         old_photo = Photo.query.filter_by(prod_id=id).first()
+    #         if old_photo:
+    #             old_photo_path = os.path.join(
+    #                 os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
+    #                 product.category, str(product.id), old_photo_path
+    #             )
+    #             try:
+    #                 os.remove(old_photo_path)
+    #             except FileNotFoundError:
+    #                 pass
+    #             db.session.delete(old_photo)
+    #             db.session.commit()   
+
+
+    #         # 2 Сохранение нового фото
+    #         photo_path = os.path.join(
+    #             os.path.dirname(app.instance_path), 'app','static', 'products_photo', 
+    #             product.category, str(product.id)
+    #         )
+    #         filename = secure_filename(f.filename)
+    #         os.makedirs(photo_path, exist_ok=True)
+    #         f.save(os.path.join( photo_path, filename ))
+    #         photo = Photo(photo_path=filename,description=photo_form.description.data, prod_id=id )
+    #         db.session.add(photo)
+    #         db.session.commit()
+    #         flash('Фото успешно добавлено', 'success')
+    #         return redirect(url_for('admin_product', id=id))
+    # return render_template('admin/product_details.html', product=product, сharacteristics_form=сharacteristics_form, photo_form=photo_form)
 
 
 @app.route('/admin/add_product', methods=['GET','POST'])
@@ -122,6 +172,7 @@ def admin_edit_product(id):
 def admin_delete_products(id):
     if not current_user.is_admin:
         abort(403)
+
     deleted_product = Product.query.get_or_404(id)
 
     form = ConfirmForm()

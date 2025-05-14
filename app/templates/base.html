@@ -92,6 +92,7 @@
                   <li><a class="dropdown-item" href="{{ url_for('logout') }}">Выйти из аккаунта</a></li>
                 </ul>
               </li>
+              {{ render_form(g.change_theme, form_type='inline', action='/change-theme' ) }}
               {% if current_user.is_admin %}
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
@@ -105,7 +106,7 @@
             </form>
 
 
-            {{ render_form(g.change_theme, form_type='inline', action='/change-theme' ) }}
+            
             
           </div>
         </div>
