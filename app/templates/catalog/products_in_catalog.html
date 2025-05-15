@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h2>{{sub_title}}</h2>
+<h2 style="text-align: center;" class="mt-3">{{sub_title}}</h2>
     
 {% if products %}
     {% for product in products %}
@@ -10,6 +10,9 @@
             <h4>{{product.name}}</h4>
             <p>Цена: {{product.price}}₸</p>
 
+            {% if product.discount %}
+                <p>Скидка {{product.discount}}%</p>
+            {% endif %}
             <!-- {% if product.photos.first() %}
                 <img width="300" src="{{ product.photos.first().get_photo() }}" alt="{{ product.photos.first().description }}" style='margin-bottom: 10px;'>
             {% else %}
@@ -18,19 +21,28 @@
 
             <img class="product-img" src="{{ product.get_first_photo() }}">
 
-            <a style="width: 50px; height: 40px;" class="btn btn-success" href="{{url_for('add_products', product_id=product.id)}}"><i class="bi bi-cart-plus-fill"></i></a>
-            <a style="width: 50px; height: 40px;" class="btn btn-danger" href="{{url_for('add_to_favourites', product_id=product.id)}}"><i class="bi bi-heart-fill"></i></a>
-            <a style="width: 50px; height: 40px;" class="btn btn-primary" href="{{url_for('show_prod_details', prod_id=product.id)}}"><i class="bi bi-info-circle-fill"></i></a>
-
+        
+            <div class="d-flex justify-content-center gap-2 mt-2 "  style="margin-left: -30px;">
+                <a style="width: 50px; height: 40px;" class="btn btn-success" href="{{url_for('add_products', product_id=product.id)}}">
+                    <i class="bi bi-cart-plus-fill"></i>
+                </a>
+                <a style="width: 50px; height: 40px;" class="btn btn-danger" href="{{url_for('add_to_favourites', product_id=product.id)}}">
+                    <i class="bi bi-heart-fill"></i>
+                </a>
+                <a style="width: 50px; height: 40px;" class="btn btn-primary" href="{{url_for('show_prod_details', prod_id=product.id)}}">
+                    <i class="bi bi-info-circle-fill"></i>
+                </a>
+            </div>            
             
             
-            {% if product.discount %}
-                <p>Скидка: {{product.discount}}</p>
-            {% endif %}
         </div>
     {% endfor %}
 
-    <a class="btn btn-primary" href="{{ url_for('pc_help') }}"> Помощь в выборе комплектующих </a>
+        <div class="text-center mt-3">
+            <a class="btn btn-primary" href="{{ url_for('pc_help') }}">
+                Помощь в выборе комплектующих
+            </a>
+        </div>
     
 {% else %}
         <p>Нет товаров в этой категории</p>

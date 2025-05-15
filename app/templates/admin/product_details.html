@@ -31,7 +31,7 @@
     <div class="col-md-4">
         <p>Фото</p>
         {% for photo in product.photos.all() %}
-            <img width="250" src="{{url_for('static', filename='products_photo/' ~ product.category ~ '/' ~ product.id ~ '/' ~ photo.photo_path )}}" alt="{{photo.description}}">
+            <img width="130" src="{{url_for('static', filename='products_photo/' ~ product.category ~ '/' ~ product.id ~ '/' ~ photo.photo_path )}}" alt="{{photo.description}}">
         {% endfor %}
 
 
@@ -40,6 +40,7 @@
 
 </div>
 
+<a class="btn btn-primary mt-2" href="{{ url_for('main') }}">Главная страница</a>
 
 
 {% endblock %}

@@ -7,4 +7,4 @@ class EditProduct(FlaskForm):
     category = StringField('Новая категорию ', validators=[DataRequired()])
     price = IntegerField('Новая цену ', validators=[DataRequired()])
     discount = IntegerField(' Скидка(необязательно)', default=0)
-    submit = SubmitField('Добавить товар')
+    submit = SubmitField('Изменить товар')
