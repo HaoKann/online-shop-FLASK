@@ -5,4 +5,12 @@
 
 <h2 style="text-align: center;">{{sub_title}}</h2>
 
+{% for discounted_product in discounted_products %}
+<!-- Закончить добавление товаров -->
+
+<p>{{discounted_products.name}}</p>
+<p>{{discounted_products.category}}</p>
+<p>{{discounted_products.price}}</p>
+<p>{{discounted_products.discount}}</p>
+
 {% endblock %}

@@ -148,68 +148,6 @@ def admin_add_product():
 
     return render_template('admin/add_product.html', form=form, photo_form=photo_form)
 
-# @app.route('/admin/add_product', methods=['GET','POST'])
-# @login_required
-# def admin_add_product():
-#     if not current_user.is_admin:
-#         abort(403)
-#     form = AddProduct()
-#     photo_form = PhotoForm()
-
-#     if form.validate_on_submit():
-#         product = Product(name=form.name.data, category=form.category.data, price=form.price.data, discount=form.discount.data)
-#         db.session.add(product)
-#         db.session.commit()
-#         flash('Продукт успешно добавлен!', 'success')
-
-#         category_routes = {
-#             'gpu': 'graphics_card',
-#             'cpu': 'processor',
-#             'motherboard': 'motherboard',
-#             'psu': 'power_supply_unit',
-#             'ram': 'random_access_memory',
-#             'cooler': 'cooling_system',
-#             'storage': 'storage',
-#             'pc_case': 'computer_case',
-#         }
-
-#         route_name = category_routes.get(product.category, 'catalog')
-
-
-#         if photo_form.validate_on_submit() and photo_form.submit_photo.data:
-#             f = photo_form.photo.data
-#             if f:
-#             # 1. Удаляем старое фото, если оно есть
-#                 old_photo = Photo.query.filter_by(prod_id=id).first()
-#                 if old_photo:
-#                     old_photo_path = os.path.join(
-#                         os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
-#                         product.category, str(product.id), old_photo.photo_path
-#                     )
-#                     try:
-#                         os.remove(old_photo_path)
-#                     except FileNotFoundError:
-#                         pass  # Если файла нет — просто пропускаем
-#                     db.session.delete(old_photo)
-#                     db.session.commit()
-            
-#              # 2. Сохраняем новое фото
-#         photo_path = os.path.join(
-#             os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
-#             product.category, str(product.id)
-#         )
-#         filename = secure_filename(f.filename)
-#         os.makedirs(photo_path, exist_ok=True)
-#         f.save(os.path.join(photo_path, filename))
-
-
-#         # 3. Добавляем запись в БД
-#         photo = Photo(photo_path=filename, description=photo_form.description.data, prod_id=id)
-#         db.session.add(photo)
-#         db.session.commit()
-
-#         return redirect(url_for(route_name))
-#     return render_template('admin/add_product.html', form=form, photo_form=photo_form, product=product)
 
 
 @app.route('/admin/edit_product/<int:id>', methods=['GET','POST'])
