@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 # )
 
 class Order(db.Model):
-    __tablename__='orders'
+    __tablename__ = 'orders'
 
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
@@ -16,6 +16,15 @@ class Order(db.Model):
     price = db.Column(db.Integer())
 
     products_in_order = db.relationship('ProductInCart', backref='order', lazy='dynamic')
-
+    delivery = db.relationship('Delivery', backref='order', uselist=False)
 
     # products = db.relationship('Product', secondary=order_product, backref='order')
+    
+class Delivery(db.Model):
+    __tablename__ = 'deliveries'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    address = db.Column(db.String(255))
+    way_of_delivery = db.Column(db.String(255))
+    time_of_arrival = db.Column(db.DateTime())
+    order_id = db.Column(db.Integer(), db.ForeignKey('orders.id'))

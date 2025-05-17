@@ -27,7 +27,15 @@ class Product(db.Model):
             return self.photos.first().get_photo()
         else:
             return '/static/img/default.webp'
-
+        
+    def get_discount_price(self):
+        if self.discount:
+            discount_price = self.price * self.discount / 100
+            total_price = self.price - discount_price
+            return round(total_price)
+        else:
+            return self.price
+        
 class Characteristic(db.Model):
     __tablename__ = 'characteristics'
 

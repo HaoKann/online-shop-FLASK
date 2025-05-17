@@ -6,11 +6,19 @@
 <h2 style="text-align: center;">{{sub_title}}</h2>
 
 {% for discounted_product in discounted_products %}
-<!-- Закончить добавление товаров -->
 
-<p>{{discounted_products.name}}</p>
-<p>{{discounted_products.category}}</p>
-<p>{{discounted_products.price}}</p>
-<p>{{discounted_products.discount}}</p>
+    {% if discounted_product.discount %}
+        <img class="product-img" src="{{ discounted_product.get_first_photo() }}">
+        <p><a href="{{ url_for('show_prod_details', prod_id=discounted_product.id) }}">{{discounted_product.name}}</a></p>
+        <p>Категория: {{discounted_product.category}}</p>
+        <p>Старая цена: <s>{{discounted_product.price}}₸</s></p>
+        <p>Новая цена: {{discounted_product.get_discount_price()}}₸</p>
+        <p>Скидка {{discounted_product.discount}}%</p>
+        <hr>
+    {% else %}
+    <p>Товаров по скидкой нет</p>    
+    {% endif %}
+{% endfor %}
 
-{% endblock %}
+{% endblock %} 
+
