@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template
+from flask import flash, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from app.forms.order_form import OrderForm
 from app.models.order import Order
@@ -11,6 +11,10 @@ def user_orders():
     
     form = OrderForm()
     
+    if not current_user.cart.products_in_cart.count():
+        flash('В корзине нет товаров!', 'danger')
+        return redirect(url_for('user_cart'))
+
     if form.validate_on_submit():
         order = Order(user_id=current_user.id, price=current_user.cart.sum_of_products_in_cart())
         db.session.add(order)
@@ -25,4 +29,6 @@ def user_orders():
         way_of_delivery = form.way_of_delivery.data
         time_of_arrival = form.time_of_arrival.data
 
+    
+        flash('Заказ успешно оформлен!','success')
     return render_template('user/user_orders.html',form=form)

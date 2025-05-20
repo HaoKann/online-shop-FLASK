@@ -70,9 +70,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('pc_help') }}">Нужна помощь в сборке ПК?</a>
               </li>
+
               <li class="nav-item position-relative">
               <a class="nav-link" href="{{ url_for('user_cart') }}">Корзина</a>
-
               {% if current_user.is_authenticated %}
               <span class="position-absolute top-0 mt-9 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ current_user.cart.sum_of_products_amount() }}

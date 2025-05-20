@@ -3,18 +3,28 @@
 
 {% block content %}
 
-<h1 style="text-align: center;">Оформление заказа</h1>
+    <h1 style="text-align: center;">Оформление заказа</h1>
 
+    {% if current_user.cart.products_in_cart.count()>0 %}
 
-{% for product_in_cart in current_user.cart.products_in_cart.all()  %}
-    <p>{{product_in_cart.product.name}}</p>
-    <p>{{product_in_cart.product.get_discount_price()}}</p>
-    <p>{{product_in_cart.amount}}</p>
-    <p>{{product_in_cart.amount * product_in_cart.product.get_discount_price()}}</p>
-    <hr>
-{% endfor %}
+    {% for product_in_cart in current_user.cart.products_in_cart.all()  %}
+        <img class="product-img" src="{{ product_in_cart.product.get_first_photo() }}">
+        <p>{{product_in_cart.product.name}}</p>
+        <p>{{product_in_cart.product.get_discount_price()}}</p>
+        <p>{{product_in_cart.amount}}</p>
+        <p>{{product_in_cart.amount * product_in_cart.product.get_discount_price()}}</p>
+        <hr>
+    {% endfor %}
 
-{{render_form(form)}}
+    {{render_form(form)}}
+
+    {% else %}
+
+        <p>Товаров в заказе нет</p>
+
+    {% endif %}
+
+    
 
 
 {% endblock %}

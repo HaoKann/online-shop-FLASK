@@ -6,18 +6,18 @@
     
 {% if products %}
     {% for product in products %}
-        <div style="display: inline-block; width: 280px; margin: 20px; vertical-align: top; text-align: left;">
+        <div style="display: inline-block; width: 280px; margin: 20px; vertical-align: top; text-align: left; position: relative;">
+            
             <h4>{{product.name}}</h4>
-            <p>Цена: {{product.price}}₸</p>
 
             {% if product.discount %}
-                <p>Скидка {{product.discount}}%</p>
+             <span style="margin-top: 10px; margin-left: -5px;" class="position-absolute top-200 start-50 translate-middle badge rounded-pill bg-danger">
+                -{{product.discount}}%
+            </span>
             {% endif %}
-            <!-- {% if product.photos.first() %}
-                <img width="300" src="{{ product.photos.first().get_photo() }}" alt="{{ product.photos.first().description }}" style='margin-bottom: 10px;'>
-            {% else %}
-                <p>Фото нет</p>
-            {% endif %} -->
+
+            
+            <p>Цена: {{product.get_discount_price()}}₸</p>
 
             <img class="product-img" src="{{ product.get_first_photo() }}">
 

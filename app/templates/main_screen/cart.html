@@ -23,49 +23,48 @@
 
 
 
-    {% for product_in_cart in current_user.cart.products_in_cart %}
-        {% if product_in_cart.amount > 0 %}
-        <div class="row align-items-center mb-3">
-            <div class="col-md-1">
-               <img style="width: 100px;" src="{{ product_in_cart.product.get_first_photo() }}" > 
+        {% for product_in_cart in current_user.cart.products_in_cart %}
+            {% if product_in_cart.amount > 0 %}
+            <div class="row align-items-center mb-3">
+                <div class="col-md-1">
+                <img style="width: 100px;" src="{{ product_in_cart.product.get_first_photo() }}" > 
+                </div>
+                <div class="col-md-4">
+                    <!-- <p>{{product_in_cart.product.name}}</p> -->
+                    <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}">{{product_in_cart.product.name}}</a>
+                </div>
+                <div class="col-md-1">
+                    <p>{{product_in_cart.amount}} </p>
+                </div>
+                <div class="col-md-1">
+                    {{product_in_cart.product.price}}₸
+                </div>
+                <div class="col-md-1 d-flex justify-content-center">
+                    <a class="btn btn-success" style="width: 50px; height: 40px;" href="{{ url_for('increase_amount', product_id=product_in_cart.id) }}"> <i class="bi bi-plus-square-fill"></i></a>
+                </div>
+                <div class="col-md-1">
+                    <a class="btn btn-warning" style="width: 50px; height: 40px;" href="{{ url_for('decrease_amount', product_id=product_in_cart.id) }}"><i class="bi bi-dash-square-fill"></i></a>
+                </div>
+                <div class="col-md-1">
+                    <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('delete_products', product_id=product_in_cart.id) }}"> <i class="bi bi-trash3-fill"></i></a>
+                </div>
             </div>
-            <div class="col-md-4">
-                <!-- <p>{{product_in_cart.product.name}}</p> -->
-                <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}">{{product_in_cart.product.name}}</a>
-            </div>
-            <div class="col-md-1">
-                <p>{{product_in_cart.amount}} </p>
-            </div>
-            <div class="col-md-1">
-                {{product_in_cart.product.price}}₸
-            </div>
-            <div class="col-md-1 d-flex justify-content-center">
-                <a class="btn btn-success" style="width: 50px; height: 40px;" href="{{ url_for('increase_amount', product_id=product_in_cart.id) }}"> <i class="bi bi-plus-square-fill"></i></a>
-            </div>
-            <div class="col-md-1">
-                <a class="btn btn-warning" style="width: 50px; height: 40px;" href="{{ url_for('decrease_amount', product_id=product_in_cart.id) }}"><i class="bi bi-dash-square-fill"></i></a>
-            </div>
-            <div class="col-md-1">
-                <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('delete_products', product_id=product_in_cart.id) }}"> <i class="bi bi-trash3-fill"></i></a>
-            </div>
-        </div>
 
-        
+
         {% endif %}
+        
     {% endfor %}
-
-    <div class="row">
-        <div class="col-md-2 offset-4 fw-bold">
-            <p class="text-end" >Всего к оплате</p>
-        </div>
-        <div class="col-md-1 fw-bold">
-            {{current_user.cart.sum_of_products_in_cart()}}₸
-        </div>
-        <div class="col-md-4">
-            <a class="btn btn-success btn-lg" href="{{ url_for('user_orders') }}">Оформить заказ</a>
-
-        </div>
+        <div class="row">
+    <div class="col-md-2 offset-4 fw-bold">
+        <p class="text-end" >Всего к оплате</p>
     </div>
+    <div class="col-md-1 fw-bold">
+        {{current_user.cart.sum_of_products_in_cart()}}₸
+    </div>
+    <div class="col-md-4">
+        <a class="btn btn-success btn-lg" href="{{ url_for('user_orders') }}">Оформить заказ</a>
+    </div>
+</div>
 
 {% endblock %}
 

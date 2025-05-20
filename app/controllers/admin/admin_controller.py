@@ -21,7 +21,7 @@ def admin_products_list():
     if not current_user.is_admin:
         abort(403)
     page = request.args.get('page', 1, type=int)
-    products = db.paginate(db.session.query(Product), page=page, per_page=10, error_out=False)
+    products = db.paginate(db.session.query(Product), page=page, per_page=20, error_out=False)
     return render_template('admin/products_list.html', products=products.items)
 
 
