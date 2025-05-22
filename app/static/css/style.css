@@ -23,3 +23,8 @@ footer {
     object-fit: contain; 
 }
 
+.product-details{
+    margin-top: 20px;
+    text-align: center;
+    font-size: large;
+}

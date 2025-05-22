@@ -2,11 +2,17 @@
 
 {% block content %}
 
-{{product.name}}
-{{product.category}}
+<div class="product-details">
+    <p>{{product.name}}</p> 
 
-{% for photo in product.photos.all() %}
-    <img style="width: 150px;" src="{{ photo.get_photo() }}" alt="{{ photo.description }}">
-{% endfor %}
+    <p>{{ product.get_category_name() }}</p> <br>
+
+    {% for photo in product.photos.all() %}
+        <img style="width: 250px;" src="{{ photo.get_photo() }}" alt="{{ photo.description }}">
+    {% endfor %}
+</div>
+
+
+
 
 {% endblock %}

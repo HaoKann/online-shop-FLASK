@@ -36,6 +36,20 @@ class Product(db.Model):
         else:
             return self.price
         
+
+    def get_category_name(self):
+        category_map = {
+            'gpu': 'Видеокарта',
+            'cpu': 'Процессор',
+            'motherboard': 'Материнская плата',
+            'ram': 'Оперативная память',
+            'psu': 'Блок питания',
+            'cooler': 'Система охлаждения',
+            'storage': 'Накопитель',
+            'pc_case': 'Корпус',
+        }
+        return category_map.get(self.category, self.category)
+        
 class Characteristic(db.Model):
     __tablename__ = 'characteristics'
 

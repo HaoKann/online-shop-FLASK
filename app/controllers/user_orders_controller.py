@@ -7,7 +7,14 @@ from app.models.order import Order
 
 @app.route('/user-orders', methods=['GET','POST'])
 @login_required
-def user_orders():
+def show_orders():
+    all_orders  = Order.query.all()
+    return render_template('user/user_orders.html', all_orders=all_orders)
+
+
+@app.route('/order', methods=['GET','POST'])
+@login_required
+def make_order():
     
     form = OrderForm()
     
@@ -31,4 +38,4 @@ def user_orders():
 
     
         flash('Заказ успешно оформлен!','success')
-    return render_template('user/user_orders.html',form=form)
+    return render_template('user/order.html',form=form)
