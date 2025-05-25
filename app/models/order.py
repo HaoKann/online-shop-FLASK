@@ -26,5 +26,5 @@ class Delivery(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     address = db.Column(db.String(255))
     way_of_delivery = db.Column(db.String(255))
-    time_of_arrival = db.Column(db.DateTime())
+    time_of_arrival = db.Column(db.String(50))
     order_id = db.Column(db.Integer(), db.ForeignKey('orders.id'))

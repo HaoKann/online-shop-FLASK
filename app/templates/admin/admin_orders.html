@@ -1,0 +1,30 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+{% for order in all_orders %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <ul>
+                {% for product_in_cart in order.products_in_order.all() %}
+                    <li>
+                        <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}">{{ product_in_cart.product.name }}</a>
+                        <br>
+                        <span>Количество: {{ product_in_cart.amount }} шт.</span>
+                    </li>
+                    
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <p>Номер телефона заказчика: {{order.user.phone_number}}</p>
+            <p>Электронная почта: {{order.user.email}}</p>
+            <p>Адрес доставки: {{order.delivery.address}}</p>
+            <p>Способ доставки: {{order.delivery.way_of_delivery}}</p>
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+
+{% endblock %}

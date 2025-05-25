@@ -7,6 +7,7 @@ from app.models.product import Product, Characteristic, Photo
 import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
+from app.models.order import Order
 
 @app.route('/admin')
 @login_required
@@ -191,3 +192,10 @@ def admin_delete_products(id):
         flash('Товар удален успешно!','success')
         return redirect (url_for('admin_products_list'))
     return render_template('admin/admin_delete_product.html', form=form, sub_title = f'Вы точно хотите удалить продукт "{deleted_product.name}"?')
+
+@app.route('/admin/user-orders')
+@login_required
+def all_user_orders():
+    all_orders = Order.query.all()
+
+    return render_template('admin/admin_orders.html', all_orders=all_orders)

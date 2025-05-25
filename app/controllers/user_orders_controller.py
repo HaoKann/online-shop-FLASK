@@ -2,7 +2,7 @@ from app import app, db
 from flask import flash, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from app.forms.order_form import OrderForm
-from app.models.order import Order
+from app.models.order import Order, Delivery
 
 
 @app.route('/user-orders', methods=['GET','POST'])
@@ -31,10 +31,14 @@ def make_order():
             product_in_cart.cart_id = None
             product_in_cart.order_id = order.id
         db.session.commit()
-        
+
         address = form.address.data
         way_of_delivery = form.way_of_delivery.data
         time_of_arrival = form.time_of_arrival.data
+
+        delivery = Delivery(address=address, way_of_delivery=way_of_delivery, time_of_arrival=time_of_arrival, order_id=order.id)
+        db.session.add(delivery)
+        db.session.commit()
 
     
         flash('Заказ успешно оформлен!','success')

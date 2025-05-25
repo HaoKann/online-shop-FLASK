@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Административная панель</title>
+    <title>Admin panel</title>
 
     {% block styles %}
         {{ bootstrap.load_css() }}
@@ -21,9 +21,7 @@
                 <div class="list-group">
                     <a class="list-group-item active list-group-item-primary" href="{{ url_for('admin_products_list') }}" >Список продуктов</a>
                     <a class="list-group-item active list-group-item-primary" href="{{ url_for('admin_add_product') }}" >Добавить продукт</a>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">And a fifth one</li>
+                    <a class="list-group-item active list-group-item-primary" href="{{ url_for('all_user_orders') }}" >Список заказов</a>
                 </div>
             </div>
             <div class="col-md-10">

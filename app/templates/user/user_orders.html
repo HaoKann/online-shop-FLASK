@@ -4,12 +4,12 @@
 
 <h1 style="text-align: center;">Ваши заказы</h1>
 
-    {% for order in all_orders %}
-    <div class="order">
-        <p> Заказ {{ order.user_id }}</p>
-        <p> Дата {{ order.date }}</p>
-        <p> Сумма {{ order.price }}</p>
-       
+    {% for user_order in current_user.orders.all() %}
+        <div class="order">
+            <p> Заказ {{ user_order.id }}</p>
+            <p> Дата {{ user_order.date }}</p>
+            <p> Сумма {{ user_order.price }}₸</p>
+        </div>
     {% endfor %}
-    </div>
+ 
 {% endblock %}
