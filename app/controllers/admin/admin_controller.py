@@ -8,6 +8,8 @@ import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
 from app.models.order import Order
+from app.models.user import User
+from app.forms.admin.edit_order import EditOrder
 
 @app.route('/admin')
 @login_required
@@ -199,3 +201,42 @@ def all_user_orders():
     all_orders = Order.query.all()
 
     return render_template('admin/admin_orders.html', all_orders=all_orders)
+
+
+@app.route('/admin/user-orders/delete/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_delete_order(id):
+
+    delete_order = Order.query.get_or_404(id)
+    user = delete_order.user
+
+    db.session.delete(delete_order)
+    db.session.commit()
+    flash(f'Заказ пользователя {user.name} удалён!', 'success')
+    return redirect(url_for('all_user_orders'))
+
+@app.route('/admin/user-orders/edit/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_edit_order(id):
+
+    edit_order = Order.query.get_or_404(id)
+    user = edit_order.user
+
+    form = EditOrder()
+
+    if form.validate_on_submit():
+        edit_order.user.phone_number = form.phone_number.data
+        edit_order.user.email = form.email.data
+        edit_order.delivery.address = form.address.data
+        edit_order.delivery.way_of_delivery = form.way_of_delivery.data
+        edit_order.delivery.time_of_arrival = form.time_of_arrival.data
+        db.session.add(edit_order)
+        db.session.commit()
+        flash(f'Заказ пользователя {user.name} успешно изменён!', 'success')
+        return redirect(url_for('all_user_orders'))
+    form.phone_number.data = edit_order.user.phone_number
+    form.email.data = edit_order.user.email
+    form.address.data = edit_order.delivery.address
+    form.way_of_delivery.data = edit_order.delivery.way_of_delivery
+    form.way_of_delivery.data = edit_order.delivery.time_of_arrival
+    return render_template('admin/admin_edit_order.html', form=form)

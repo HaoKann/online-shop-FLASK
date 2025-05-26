@@ -32,7 +32,7 @@ class User(db.Model, UserMixin):
     # products = db.relationship('Product', backref='user', lazy='dynamic')
 
     cart = db.relationship('Cart', backref='user', uselist=False)
-    orders = db.relationship('Order', backref='user', lazy='dynamic')
+    orders = db.relationship('Order', back_populates='user', lazy='dynamic')
     favourite_products = db.relationship('FavouriteProduct', backref='favourite', lazy='dynamic')
 
 

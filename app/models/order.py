@@ -17,6 +17,7 @@ class Order(db.Model):
 
     products_in_order = db.relationship('ProductInCart', backref='order', lazy='dynamic')
     delivery = db.relationship('Delivery', backref='order', uselist=False)
+    user = db.relationship('User', back_populates='orders')
 
     # products = db.relationship('Product', secondary=order_product, backref='order')
     

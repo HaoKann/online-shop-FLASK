@@ -9,22 +9,29 @@
             <ul>
                 {% for product_in_cart in order.products_in_order.all() %}
                     <li>
+                        <img class="product-img" style="width: 100px;" src="{{ product_in_cart.product.get_first_photo() }}">
+                        <br>
                         <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}">{{ product_in_cart.product.name }}</a>
                         <br>
                         <span>Количество: {{ product_in_cart.amount }} шт.</span>
                     </li>
-                    
+                  
                 {% endfor %}
             </ul>
+                <div class="col-md-10">
+                    <p>Номер телефона заказчика: {{order.user.phone_number}}</p>
+                    <p>Электронная почта: {{order.user.email}}</p>
+                    <p>Адрес доставки: {{order.delivery.address}}</p>
+                    <p>Способ доставки: {{order.delivery.way_of_delivery}}</p>
+                    <p>Время доставки: {{order.delivery.time_of_arrival}}</p>
+                    <a class="btn btn-danger mt-2" href="{{ url_for('admin_delete_order', id=order.id) }}"><i class="bi bi-x-circle"></i></a>
+                    <a class="btn btn-primary mt-2" href="{{ url_for('admin_edit_order', id=order.id) }}"><i class="bi bi-pencil-square"></i></a>
+                    <hr>
+                </div>
         </div>
-        <div class="col-md-4">
-            <p>Номер телефона заказчика: {{order.user.phone_number}}</p>
-            <p>Электронная почта: {{order.user.email}}</p>
-            <p>Адрес доставки: {{order.delivery.address}}</p>
-            <p>Способ доставки: {{order.delivery.way_of_delivery}}</p>
-        </div>
+        
     </div>
-    <hr>
+    
 {% endfor %}
 
 {% endblock %}
