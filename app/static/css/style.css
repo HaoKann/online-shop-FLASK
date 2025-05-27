@@ -1,14 +1,193 @@
-/* Ensure the footer stays at the bottom of the page */
+:root {
+  --primary: #2563eb;
+  --dark: #1e293b;
+  --light: #f8fafc;
+  --accent:  #600018;
+}
+
+
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
 }
-
-main {
-    flex: 1;
+.hero-section {
+  background: rgb(15, 15, 15), 
+              url('../images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 8rem 0;
+  text-align: center;
 }
+
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.hero-title span {
+  color: var(--accent);
+}
+
+.feature-card,
+.feature-item {
+  color: var(--light); /* Чёрный цвет текста */
+}
+
+.feature-card h3,
+.feature-item p {
+  color: var(--light); /* Наследует чёрный цвет от родителя */
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.features-section {
+  background: rgb(15, 15, 15) !important;
+  padding: 6rem 0;
+  background: var(--light);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.feature-card {
+  background:var(--accent);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  color: var( --dark);
+  margin-bottom: 1.5rem;
+}
+
+/* Товары */
+.products-showcase {
+  padding: 6rem 0;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.product-card {
+  background: white;
+  color: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.product-card h3,
+.product-card .specs,
+.product-card .price {
+  color: var(--light)/* Наследует чёрный цвет */
+}
+
+/* Для спецификаций товаров */
+.specs span {
+  color: #333333; /* Тёмно-серый для лучшей читаемости */
+}
+
+.feature-card p,
+.product-card .specs {
+  opacity: 0.9; /* Лёгкое затемнение второстепенного текста */
+  background-color: var(--accent);
+}
+
+.feature-icon {
+  color: var(--primary) !important; /* Иконки останутся синими */
+}
+
+.price {
+  color: var(--primary) !important; /* Цены останутся синими */
+}
+
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 4rem;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: var(--light);
+}
+
+.main {
+        padding: 3rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+ h2 {
+        color: var(--light);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+ h4 {
+        color: #ffffff;
+        margin-bottom: 2rem;
+    }
+
+
+ .features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+.feature-item {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        width: 200px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature-item p {
+        margin-bottom: 0;
+        font-weight: 500;
+    }
 
 footer {
     text-align: center;
@@ -27,4 +206,4 @@ footer {
     margin-top: 20px;
     text-align: center;
     font-size: large;
-}
+} 
