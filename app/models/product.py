@@ -49,7 +49,26 @@ class Product(db.Model):
             'pc_case': 'Корпус',
         }
         return category_map.get(self.category, self.category)
-        
+
+
+ready_pc_products = db.Table('ready_pc_products',
+    db.Column('readypc_id', db.Integer, db.ForeignKey('readypc.id')),
+    db.Column('product_id', db.Integer, db.ForeignKey('products.id'))
+)
+
+class ReadyPC(db.Model):
+    __tablename__='readypc'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    category = db.Column(db.String(100), nullable=False)
+    amount = db.Column(db.Integer(), nullable=False)
+
+    products = db.relationship('Product', secondary='ready_pc_products', backref='ready_pcs' )
+
+
+
+
 class Characteristic(db.Model):
     __tablename__ = 'characteristics'
 

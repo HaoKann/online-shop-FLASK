@@ -240,3 +240,18 @@ def admin_edit_order(id):
     form.way_of_delivery.data = edit_order.delivery.way_of_delivery
     form.way_of_delivery.data = edit_order.delivery.time_of_arrival
     return render_template('admin/admin_edit_order.html', form=form)
+
+
+
+@app.route('/admin/ready-pcs')
+@login_required
+def admin_ready_pcs():
+    return render_template('admin/admin_ready_pcs.html')
+
+
+@app.route('/admin/add/ready-pc', methods=['GET','POST'])
+@login_required
+def admin_add_readypc():
+    return render_template('admin/admin_add_readypc.html')
+
+
