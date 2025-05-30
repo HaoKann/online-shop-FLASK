@@ -3,20 +3,14 @@ from wtforms import StringField, IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
 class ReadyPCForm(FlaskForm):
-    name = StringField('Название товара', validators=[DataRequired()])
+    name = StringField('Название сборки', validators=[DataRequired()])
     category = SelectField(
-        'Категория товара',
+        'Категория сборки',
         choices=[
-            ('gpu', 'Видеокарта'),
-            ('cpu', 'Процессор'),
-            ('motherboard', 'Материнская плата'),
-            ('ram', 'Оперативная память'),
-            ('psu', 'Блок питания'),
-            ('cooler', 'Система охлаждения'),
-            ('storage', 'Накопитель'),
-            ('pc_case', 'Корпус'),
+            ('gaming', 'Игровая'),
+            ('office', 'Офисная'),
+            ('professional', 'Профессиональная'),
         ],
         validators=[DataRequired()]
     )
-    amount = IntegerField('Количество продукта', validators=[DataRequired()])
     submit = SubmitField('Добавить готовую сборку')

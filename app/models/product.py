@@ -20,7 +20,8 @@ class Product(db.Model):
                                      cascade='all, delete-orphan', passive_deletes=True)
     favourite_by_users = db.relationship('FavouriteProduct', backref='product', lazy='dynamic',
                                        cascade='all, delete-orphan', passive_deletes=True)
-    
+    product_in_ready_pcs = db.relationship('ProductInReadyPC', backref='product', lazy='dynamic',
+                                           cascade='all, delete-orphan')
 
     def get_first_photo(self):
         if self.photos.first():
@@ -51,10 +52,6 @@ class Product(db.Model):
         return category_map.get(self.category, self.category)
 
 
-ready_pc_products = db.Table('ready_pc_products',
-    db.Column('readypc_id', db.Integer, db.ForeignKey('readypc.id')),
-    db.Column('product_id', db.Integer, db.ForeignKey('products.id'))
-)
 
 class ReadyPC(db.Model):
     __tablename__='readypc'
@@ -62,10 +59,17 @@ class ReadyPC(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(100), nullable=False)
-    amount = db.Column(db.Integer(), nullable=False)
 
-    products = db.relationship('Product', secondary='ready_pc_products', backref='ready_pcs' )
+    products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic' )
 
+
+class ProductInReadyPC(db.Model):
+    __tablename__='productsinreadypc'
+
+    id = db.Column(db.Integer(), primary_key=True) 
+    amount = db.Column(db.Integer(), nullable=False, default=1)
+    ready_pc_id = db.Column(db.Integer(), db.ForeignKey('readypc.id'), nullable=False)
+    product_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
 
 
 

@@ -10,6 +10,8 @@ from flask_login import login_required, current_user
 from app.models.order import Order
 from app.models.user import User
 from app.forms.admin.edit_order import EditOrder
+from app.forms.admin.add_ready_pc import ReadyPCForm
+
 
 @app.route('/admin')
 @login_required
@@ -252,6 +254,11 @@ def admin_ready_pcs():
 @app.route('/admin/add/ready-pc', methods=['GET','POST'])
 @login_required
 def admin_add_readypc():
-    return render_template('admin/admin_add_readypc.html')
+
+    form = ReadyPCForm()
+    if form.validate_on_submit():
+        pass
+
+    return render_template('admin/admin_add_readypc.html', form=form)
 
 

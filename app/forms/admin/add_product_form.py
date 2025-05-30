@@ -28,7 +28,7 @@ class CharacteristicsForm(FlaskForm):
     name = StringField('Название характиристики',validators=[DataRequired()])
     int_value = IntegerField('Числовая характеристика', validators=[DataRequired()], default=0)
     str_value = StringField('Строковая характиристика',validators=[DataRequired()])
-    submit_сharacteristics = SubmitField('Добавить характеристику')
+    submit_characteristics = SubmitField('Добавить характеристику')
 
 class PhotoForm(FlaskForm):
     photo = FileField('Добавить фото товара: ', validators=[FileAllowed(['jpg','png','gif'], 'Можно загружать только картинки!' )])
