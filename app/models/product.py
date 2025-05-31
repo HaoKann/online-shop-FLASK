@@ -62,6 +62,27 @@ class ReadyPC(db.Model):
 
     products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic' )
 
+    def get_absent_categories(self):
+        category_map = {
+            'gpu': 'Видеокарта',
+            'cpu': 'Процессор',
+            'motherboard': 'Материнская плата',
+            'ram': 'Оперативная память',
+            'psu': 'Блок питания',
+            'cooler': 'Система охлаждения',
+            'storage': 'Накопитель',
+            'pc_case': 'Корпус',
+        }
+
+        for component in self.products_in_readypc.all():
+            if component.product.category in category_map:
+                category_map.pop(component.product.category)
+        return category_map
+    
+
+    def is_ready(self):
+        return len(self.get_absent_categories()) == 0
+
 
 class ProductInReadyPC(db.Model):
     __tablename__='productsinreadypc'
@@ -70,6 +91,8 @@ class ProductInReadyPC(db.Model):
     amount = db.Column(db.Integer(), nullable=False, default=1)
     ready_pc_id = db.Column(db.Integer(), db.ForeignKey('readypc.id'), nullable=False)
     product_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
+
+
 
 
 

@@ -11,7 +11,7 @@ from app.models.order import Order
 from app.models.user import User
 from app.forms.admin.edit_order import EditOrder
 from app.forms.admin.add_ready_pc import ReadyPCForm
-
+from app.models.product import ReadyPC
 
 @app.route('/admin')
 @login_required
@@ -248,7 +248,16 @@ def admin_edit_order(id):
 @app.route('/admin/ready-pcs')
 @login_required
 def admin_ready_pcs():
-    return render_template('admin/admin_ready_pcs.html')
+    all_ready_pc = ReadyPC.query.all()
+
+    return render_template('admin/admin_ready_pcs.html',all_ready_pc=all_ready_pc)
+
+@app.route('/admin/ready-pc/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_ready_pc_detail(id):
+    ready_pc_detail = ReadyPC.query.get_or_404(id)
+
+    return render_template('admin/admin_ready_pc_details.html', ready_pc_detail=ready_pc_detail)
 
 
 @app.route('/admin/add/ready-pc', methods=['GET','POST'])
@@ -256,9 +265,12 @@ def admin_ready_pcs():
 def admin_add_readypc():
 
     form = ReadyPCForm()
-    if form.validate_on_submit():
-        pass
 
+    if form.validate_on_submit():
+        ready_pc = ReadyPC(name=form.name.data, category=form.category.data)   
+        db.session.add(ready_pc)
+        db.session.commit()
+        flash('Готовая сборка создана!', 'success')
     return render_template('admin/admin_add_readypc.html', form=form)
 
 

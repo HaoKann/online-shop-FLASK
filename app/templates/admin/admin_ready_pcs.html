@@ -4,4 +4,24 @@
 {% block content %}
 <h1 style="text-align: center;">Готовые сборки</h1>
 
+{% for ready_pc in all_ready_pc %}
+
+    {% if ready_pc.is_ready() %}
+        <p>Сборка готова</p>
+    {% else %}
+        <p>Сборка не готова</p>
+        <p>Не хватает 
+            {% for category in ready_pc.get_absent_categories().values() %} 
+                {{ category }} 
+            {% endfor %}</p>
+     {% endif %}
+
+    <a href="{{ url_for('admin_ready_pc_detail', id=ready_pc.id) }}">{{ ready_pc.name }}</a>
+    {{ ready_pc.category }}
+    <hr>
+
+    
+
+{% endfor %}
+
 {% endblock %}
