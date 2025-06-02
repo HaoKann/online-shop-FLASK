@@ -3,19 +3,19 @@
 {% block content %}
 
 <h1 style="text-align: center;">Все продукты</h1>
-{% for product in products %}
+{% for product in products.items %}
 
 
     <img class="product-img" src="{{ product.get_first_photo() }}">
 
     <p>
-        {{ product.name }}
+        {{ product.name }} <br>
         
-        <a href="{{ url_for('admin_product', id=product.id) }}">
+        <a class="btn btn-primary" style="width: 50px; height: 40px;" href="{{ url_for('admin_product', id=product.id) }}">
             <i class="bi bi-pencil-square"></i>
         </a>
         
-        <a href="{{ url_for('admin_delete_products', id=product.id) }}">
+        <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('admin_delete_products', id=product.id) }}">
             <i class="bi bi-x-circle"></i>
         </a>
     </p>
@@ -24,6 +24,9 @@
     Товаров нет
 {% endfor %}
 
-<a class="btn btn-primary" href="{{url_for('main')}}">Главная страница</a>
+<!-- Пагинация --> 
+ <nav></nav>
+
+
 
 {% endblock %}

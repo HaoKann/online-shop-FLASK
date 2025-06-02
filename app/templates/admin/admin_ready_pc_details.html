@@ -13,15 +13,16 @@
 
 {% endfor %}
 
- {% if ready_pc_detail.is_ready() %}
-        <p>Сборка готова</p>
-    {% else %}
-        <p>Сборка не готова</p>
-        <p>Не хватает 
-            {% for category in ready_pc_detail.get_absent_categories().values() %} 
-                {{ category }} 
-            {% endfor %}</p>
-     {% endif %}
+{% if ready_pc_detail.is_ready() %}
+    <p>Сборка готова</p>
+{% else %}
+    <p>Сборка не готова</p>
+    <p>Не хватает:</p>
+    {% for category in ready_pc_detail.get_absent_categories().values() %} 
+        <div>{{ category }}</div>
+    {% endfor %}
+{% endif %}
+
 
 
 {% endblock %}

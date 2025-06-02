@@ -4,6 +4,7 @@
 {% block content %}
 <h1 style="text-align: center;">Готовые сборки</h1>
 
+
 {% for ready_pc in all_ready_pc %}
 
     {% if ready_pc.is_ready() %}
@@ -18,6 +19,11 @@
 
     <a href="{{ url_for('admin_ready_pc_detail', id=ready_pc.id) }}">{{ ready_pc.name }}</a>
     {{ ready_pc.category }}
+    <a class="btn btn-danger" style="width: 50px; height: 40px;"" href="{{ url_for('admin_delete_readypc', id=ready_pc.id) }}">
+        <i class="bi bi-x-square-fill"></i>
+    </a>
+
+
     <hr>
 
     

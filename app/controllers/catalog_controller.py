@@ -2,6 +2,10 @@ from app import app
 from flask import render_template
 from app.models.product import Product
 
+@app.route('/products')
+def all_products():
+    return render_template('catalog/all_products.html')
+
 @app.route('/catalog')
 def catalog():
     return render_template('main_screen/catalog.html')

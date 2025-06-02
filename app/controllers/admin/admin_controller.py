@@ -27,7 +27,7 @@ def admin_products_list():
         abort(403)
     page = request.args.get('page', 1, type=int)
     products = db.paginate(db.session.query(Product), page=page, per_page=20, error_out=False)
-    return render_template('admin/products_list.html', products=products.items)
+    return render_template('admin/products_list.html', products=products)
 
 
 @app.route('/admin/products/<int:id>', methods=['GET','POST'])
@@ -272,5 +272,16 @@ def admin_add_readypc():
         db.session.commit()
         flash('Готовая сборка создана!', 'success')
     return render_template('admin/admin_add_readypc.html', form=form)
+
+
+@app.route('/admin/ready-pc/delete/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_delete_readypc(id):
+
+    delete_ready_pc = ReadyPC.query.get_or_404(id)
+    db.session.delete(delete_ready_pc)
+    db.session.commit()
+    flash(f'Сборка {delete_ready_pc.name} удалена! ', 'danger')
+    return redirect (url_for('admin_ready_pcs'))
 
 
