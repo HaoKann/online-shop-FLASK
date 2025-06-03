@@ -25,9 +25,12 @@ def admin():
 def admin_products_list():
     if not current_user.is_admin:
         abort(403)
-    page = request.args.get('page', 1, type=int)
-    products = db.paginate(db.session.query(Product), page=page, per_page=20, error_out=False)
-    return render_template('admin/products_list.html', products=products)
+    page = request.args.get('page', 1, type=int) 
+    # метод db.paginate для получения объектов Product с пагинацией
+    # page: Номер страницы, берётся из запроса (request.args.get('page', 1, type=int)), по умолчанию 1.
+    per_page = 5
+    products = Product.query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template('admin/products_list.html', products=products, active_page = 'products')
 
 
 @app.route('/admin/products/<int:id>', methods=['GET','POST'])
