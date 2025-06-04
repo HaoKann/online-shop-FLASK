@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request, abort
 from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm, PhotoForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
-from app.models.product import Product, Characteristic, Photo
+from app.models.product import Product, Characteristic, Photo, ProductInReadyPC
 import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
@@ -12,6 +12,8 @@ from app.models.user import User
 from app.forms.admin.edit_order import EditOrder
 from app.forms.admin.add_ready_pc import ReadyPCForm
 from app.models.product import ReadyPC
+from app.forms.admin.edit_ready_pc import EditReadyPC
+
 
 @app.route('/admin')
 @login_required
@@ -276,6 +278,40 @@ def admin_add_readypc():
         flash('Готовая сборка создана!', 'success')
     return render_template('admin/admin_add_readypc.html', form=form)
 
+@app.route('/admin/ready-pc/edit/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_edit_readypc(id):
+    if not current_user.is_admin:
+        abort(403)
+
+    # Находим сборку для редактирования
+    ready_pc = ReadyPC.query.get_or_404(id)  
+
+    # Создаём форму с текущей сборкой, ready_pc передан для предзаполнения текущей сборки   
+    form = EditReadyPC(ready_pc=ready_pc)
+
+    if form.validate_on_submit():
+        # Удаляем старые комплектующие
+        ProductInReadyPC.query.filter(ProductInReadyPC.ready_pc_id == ready_pc.id).delete()
+
+        # Добавляем новые комплектующие
+        categories = ['cpu','gpu','motherboard','ram','psu','cooler','storage','pc_case']
+        for cat in categories:
+            product_id = int(getattr(form, cat).data) if getattr(form, cat).data else None
+            if product_id:
+                new_component = ProductInReadyPC(
+                    ready_pc_id=ready_pc.id,
+                    amount = 1, 
+                    product_id = product_id
+                )
+                db.session.add(new_component)
+        # Обновляем название
+        ready_pc.name = form.name.data
+
+        db.session.commit()
+        flash('Сборка изменена успешно!','success')
+        return redirect(url_for('admin_ready_pcs'))
+    return render_template('admin/edit_readypc.html', form=form, ready_pc=ready_pc, active_page='ready_pcs')
 
 @app.route('/admin/ready-pc/delete/<int:id>', methods=['GET','POST'])
 @login_required
