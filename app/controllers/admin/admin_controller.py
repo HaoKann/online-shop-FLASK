@@ -297,6 +297,9 @@ def admin_edit_readypc(id):
         # Добавляем новые комплектующие
         categories = ['cpu','gpu','motherboard','ram','psu','cooler','storage','pc_case']
         for cat in categories:
+            # Получает значение выбранного продукта из поля формы (например, form.cpu.data) и преобразует его в число. 
+            # Если значение пустое, присваивает None.
+            # Как и в форме, getattr это способ получить поле формы по его имени (например, form.cpu вместо getattr(form, 'cpu')).
             product_id = int(getattr(form, cat).data) if getattr(form, cat).data else None
             if product_id:
                 new_component = ProductInReadyPC(
@@ -316,6 +319,8 @@ def admin_edit_readypc(id):
 @app.route('/admin/ready-pc/delete/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_delete_readypc(id):
+    if not current_user.is_admin:
+        abort(403)
 
     delete_ready_pc = ReadyPC.query.get_or_404(id)
     db.session.delete(delete_ready_pc)

@@ -60,7 +60,7 @@ class ReadyPC(db.Model):
     name = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(100), nullable=False)
 
-    products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic' )
+    products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan' )
 
     def get_absent_categories(self):
         category_map = {

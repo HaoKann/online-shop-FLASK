@@ -13,7 +13,7 @@
         <p>Сборка не готова</p>
         <p>Не хватает 
             {% for category in ready_pc.get_absent_categories().values() %} 
-                {{ category }} 
+                <p>Категория сборки {{category}}</p>
             {% endfor %}</p>
      {% endif %}
 
