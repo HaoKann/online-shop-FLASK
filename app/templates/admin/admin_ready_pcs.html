@@ -1,37 +1,40 @@
 {% extends 'admin/base.html' %}
 
-
 {% block content %}
 <h1 style="text-align: center;">Готовые сборки</h1>
 
-
 {% for ready_pc in all_ready_pc %}
+    <div class="ready-pc-item">
+        <a href="{{ url_for('admin_ready_pc_detail', id=ready_pc.id) }}">{{ ready_pc.name }}</a><br>
+        <p>Категория: {{ ready_pc.category }}</p>
 
-    {% if ready_pc.is_ready() %}
-        <p>Сборка готова</p>
-    {% else %}
-        <p>Сборка не готова</p>
-        <p>Не хватает 
-            {% for category in ready_pc.get_absent_categories().values() %} 
-                <p>Категория сборки {{category}}</p>
-            {% endfor %}</p>
-     {% endif %}
+        {% if ready_pc.is_ready() %}
+            <div class="status-item">
+                <i class="bi bi-check-circle-fill" style="margin-right: 0.5em; color: green;"></i>
+                Готовая сборка
+            </div>
+        {% else %}
+            <div class="status-item">
+                <i class="bi bi-gear-fill" style="margin-right: 0.5em; color: gray;"></i>
+                Неготовая сборка
+            </div>
+            <p>Не хватает:
+                {% for category in ready_pc.get_absent_categories().values() %}
+                    <span>{{ category }}</span>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
 
-    <a href="{{ url_for('admin_ready_pc_detail', id=ready_pc.id) }}">{{ ready_pc.name }}</a>
-    {{ ready_pc.category }}
-    <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('admin_delete_readypc', id=ready_pc.id) }}">
-        <i class="bi bi-x-square-fill"></i>
-    </a>
+        <div class="button-group">
+            <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('admin_delete_readypc', id=ready_pc.id) }}">
+                <i class="bi bi-x-square-fill"></i>
+            </a>
+            <a class="btn btn-primary" style="width: 50px; height: 40px;" href="{{ url_for('admin_edit_readypc', id=ready_pc.id) }}">
+                <i class="bi bi-pencil-fill"></i>
+            </a>
+        </div>
 
-    <a class="btn btn-primary" style="width: 50px; height: 40px;" href="{{ url_for('admin_edit_readypc', id=ready_pc.id) }}">
-        <i class="bi bi-pencil-fill"></i>
-    </a>
-
-
-    <hr>
-
-    
-
+        <hr>
+    </div>
 {% endfor %}
-
 {% endblock %}

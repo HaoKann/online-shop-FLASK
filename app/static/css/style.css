@@ -213,3 +213,24 @@ footer {
     width: 50px;
     height: 40px;
 }
+
+.ready-pc-item {
+        margin-bottom: 1rem;
+    }
+.status-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.bi {
+      font-size: 1.2em; /* Размер иконок */
+    }
+
+.button-group {
+      margin-top: 0.5rem;
+    }
+    
+.button-group .btn {
+      margin-right: 0.5rem;
+    }
