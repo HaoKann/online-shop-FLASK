@@ -3,11 +3,18 @@
 {% block content %}
 
 <h1 style="text-align: center;">Все продукты</h1>
+
+<form class="d-flex" role="search" action=" {{ url_for('admin_search') }} " method="GET" >
+    <input class="form-control me-2" name="q" placeholder="Искать" aria-label="Search" >
+    <button class="btn btn-outline-success" type="submit">Поиск</button>
+</form>
+
+
 {% for product in products.items %}
     <div class="product-item">
     <img class="product-img" src="{{ product.get_first_photo() }}" alt="{{ product.name }}">
     <div class="product-info">
-        <span>{{ product.name }}</span>
+        <span>{{ product.name }}</span> <br>
         <a class="btn btn-primary admin-btn" href="{{ url_for('admin_product', id=product.id) }}">
             <i class="bi bi-pencil-square"></i>
         </a>
