@@ -89,7 +89,7 @@
                   <li><a class="dropdown-item" href="{{ url_for('logout') }}">Выйти из аккаунта</a></li>
                 </ul>
               </li>
-              {{ render_form(g.change_theme, form_type='inline', action='/change-theme' ) }}
+
               {% if current_user.is_admin %}
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
@@ -97,23 +97,27 @@
               {% endif %}
             </ul>
 
-            <form class="d-flex" role="search" action="{{ url_for('search') }}" method="GET">
-              <input class="form-control me-2" name="q"  placeholder="Искать" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Поиск</button>
-            </form>
-
-
             
+              <!-- Форма поиска с кнопкой переключения темы -->
+              <div class="d-flex align-items-center">
+               <form class="d-flex me-2" role="search" action="{{ url_for('search') }}" method="GET">
+                        <input class="form-control me-2" name="q" placeholder="Искать" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Поиск</button>
+                    </form>
+                    <button id="theme-toggle" class="btn btn-outline-secondary theme-toggle-btn" title="Переключить тему">
+                        <i class="bi bi-brightness-high"></i>
+                    </button>
+              </div>
+
+            {{ render_messages(dismissible=True, dismiss_animate=True) }}
+            
+
             
           </div>
         </div>
       </nav>
       
-      
-      {{ render_messages(dismissible=True, dismiss_animate=True) }}
-
-
-
+  
       <div class="container">
           {% block content %}
 
@@ -123,6 +127,15 @@
     
     {% block scripts %}
         {{ bootstrap.load_js() }}
+
+        <script>
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                const currentTheme = document.cookie.split('; ').find(row => row.startsWith('theme=')).split('=')[1] || 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.cookie = `theme=${newTheme}; path=/`;
+                location.reload(); // Перезагрузка для применения стилей
+            });
+        </script>
     {% endblock %}
 </body>
 
