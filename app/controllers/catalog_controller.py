@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template
+from flask import render_template, request
 from app.models.product import Product
 
 @app.route('/products')
@@ -12,43 +12,51 @@ def catalog():
 
 @app.route('/gpu')
 def graphics_card():
-    gpu_products = Product.query.filter_by(category='gpu').all()
-    return render_template('catalog/products_in_catalog.html', sub_title ='Видеокарты', products=gpu_products)
+    page = request.args.get('page', 1, type=int)
+    gpu_products = Product.query.filter_by(category='gpu').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html', sub_title ='Видеокарты', products=gpu_products, endpoint='graphics_card')
 
 @app.route('/cpu')
 def processor():
-    processor_products = Product.query.filter_by(category='cpu').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Процессоры', products=processor_products)
+    page = request.args.get('page', 1, type=int)
+    processor_products = Product.query.filter_by(category='cpu').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Процессоры', products=processor_products, endpoint='processor')
 
 @app.route('/motherboard')
 def motherboard():
-    motherboard_products = Product.query.filter_by(category='motherboard').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Материнские платы', products=motherboard_products)
+    page = request.args.get('page', 1, type=int)
+    motherboard_products = Product.query.filter_by(category='motherboard').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Материнские платы', products=motherboard_products,endpoint='motherboard')
 
 @app.route('/psu')
 def power_supply_unit():
-    psu_products = Product.query.filter_by(category='psu').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Блоки питания', products=psu_products)
+    page = request.args.get('page', 1, type=int)
+    psu_products = Product.query.filter_by(category='psu').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Блоки питания', products=psu_products,endpoint='power_supply_unit')
 
 @app.route('/ram')
 def random_access_memory():
-    ram_products = Product.query.filter_by(category='ram').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Оперативная память', products=ram_products)
+    page = request.args.get('page', 1, type=int)
+    ram_products = Product.query.filter_by(category='ram').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Оперативная память', products=ram_products,endpoint='random_access_memory')
 
 @app.route('/cooler')
 def cooling_system():
-    cooler_products = Product.query.filter_by(category='cooler').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Кулеры и системы охлаждения', products=cooler_products)
+    page = request.args.get('page', 1, type=int)
+    cooler_products = Product.query.filter_by(category='cooler').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Кулеры и системы охлаждения', products=cooler_products,endpoint='cooling_system')
 
 @app.route('/storage')
 def storage():
-    storage_products = Product.query.filter_by(category='storage').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Жесткие диски и твердотельные накопители', products=storage_products)
+    page = request.args.get('page', 1, type=int)
+    storage_products = Product.query.filter_by(category='storage').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Жесткие диски и твердотельные накопители', products=storage_products,endpoint='storage')
 
 @app.route('/pc_case')
 def computer_case():
-    case_products = Product.query.filter_by(category='pc_case').all()
-    return render_template('catalog/products_in_catalog.html',sub_title='Корпуса', products=case_products)
+    page = request.args.get('page', 1, type=int)
+    case_products = Product.query.filter_by(category='pc_case').paginate(page=page, per_page=10)
+    return render_template('catalog/products_in_catalog.html',sub_title='Корпуса', products=case_products,endpoint='computer_case')
 
 
 @app.route('/product_details/<int:prod_id>')

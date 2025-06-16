@@ -269,3 +269,38 @@ section.features-section h2,
 .btn-primary .text-white {
     color: white !important;
 }
+
+
+
+/* Стили для пагинации */
+.pagination {
+    --bs-pagination-color: #ffffff; /* Белый цвет текста по умолчанию */
+    --bs-pagination-active-bg: #600018; /* Красный фон для активной страницы */
+    --bs-pagination-active-border-color: #600018;
+    --bs-pagination-hover-color: #ffcccc; /* Розовый при наведении */
+    --bs-pagination-disabled-color: #666666; /* Серый для отключённых элементов */
+}
+
+.page-link {
+    color: #ffffff !important; /* Принудительно белый текст */
+    background-color: #2a2a2a; /* Тёмный фон для ссылок */
+    border-color: #333333; /* Тёмная граница */
+}
+
+.page-link:hover {
+    color: #ffcccc !important; /* Розовый при наведении */
+    background-color: #333333; /* Темнее фон */
+    border-color: #444444;
+}
+
+.page-item.active .page-link {
+    background-color: #600018 !important; /* Активная страница */
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+.page-item.disabled .page-link {
+    color: #666666 !important; /* Серый для отключённых */
+    background-color: #1e1e1e;
+    border-color: #333333;
+}
