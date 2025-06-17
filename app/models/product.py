@@ -59,6 +59,8 @@ class ReadyPC(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     category = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Integer(), nullable=False, default=0)  
+    amount = db.Column(db.Integer(), nullable=False, default=1)
 
     products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan' )
 

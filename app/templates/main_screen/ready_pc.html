@@ -1,1 +1,17 @@
 {% extends 'base.html' %}
+
+
+{% block content %}
+<h1 style="text-align: center;">Готовые сборки</h1>
+
+{% for ready_pc in all_ready_pc %}
+
+
+<img src="" alt="">
+<p>Название: {{ready_pc.name}}</p>
+<p>Категория: {{ready_pc.category}}</p>
+
+
+{% endfor %}
+
+{% endblock %}
