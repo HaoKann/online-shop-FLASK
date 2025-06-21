@@ -55,7 +55,16 @@ body {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  
+}
+
+.cta-buttons .btn-outline-light:hover {
+  color: #600018;
+  background-color: rgba(96, 0, 24, 0.1); /* Полупрозрачный бордовый */
+  border-color: #600018;
+}
+
+.cta-buttons .btn-outline-light {
+  transition: all 0.3s ease;
 }
 
 .features-section {

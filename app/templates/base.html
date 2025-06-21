@@ -44,32 +44,33 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="{{ url_for('catalog') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="{{ url_for('catalog') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi-list-ul"></i>
                   Каталог
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{{ url_for('graphics_card') }}">Видеокарты</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('processor') }}">Процессоры</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('motherboard') }}">Материнские платы </a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('power_supply_unit') }}">Блоки питания</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('random_access_memory') }}">Оперативная память</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('cooling_system') }}">Кулеры и системы охлаждения</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('storage') }}">Жесткие диски и твердотельные накопители</a></li>
-                  <li><a class="dropdown-item" href="{{ url_for('computer_case') }}">Корпуса</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('graphics_card') }}"> <i class="bi bi-gpu-card"></i> Видеокарты</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('processor') }}"> <i class="bi bi-cpu"></i> Процессоры</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('motherboard') }}"> <i class="bi bi-motherboard"></i> Материнские платы </a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('power_supply_unit') }}"> <i class="bi bi-plug-fill"></i> Блоки питания</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('random_access_memory') }}"> <i class="bi bi-memory"></i> Оперативная память</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('cooling_system') }}"> <i class="bi bi-fan"></i>  Кулеры и системы охлаждения</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('storage') }}"> <i class="bi bi-nvme"></i> Жесткие диски и твердотельные накопители</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('computer_case') }}"> <i class="bi bi-pc"></i> Корпуса</a></li>
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('promotions') }}">Акции</a>
+                 <a class="nav-link" href="{{ url_for('promotions') }}"><i class="bi bi-percent"></i> Акции</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('ready_pc') }}">Готовые сборки</a>
+                <a class="nav-link" href="{{ url_for('ready_pc') }}" > </i>Готовые сборки</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('pc_help') }}">Нужна помощь в сборке ПК?</a>
+                <a class="nav-link" href="{{ url_for('pc_help') }}"> <i class="bi bi-question-diamond"></i> Нужна помощь в сборке ПК?</a>
               </li>
-
+              
               <li class="nav-item position-relative">
-              <a class="nav-link" href="{{ url_for('user_cart') }}">Корзина</a>
+              <a class="nav-link" href="{{ url_for('user_cart') }}"><i class="bi bi-cart"></i> Корзина</a>
+              
               {% if current_user.is_authenticated %}
               <span class="position-absolute top-0 mt-9 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ current_user.cart.sum_of_products_amount() }}
@@ -79,8 +80,8 @@
               
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Моя информация
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-person-badge"></i>
+                  {{ current_user.name }}
                 </a>  
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="{{ url_for('user') }}">Профиль</a></li>
@@ -102,7 +103,7 @@
               <div class="d-flex align-items-center">
                <form class="d-flex me-2" role="search" action="{{ url_for('search') }}" method="GET">
                         <input class="form-control me-2" name="q" placeholder="Искать" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Поиск</button>
+                        <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                     </form>
                     <button id="theme-toggle" class="btn btn-outline-secondary theme-toggle-btn" title="Переключить тему">
                         <i class="bi bi-brightness-high"></i>
