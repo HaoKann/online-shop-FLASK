@@ -304,3 +304,15 @@ section.features-section h2,
     background-color: #1e1e1e;
     border-color: #333333;
 }
+
+.alert-success {
+  background-color: var(--success-bg);
+  color: var(--light);
+  border-left: 4px solid darken(var(--success-bg), 10%);
+}
+
+.alert-danger {
+  background-color: var(--danger-bg);
+  color: var(--light);
+  border-left: 4px solid darken(var(--danger-bg), 10%);
+}

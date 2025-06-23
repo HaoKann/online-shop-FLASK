@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, redirect, flash, url_for, request, abort
+from flask import render_template, redirect, flash, url_for, request, abort, jsonify
 from app.models.product import Product
 from app.models.cart import Cart, ProductInCart
 from flask_login import login_required, current_user
@@ -32,21 +32,19 @@ def add_products(product_id):
     flash(f'Товар {product.name} добавлен в корзину', 'success')
     return redirect(request.referrer or '/')
 
-@app.route('/cart/delete_product/<int:product_id>', methods=['GET','POST'])
+@app.route('/cart/delete_product/<int:product_id>', methods=['POST','DELETE'])
 @login_required
 def delete_products(product_id):
-    
-    form = ConfirmForm()
-    deleted_product = ProductInCart.query.get_or_404(product_id)
-
-    product_name = deleted_product.product.name
-
-    if form.validate_on_submit():
+    try:
+        deleted_product = ProductInCart.query.get_or_404(product_id)
+        product_name = deleted_product.product.name
         db.session.delete(deleted_product)
         db.session.commit()
         flash(f'Продукт {product_name} удалён из корзины', 'danger')
-        return redirect(url_for('user_cart'))
-    return render_template('main_screen/confirm.html', form=form, sub_title=f'Вы точно хотите удалить {product_name}?' )
+        return jsonify({'message': f'Продукт {product_name} удален из корзины', 'status' : 'success'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Ошибка при удалении продукта', 'status': 'error'}), 400
 
 @app.route('/cart/increase_amount/<int:product_id>', methods=['GET','POST'])
 @login_required

@@ -1,24 +1,52 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
+    <section class="py-5 products-showcase">
+        <div class="container">
+            <h2 class="text-center mb-5" style="color: var(--accent); font-weight: 700;">{{ sub_title }}</h2>
 
-<h2 style="text-align: center;">{{sub_title}}</h2>
+            {% if discounted_products %}
+                <div class="products-grid">
+                    {% for discounted_product in discounted_products %}
+                        {% if discounted_product.discount %}
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <img src="{{ discounted_product.get_first_photo() }}" class="product-img" alt="{{ discounted_product.name }}">
+                                    <span class="badge bg-danger position-absolute top-0 start-0 m-2">{{ discounted_product.discount }}% OFF</span>
+                                </div>
+                                <div class="product-content">
+                                    <h3 class="product-title">{{ discounted_product.name }}</h3>
+                                    <p class="card-text text-muted">Категория: {{ discounted_product.category }}</p>
+                                    <p class="text-decoration-line-through text-muted mb-1">Старая цена: {{ discounted_product.price }}₸</p>
+                                    <p class="price text-success">Новая цена: {{ discounted_product.get_discount_price() }}₸</p>
+                                    <div class="button-group">
+                                        <a href="{{ url_for('show_prod_details', prod_id=discounted_product.id) }}" class="btn btn-outline-primary">Подробнее</a>
+                                        <a href="{{ url_for('add_products', product_id=discounted_product.id) }}" class="btn btn-primary">В корзину</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <p class="h4 text-muted">Товаров по скидке нет</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <p class="h4 text-muted">Товаров по скидке нет</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
 
-{% for discounted_product in discounted_products %}
 
-    {% if discounted_product.discount %}
-        <img class="product-img" src="{{ discounted_product.get_first_photo() }}">
-        <p><a href="{{ url_for('show_prod_details', prod_id=discounted_product.id) }}">{{discounted_product.name}}</a></p>
-        <p>Категория: {{discounted_product.category}}</p>
-        <p>Старая цена: <s>{{discounted_product.price}}₸</s></p>
-        <p>Новая цена: {{discounted_product.get_discount_price()}}₸</p>
-        <p>Скидка {{discounted_product.discount}}%</p>
-        <hr>
-    {% else %}
-    <p>Товаров по скидкой нет</p>    
-    {% endif %}
-{% endfor %}
-
-{% endblock %} 
-
+    <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-4">
+        <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+    </ul>
+</nav>
+{% endblock %}

@@ -2,13 +2,13 @@ from app import app
 from flask import render_template, request
 from app.models.product import Product
 
-@app.route('/products')
-def all_products():
-    return render_template('catalog/all_products.html')
 
 @app.route('/catalog')
 def catalog():
-    return render_template('main_screen/catalog.html')
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    all_products_in_catalog = Product.query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template('main_screen/catalog.html', all_products_in_catalog=all_products_in_catalog, active_page = 'catalog')
 
 @app.route('/gpu')
 def graphics_card():

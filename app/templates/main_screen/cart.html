@@ -1,68 +1,149 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
+    <div class="container py-5">
+        <h1 class="text-center mb-4">{{ sub_title }}</h1>
 
-    <h1>{{sub_title}}</h1>
-    
-    {% if current_user.cart.products_in_cart.count() == 0 %}
-        <p><i class="bi bi-cart-x"></i> В корзине нет товаров</p>
-        <a class="btn btn-primary" href="{{url_for('catalog')}}">Перейти в каталог</a>
-    {% else %}
-    <div class="row">
-            <div class="col-md-4 offset-md-1">
-                <p>Название</p>
+        {% if current_user.cart.products_in_cart.count() == 0 %}
+            <div class="text-center">
+                <p class="display-6 text-muted"><i class="bi bi-cart-x"></i> В корзине нет товаров</p>
+                <a class="btn btn-primary btn-lg" href="{{ url_for('catalog') }}">Перейти в каталог</a>
             </div>
-            <div class="col-md-1">
-                <p>Количество</p>
+        {% else %}
+            <div class="row mb-4 border-bottom pb-2">
+                <div class="col-md-4 fw-bold">Название</div>
+                <div class="col-md-2 fw-bold text-center">Количество</div>
+                <div class="col-md-2 fw-bold text-center">Цена</div>
+                <div class="col-md-4 fw-bold text-center">Действия</div>
             </div>
-            <div class="col-md-1">
-                <p>Цена</p>
-            </div>
-        </div>
 
-    
+            {% for product_in_cart in current_user.cart.products_in_cart %}
+                {% if product_in_cart.amount > 0 %}
+                    <div class="row align-items-center mb-3 p-3 bg-light rounded shadow-sm cart-item" data-product-id="{{ product_in_cart.id }}">
+                        <div class="col-md-1">
+                            <img src="{{ product_in_cart.product.get_first_photo() }}" alt="{{ product_in_cart.product.name }}" class="img-fluid rounded" style="max-width: 100px;">
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}" class="text-decoration-none text-dark fw-semibold text-break" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; display: block;">
+                                {{ product_in_cart.product.name }}
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <span class="badge bg-secondary p-2">{{ product_in_cart.amount }}</span>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <span class="text-success fw-bold fs-5">{{ product_in_cart.product.price }}₸</span>
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-center gap-2">
+                            <a class="btn btn-success btn-sm" href="{{ url_for('increase_amount', product_id=product_in_cart.id) }}"><i class="bi bi-plus-square-fill"></i></a>
+                            <a class="btn btn-warning btn-sm" href="{{ url_for('decrease_amount', product_id=product_in_cart.id) }}"><i class="bi bi-dash-square-fill"></i></a>
+                            <button class="btn btn-danger btn-sm delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-product-id="{{ product_in_cart.id }}">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
 
-        {% for product_in_cart in current_user.cart.products_in_cart %}
-            {% if product_in_cart.amount > 0 %}
-            <div class="row align-items-center mb-3">
-                <div class="col-md-1">
-                <img style="width: 100px;" src="{{ product_in_cart.product.get_first_photo() }}" > 
+            <div class="row mt-4 p-3 bg-light rounded shadow-sm">
+                <div class="col-md-6 offset-md-4 fw-bold text-end">
+                    <p class="mb-0">Всего к оплате:</p>
                 </div>
-                <div class="col-md-4">
-                    <a href="{{ url_for('show_prod_details', prod_id=product_in_cart.product.id) }}">{{product_in_cart.product.name}}</a>
+                <div class="col-md-2 fw-bold text-end">
+                    <span class="text-success h4">{{ current_user.cart.sum_of_products_in_cart() }}₸</span>
                 </div>
-                <div class="col-md-1">
-                    <p>{{product_in_cart.amount}} </p>
-                </div>
-                <div class="col-md-1">
-                    {{product_in_cart.product.price}}₸
-                </div>
-                <div class="col-md-1 d-flex justify-content-center">
-                    <a class="btn btn-success" style="width: 50px; height: 40px;" href="{{ url_for('increase_amount', product_id=product_in_cart.id) }}"> <i class="bi bi-plus-square-fill"></i></a>
-                </div>
-                <div class="col-md-1">
-                    <a class="btn btn-warning" style="width: 50px; height: 40px;" href="{{ url_for('decrease_amount', product_id=product_in_cart.id) }}"><i class="bi bi-dash-square-fill"></i></a>
-                </div>
-                <div class="col-md-1">
-                    <a class="btn btn-danger" style="width: 50px; height: 40px;" href="{{ url_for('delete_products', product_id=product_in_cart.id) }}"> <i class="bi bi-trash3-fill"></i></a>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-success btn-lg" href="{{ url_for('make_order') }}">Оформить заказ</a>
                 </div>
             </div>
         {% endif %}
-    {% endfor %}
 
-    <div class="row">
-        <div class="col-md-2 offset-4 fw-bold">
-            <p class="text-end" >Всего к оплате</p>
+        <!-- Модальное окно подтверждения -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить <span id="productName"></span> из корзины?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Удалить</button>
+            </div>
         </div>
-    <div class="col-md-1 fw-bold">
-        {{current_user.cart.sum_of_products_in_cart()}}₸
     </div>
-        <div class="col-md-4">
-            <a class="btn btn-success btn-lg" href="{{ url_for('make_order') }}">Оформить заказ</a>
-        </div>
-    </div>
-    {% endif %}
+</div>
+
+
+<!-- JavaScript для обработки удаления -->
+<div id="flashMessage" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; max-width: 300px;">
+    <span id="flashMessageText"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.delete-btn').on('click', function() {
+            var productId = $(this).data('product-id');
+            var productName = $(this).closest('.cart-item').find('a').text();
+            $('#productName').text(productName);
+            $('#confirmDeleteBtn').data('product-id', productId);
+        });
+
+        $('#confirmDeleteBtn').on('click', function() {
+            var productId = $(this).data('product-id');
+            var $modal = $('#confirmDeleteModal');
+            $.ajax({
+                url: '/cart/delete_product/' + productId,
+                type: 'DELETE',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Принудительное закрытие модального окна
+                        $modal.modal('hide');
+                        // Удаляем overlay вручную после задержки
+                        setTimeout(function() {
+                            $('.modal-backdrop').remove(); // Убираем затемнение
+                            $('body').removeClass('modal-open'); // Убираем класс, блокирующий скролл
+                            $('[data-product-id="' + productId + '"]').remove(); // Удаляем строку
+                            $('#flashMessageText').text(response.message);
+                            $('#flashMessage').fadeIn().delay(3000).fadeOut();
+                            // Обновляем сумму
+                            $.get('/cart/sum', function(data) {
+                                $('.text-success.h4').text(data.sum + '₸');
+                            }).fail(function() {
+                                console.log('Ошибка при обновлении суммы');
+                            });
+                        }, 300); // Задержка для завершения анимации
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $modal.modal('hide');
+                    setTimeout(function() {
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open');
+                        $('#flashMessageText').text('Ошибка при удалении продукта');
+                        $('#flashMessage').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut();
+                        console.log('Ошибка AJAX: ' + error);
+                    }, 300);
+                }
+            });
+        });
+
+        // Обработчик после закрытия модального окна
+        $('#confirmDeleteModal').on('hidden.bs.modal', function() {
+            console.log('Модальное окно закрыто');
+            $('.modal-backdrop').remove(); // Дополнительная очистка
+            $('body').removeClass('modal-open'); // Убираем блокировку скролла
+        });
+    });
+</script>
 
 {% endblock %}
-
