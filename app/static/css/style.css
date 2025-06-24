@@ -102,13 +102,15 @@ main {
 
 /* Герой секция */
 .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/hero-bg.jpg');
+    background: rgb(15, 15, 15);
     background-size: cover;
     background-position: center;
     color: var(--text-light);
     padding: 4rem 0;
     text-align: center;
 }
+
+
 
 .hero-title {
     font-size: 4.5rem;
@@ -162,22 +164,88 @@ footer a:hover {
 
 /* Аккордеон */
 .accordion-item {
-    background-color: var(--dark-bg);
-    border-color: var(--border-dark);
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.accordion-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .accordion-body {
-    background-color: var(--dark-bg);
+    background-color: #2a2a2a;
     color: var(--text-light);
+    padding: 1.5rem;
+}
+
+.accordion-body p,
+.accordion-body ul,
+.accordion-body ol {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.accordion-body ul li,
+.accordion-body ol li {
+    margin-bottom: 0.5rem;
+}
+
+.accordion-body .btn {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.bi {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .accordion-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    .accordion-body {
+        padding: 1rem;
+    }
+    .hero-title {
+        font-size: 3rem;
+    }
 }
 
 .accordion-button {
     background-color: var(--accent) !important;
     color: var(--text-light) !important;
-    transition: all 0.3s ease;
+    font-weight: 600;
+    padding: 1.5rem;
 }
 
 .accordion-button:hover,
+.accordion-button:not(.collapsed) {
+    background-color: var(--hover-accent) !important;
+    color: var(--text-light) !important;
+}
+
+
+.accordion-button.collapsed {
+    background-color: #2a2a2a !important;
+    color: var(--text-light) !important;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: var(--accent);
+}
+
+.accordion-button::after {
+    filter: brightness(2);
+}
+
 .accordion-button:not(.collapsed) {
     background-color: var(--hover-accent) !important;
     color: var(--text-light) !important;
@@ -291,6 +359,11 @@ h1, h2, h3, h4, h5, h6, p, div, span {
     text-overflow: ellipsis;
     white-space: nowrap;
     color: var(--light);
+}
+
+.product-card .card-text,
+.product-card .text-muted {
+    color: var(--text-light) !important; 
 }
 
 .price {
@@ -606,3 +679,49 @@ section.features-section h2,
     background-color: #f8f9fa;
     transform: translateY(-2px);
 }
+
+.profile-card {
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+        .avatar {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+        }
+        .profile-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .profile-info h5 {
+            margin: 0.5rem 0;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .nowrap {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (max-width: 768px) {
+            .profile-card {
+                max-width: 100%;
+            }
+            .avatar {
+                width: 120px;
+                height: 120px;
+            }
+            .profile-info h5 {
+                font-size: 0.9rem;
+            }
+        }

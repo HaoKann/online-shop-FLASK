@@ -20,9 +20,16 @@
                                     <p class="text-decoration-line-through text-muted mb-1">Старая цена: {{ discounted_product.price }}₸</p>
                                     <p class="price text-success">Новая цена: {{ discounted_product.get_discount_price() }}₸</p>
                                     <div class="button-group">
-                                        <a href="{{ url_for('show_prod_details', prod_id=discounted_product.id) }}" class="btn btn-outline-primary">Подробнее</a>
-                                        <a href="{{ url_for('add_products', product_id=discounted_product.id) }}" class="btn btn-primary">В корзину</a>
-                                    </div>
+                                    <a class="btn btn-success admin-btn" href="{{ url_for('add_products', product_id=discounted_product.id) }}">
+                                        <i class="bi bi-cart-plus-fill"></i>
+                                    </a>
+                                    <a class="btn btn-danger admin-btn" href="{{ url_for('add_to_favourites', product_id=discounted_product.id) }}">
+                                        <i class="bi bi-heart-fill"></i>
+                                    </a>
+                                    <a class="btn btn-primary admin-btn" href="{{ url_for('show_prod_details', prod_id=discounted_product.id) }}">
+                                        <i class="bi bi-info-circle-fill"></i>
+                                    </a>
+                    </div>
                                 </div>
                             </div>
                         {% else %}
