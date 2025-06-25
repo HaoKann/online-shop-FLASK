@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h1 class="text-center mb-4" style="color: var(--accent); font-weight: 700;">О нас</h1>
+        <div class="timeline">
+            {% for milestone in milestones %}
+                <div class="timeline-item">
+                    <h3>{{ milestone.year }}</h3>
+                    <p>{{ milestone.title }}</p>
+                    <p>{{ milestone.description }}</p>
+                    {% if milestone.image_url %}
+                        <img src="{{ url_for('static', filename=milestone.image_url) }}" 
+                        alt="{{ milestone.title }}" class="img-fluid mb-2" style="max-width: 200px;">
+                    {% endif %}
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#milestoneModal-{{ milestone.id }}" >
+                        Узнать больше
+                    </button>
+
+                    <!-- Модальное окно -->
+                     <div class="modal fade" id="milestoneModal-{{ milestone.id }}" tabindex="-1" aria-labelledby="milestoneModalLabel-{{ milestone.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="milestoneModalLabel-{{ milestone.id }}">{{ milestone.year }} - {{ milestone.title }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ milestone.description | safe }}</p>
+                                    {% if milestone.image_url %}
+                                        <img src="{{ url_for('static', filename=milestone.image_url) }}" alt="{{ milestone.title }}" class="img-fluid">
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
