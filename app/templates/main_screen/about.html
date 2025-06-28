@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-
-
 <section class="py-5 bg-light">
     <div class="container">
         <h1 class="text-center mb-4" style="color: var(--accent); font-weight: 700;">О нас</h1>
@@ -12,17 +9,16 @@
                 <div class="timeline-item">
                     <h3>{{ milestone.year }}</h3>
                     <p>{{ milestone.title }}</p>
-                    <p>{{ milestone.description }}</p>
+                    <p>{{ milestone.description | safe }}</p>
                     {% if milestone.image_url %}
-                        <img src="{{ url_for('static', filename=milestone.image_url) }}" 
-                        alt="{{ milestone.title }}" class="img-fluid mb-2" style="max-width: 200px;">
+                        <img src="{{ url_for('static', filename=milestone.image_url) }}" alt="{{ milestone.title }}" class="img-fluid mb-2" style="max-width: 200px;">
                     {% endif %}
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#milestoneModal-{{ milestone.id }}" >
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#milestoneModal-{{ milestone.id }}">
                         Узнать больше
                     </button>
 
                     <!-- Модальное окно -->
-                     <div class="modal fade" id="milestoneModal-{{ milestone.id }}" tabindex="-1" aria-labelledby="milestoneModalLabel-{{ milestone.id }}" aria-hidden="true">
+                    <div class="modal fade" id="milestoneModal-{{ milestone.id }}" tabindex="-1" aria-labelledby="milestoneModalLabel-{{ milestone.id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -36,15 +32,37 @@
                                     {% endif %}
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                                 </div>
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
     </div>
 </section>
+
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const  timelineItems = document.querySelectorAll('.timeline-item')
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible')
+                        observer.unobserve(entry.target)
+                    }
+                })
+            }, {threshold: 0.5})
+
+            timelineItems.forEach(item => {
+                observer.observe(item)
+            })
+        })
+    </script>
+{% endblock %}
 
 {% endblock %}

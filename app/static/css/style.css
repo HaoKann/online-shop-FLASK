@@ -765,6 +765,18 @@ section.features-section h2,
     border-radius: 50%;
 }
 
+.timeline-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
 .modal-content {
     background-color: #2a2a2a;
     color: var(--text-light);
@@ -781,4 +793,98 @@ section.features-section h2,
     .timeline-item h3 {
         font-size: 1rem;
     }
+}
+
+
+
+/* --- Стили для страницы каталога --- */
+
+/* Сетка для всех товаров */
+.product-grid {
+    display: grid;
+    /* Создает адаптивные колонки: минимум 280px, максимум - 1 фракция. auto-fill заполнит доступное пространство */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem; /* Расстояние между карточками */
+}
+
+/* Стили для отдельной карточки товара в каталоге */
+.product-card-catalog {
+    background-color: rgb(30, 30, 30); /* Темный фон для карточки */
+    border: 1px solid var(--border-dark);
+    border-radius: 12px; /* Скругленные углы */
+    overflow: hidden; /* Скрывает все, что выходит за рамки скругления */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-card-catalog:hover {
+    transform: translateY(-8px); /* Приподнимаем карточку при наведении */
+    box-shadow: 0 10px 25px rgba(96, 0, 24, 0.4); /* Тень акцентного цвета */
+}
+
+/* Ссылка, оборачивающая карточку для кликабельности */
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Позволяет ссылке занять все доступное пространство карточки */
+}
+
+/* Контейнер для изображения */
+.product-image-container {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* Белый фон для лучшей видимости компонентов */
+    padding: 1rem;
+}
+
+.product-image-catalog {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Масштабирует изображение, сохраняя пропорции */
+}
+
+/* Контентная часть карточки */
+.product-content-catalog {
+    padding: 1.5rem;
+    text-align: center;
+    flex-grow: 1; /* Позволяет этому блоку расти */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product-title-catalog {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin: 0 0 0.5rem 0;
+    /* Обрезка длинного текста */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-price-catalog {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #28a745; /* Яркий зеленый цвет для цены */
+    margin: 0;
+}
+
+/* Блок с кнопками действий */
+.product-actions-catalog {
+    padding: 0 1.5rem 1.5rem 1.5rem; /* Отступы только для блока с кнопкой */
+}
+
+/* Стили для иконки в кнопке */
+.product-actions-catalog .btn .bi {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    vertical-align: middle;
 }

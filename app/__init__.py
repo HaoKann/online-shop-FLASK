@@ -27,4 +27,4 @@ ready_pc_controller, user_controller, user_orders_controller, favourites_control
 auth_controller, search_controller, theme_controller
 
 from app.controllers.admin import admin_controller
-from app.models import cart, order, product, user
+from app.models import cart, order, product, user, about
