@@ -13,4 +13,9 @@ class OrderForm(FlaskForm):
         ('12:00-18:00', 'Дневное время(12:00-18:00)'),
         ('18:00-00:00', 'Вечернее время(18:00-00:00)')
     ])
+    status = SelectField('Статус заказа', choices=[
+        ('pending', 'Оформлен'),
+        ('shipped', 'В пути'),
+        ('delivered', 'Доставлен')
+    ])
     submit = SubmitField('Заказать')

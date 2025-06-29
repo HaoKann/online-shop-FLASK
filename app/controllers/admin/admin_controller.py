@@ -237,6 +237,7 @@ def admin_edit_order(id):
         edit_order.delivery.address = form.address.data
         edit_order.delivery.way_of_delivery = form.way_of_delivery.data
         edit_order.delivery.time_of_arrival = form.time_of_arrival.data
+        edit_order.status = form.status.data
         db.session.add(edit_order)
         db.session.commit()
         flash(f'Заказ пользователя {user.name} успешно изменён!', 'success')
@@ -246,6 +247,7 @@ def admin_edit_order(id):
     form.address.data = edit_order.delivery.address
     form.way_of_delivery.data = edit_order.delivery.way_of_delivery
     form.way_of_delivery.data = edit_order.delivery.time_of_arrival
+    form.status.data = edit_order.status
     return render_template('admin/admin_edit_order.html', form=form)
 
 

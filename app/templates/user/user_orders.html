@@ -1,16 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h1 class="text-center mb-5" style="color: var(--accent); font-weight: 700;">Ваши заказы</h1>
 
-<h1 style="text-align: center;">Ваши заказы</h1>
-
-    {% for user_order in current_user.orders.all() %}
-        <div class="order">
-            <p> Заказ {{ user_order.id }}</p>
-            <p> Дата {{ user_order.date }}</p>
-            <p> Сумма: {{ user_order.price }}₸</p>
-            <hr>
+            {% if current_user.orders.all() %}
+                <div class="row g-4">
+                    {% for user_order in current_user.orders.all() %}
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100 shadow-sm border-0">
+                                <div class="card-body">
+                                    <h5 class="card-title">Заказ #{{ user_order.id }}</h5>
+                                    <p class="card-text"><strong>Дата:</strong> {{ user_order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    <p class="card-text"><strong>Сумма:</strong> {{ user_order.price }}₸</p>
+                                    <p class="card-text"><strong>Статус:</strong> 
+                                        {% if user_order.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">Обрабатывается</span>
+                                        {% elif user_order.status == 'shipped' %}
+                                            <span class="badge bg-info text-dark">Отправлен</span>
+                                        {% elif user_order.status == 'delivered' %}
+                                            <span class="badge bg-success">Доставлен</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Неизвестно</span>
+                                        {% endif %}
+                                    </p>
+           
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <p class="h4 text-muted">У вас пока нет заказов.</p>
+                    <a href="{{ url_for('catalog') }}" class="btn btn-primary mt-3">Перейти в каталог</a>
+                </div>
+            {% endif %}
         </div>
-    {% endfor %}
- 
+    </section>
 {% endblock %}
