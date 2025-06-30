@@ -474,7 +474,7 @@ section.features-section h2,
     justify-items: center;
 }
 
-/* Стили для страницы акций */
+/* Стили для секции заказов */
 .py-5 {
     padding-top: 3rem !important;
     padding-bottom: 3rem !important;
@@ -484,42 +484,79 @@ section.features-section h2,
     background-color: #f8f9fa;
 }
 
-.card-img-top {
-    border-top-left-radius: 0.375rem;
-    border-top-right-radius: 0.375rem;
-    object-fit: cover;
-    height: 200px;
+.card {
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.badge.bg-danger {
-    background-color: #dc3545 !important;
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    z-index: 1;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-light);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    color: var(--text-dark);
 }
 
 .card-text {
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    color: #6c757d;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem; /* Уменьшаем отступ для компактности */
+    color: var(--text-dark);
 }
 
-.text-success {
-    color: #28a745 !important;
+.card-text strong {
+    color: var(--accent);
+    margin-right: 1rem;
 }
 
-.text-muted {
-    color: #6c757d !important;
+.value {
+    margin-right: 1rem; /* Отступ между значениями */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column; /* Элементы будут идти друг под другом */
+}
+
+
+
+.card-body .card-text strong {
+    display: inline-block;
+    min-width: 70px; /* Ширина надписей для выравнивания */
+}
+
+.card-body > .badge {
+    align-self: center;  /* <-- ВОТ МАГИЯ! Центрируем бейдж по горизонтали */
+    margin-top: 0.5rem;  /* Добавляем небольшой отступ сверху от надписи "Статус:" */
+    min-width: 120px;    /* Задаем минимальную ширину для красоты */
+    text-align: center;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.8em; /* Немного увеличим padding для солидности */
+}
+
+.badge-warning {
+    background-color: #ffc107 !important;
+    color: var(--text-dark) !important;
+}
+
+.badge-info {
+    background-color: #17a2b8 !important;
+    color: var(--text-light) !important;
+}
+
+.badge-success {
+    background-color: #28a745 !important;
+    color: var(--text-light) !important;
+}
+
+.badge-secondary {
+    background-color: #6c757d !important;
+    color: var(--text-light) !important;
 }
 
 .btn-outline-primary {
@@ -533,15 +570,29 @@ section.features-section h2,
     border-color: var(--accent);
 }
 
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
-    .card-img-top {
-        height: 150px;
-    }
     .card-title {
         font-size: 1.1rem;
     }
-    .price {
-        font-size: 1rem;
+    .card-text {
+        font-size: 0.9rem;
+    }
+    .order-details {
+        flex-direction: column; /* Стек на мобильных */
+        align-items: flex-start; /* Выравнивание в столбец */
+    }
+    .order-details .value {
+        margin-bottom: 0.25rem; /* Отступ снизу вместо справа */
+    }
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.375rem 0.75rem;
     }
 }
 
@@ -914,13 +965,6 @@ section.features-section h2,
 }
 
 /* Стили для иконки в кнопке */
-.product-actions-catalog .btn .bi {
-    margin-right: 0.5rem;
-    font-size: 1rem;
-    vertical-align: middle;
-}
-
-
 /* Стили для секции заказов */
 .py-5 {
     padding-top: 3rem !important;
@@ -960,22 +1004,27 @@ section.features-section h2,
 .badge {
     font-size: 0.9rem;
     padding: 0.25rem 0.5rem;
+    color: var(--text-light); /* По умолчанию белый текст для тёмных фонов */
 }
 
 .badge-warning {
     background-color: #ffc107 !important;
+    color: var(--text-dark) !important; /* Тёмный текст для жёлтого фона */
 }
 
 .badge-info {
     background-color: #17a2b8 !important;
+    color: var(--text-light) !important; /* Белый текст для синего фона */
 }
 
 .badge-success {
     background-color: #28a745 !important;
+    color: var(--text-light) !important; /* Белый текст для зелёного фона */
 }
 
 .badge-secondary {
     background-color: #6c757d !important;
+    color: var(--text-light) !important; /* Белый текст для серого фона */
 }
 
 .btn-outline-primary {
@@ -1002,7 +1051,6 @@ section.features-section h2,
     .card-text {
         font-size: 0.9rem;
     }
-    /* Дополнительные адаптивные стили, если нужно */
     .btn {
         font-size: 0.9rem;
         padding: 0.375rem 0.75rem;

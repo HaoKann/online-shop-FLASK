@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
 from app.models.order import Order
 from app.models.user import User
-from app.forms.admin.edit_order import EditOrder
+from app.forms.admin.edit_order import AdminEditOrder
 from app.forms.admin.add_ready_pc import ReadyPCForm
 from app.models.product import ReadyPC
 from app.forms.admin.edit_ready_pc import EditReadyPC
@@ -229,7 +229,7 @@ def admin_edit_order(id):
     edit_order = Order.query.get_or_404(id)
     user = edit_order.user
 
-    form = EditOrder()
+    form = AdminEditOrder()
 
     if form.validate_on_submit():
         edit_order.user.phone_number = form.phone_number.data

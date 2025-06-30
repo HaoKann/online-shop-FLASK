@@ -1,7 +1,7 @@
 from app import app, db
 from flask import flash, render_template, redirect, url_for
 from flask_login import login_required, current_user
-from app.forms.order_form import OrderForm
+from app.forms.order_form import UserOrderForm
 from app.models.order import Order, Delivery
 
 
@@ -16,7 +16,7 @@ def show_orders():
 @login_required
 def make_order():
     
-    form = OrderForm()
+    form = UserOrderForm()
     
     if not current_user.cart.products_in_cart.count():
         flash('В корзине нет товаров!', 'danger')

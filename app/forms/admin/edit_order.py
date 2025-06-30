@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
-class EditOrder(FlaskForm):
+class AdminEditOrder(FlaskForm):
     phone_number = IntegerField('Номер телефона', validators=[DataRequired()])
     email = EmailField('Электронная почта', validators=[DataRequired()])
     address = StringField('Адрес доставки', validators=[DataRequired()])
@@ -18,6 +18,7 @@ class EditOrder(FlaskForm):
     status = SelectField('Статус заказа', choices=[
         ('pending', 'Оформлен'),
         ('shipped', 'В пути'),
-        ('delivered', 'Доставлен')
+        ('delivered', 'Доставлен'),
+        ('canceled', 'Отменён')
     ])
     submit = SubmitField('Изменить заказ')

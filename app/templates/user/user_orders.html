@@ -12,20 +12,22 @@
                             <div class="card h-100 shadow-sm border-0">
                                 <div class="card-body">
                                     <h5 class="card-title">Заказ #{{ user_order.id }}</h5>
-                                    <p class="card-text"><strong>Дата:</strong> {{ user_order.date.strftime('%Y-%m-%d %H:%M') }}</p>
-                                    <p class="card-text"><strong>Сумма:</strong> {{ user_order.price }}₸</p>
-                                    <p class="card-text"><strong>Статус:</strong> 
-                                        {% if user_order.status == 'pending' %}
-                                            <span class="badge bg-warning text-dark">Обрабатывается</span>
-                                        {% elif user_order.status == 'shipped' %}
-                                            <span class="badge bg-info text-dark">Отправлен</span>
-                                        {% elif user_order.status == 'delivered' %}
-                                            <span class="badge bg-success">Доставлен</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">Неизвестно</span>
-                                        {% endif %}
-                                    </p>
-           
+                                    
+                                    <p class="card-text"><strong>Дата:</strong> <span>{{ user_order.date.strftime('%Y-%m-%d %H:%M') }}</span></p>
+                                    
+                                    <p class="card-text"><strong>Сумма:</strong> <span>{{ user_order.price }}₸</span></p>
+
+                                    {% if user_order.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Обрабатывается</span>
+                                    {% elif user_order.status == 'shipped' %}
+                                        <span class="badge bg-info text-light">Отправлен</span>
+                                    {% elif user_order.status == 'delivered' %}
+                                        <span class="badge bg-success text-light">Доставлен</span>
+                                    {% elif user_order.status == 'canceled' %}
+                                        <span class="badge bg-danger text-light">Отменён</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary text-light">Неизвестно</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
