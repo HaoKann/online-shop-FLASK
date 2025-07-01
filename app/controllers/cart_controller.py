@@ -46,39 +46,54 @@ def delete_products(product_id):
         db.session.rollback()
         return jsonify({'message': 'Ошибка при удалении продукта', 'status': 'error'}), 400
 
-@app.route('/cart/increase_amount/<int:product_id>', methods=['GET','POST'])
+
+@app.route('/cart/increase_amount/<int:product_id>', methods=['POST']) # Изменен метод на POST
 @login_required
 def increase_amount(product_id):
+    product_in_cart = ProductInCart.query.get_or_404(product_id)
 
-    added_product = ProductInCart.query.get_or_404(product_id)
-
-    if added_product.cart_id != current_user.cart.id:
+    if product_in_cart.cart_id != current_user.cart.id:
         abort(403)
     
-    added_product.amount += 1
+    product_in_cart.amount += 1
     db.session.commit()
-    return redirect(url_for('user_cart'))
+    
+    # ИЗМЕНЕНИЕ: Возвращаем JSON вместо redirect
+    return jsonify({
+        'status': 'success',
+        'new_quantity': product_in_cart.amount,
+        'item_total': product_in_cart.amount * product_in_cart.product.get_discount_price(),
+        'cart_total': current_user.cart.sum_of_products_in_cart()
+    })
 
 
-@app.route('/cart/decrease_amount/<int:product_id>', methods=['GET','POST'])
+
+@app.route('/cart/decrease_amount/<int:product_id>', methods=['POST'])
 @login_required
 def decrease_amount(product_id):
+    product_in_cart = ProductInCart.query.get_or_404(product_id)
 
-    deleted_product = ProductInCart.query.get_or_404(product_id)
-
-    # Проверка, принадлежит ли товар корзине текущего пользователя
-    if deleted_product.cart_id != current_user.cart.id:
+    if product_in_cart.cart_id != current_user.cart.id:
         abort(403)
 
-    if deleted_product.amount <=0:
-        flash('Некорректное количество товара. Операция отменена.', 'warning')
-        return redirect(url_for('user_cart'))
-
-    if deleted_product.amount <= 1:
-        db.session.delete(deleted_product)
-        flash(f'Вы удалили продукт {deleted_product.product.name}', 'danger')
+    if product_in_cart.amount > 1:
+        # Если товаров больше одного, просто уменьшаем количество
+        product_in_cart.amount -= 1
+        db.session.commit()
+        return jsonify({
+            'status': 'success',
+            'new_quantity': product_in_cart.amount,
+            'item_total': product_in_cart.amount * product_in_cart.product.get_discount_price(),
+            'cart_total': current_user.cart.sum_of_products_in_cart()
+        })
     else:
-        deleted_product.amount -= 1
-
-    db.session.commit()
-    return redirect(url_for('user_cart'))
+        # Если товар один, удаляем его
+        product_name = product_in_cart.product.name
+        db.session.delete(product_in_cart)
+        db.session.commit()
+        flash(f'Товар "{product_name}" был удален из корзины', 'success') # Добавляем flash-сообщение
+        # ИЗМЕНЕНИЕ: Отправляем новый статус 'removed'
+        return jsonify({
+            'status': 'removed',
+            'cart_total': current_user.cart.sum_of_products_in_cart()
+        })

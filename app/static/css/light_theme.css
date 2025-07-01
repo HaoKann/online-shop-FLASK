@@ -41,9 +41,9 @@ footer .nav-link {
 }
 
 footer .nav-link:hover {
-    color: #600018 !important; /* Красный при наведении */
+    color: #1e1e1e !important; /* Меняем на темный */
+    text-decoration: underline; /* Добавляем подчеркивание для наглядности */
 }
-
 footer .copyright {
     color: #1e1e1e !important; /* Тёмный копирайт */
 }
@@ -212,8 +212,8 @@ section.features-section h2,
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(96, 0, 24, 0.15); /* Красноватая тень */
+    background-color: #f8f9fa !important; /* Добавили эту строку, чтобы фон не менялся */
+    box-shadow: 0 5px 20px rgba(96, 0, 24, 0.15);
     border-color: #600018 !important;
 }
 
@@ -293,4 +293,38 @@ section.features-section h2,
     color: #666666 !important; /* Серый для отключённых */
     background-color: #f0f0f0;
     border-color: #e0e0e0;
+}
+
+
+.hero-section {
+    /* Меняем черный фон на очень светло-серый для мягкости */
+    background-color: #f8f9fa !important;
+    padding: 6rem 0; /* Сохраняем отступы для высоты блока */
+    text-align: center;
+}
+
+/* Делаем главный заголовок и подзаголовок темными */
+.hero-section .hero-title,
+.hero-section .hero-subtitle {
+    color: #1e1e1e !important; /* Наш основной темный цвет текста */
+}
+
+/* Делаем акцентную часть заголовка красной */
+.hero-section .hero-title span {
+    color: #600018 !important; /* Ваш фирменный красный */
+}
+
+/* Стилизуем кнопки для светлого фона */
+.hero-section .btn-outline-light {
+    color: #600018 !important; /* Цвет текста - красный */
+    border-color: #600018 !important; /* Цвет рамки - красный */
+    background-color: transparent; /* Прозрачный фон */
+    font-weight: 600; /* Делаем шрифт жирнее */
+}
+
+/* Меняем вид кнопок при наведении */
+.hero-section .btn-outline-light:hover {
+    color: #ffffff !important; /* Текст становится белым */
+    background-color: #600018 !important; /* Заливка становится красной */
+    border-color: #600018 !important;
 }
