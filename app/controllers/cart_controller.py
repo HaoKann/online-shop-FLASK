@@ -4,6 +4,8 @@ from app.models.product import Product
 from app.models.cart import Cart, ProductInCart
 from flask_login import login_required, current_user
 from app.forms.confirm_form import ConfirmForm
+from app.models.product import ReadyPC
+
 
 @app.route('/cart')
 @login_required
@@ -11,7 +13,7 @@ def user_cart():
     return render_template('main_screen/cart.html', sub_title='Корзина')
 
 
-@app.route('/cart/add_product/<int:product_id>', )
+@app.route('/cart/add_product/<int:product_id>', methods=['GET','POST'] )
 @login_required
 def add_products(product_id):
 
@@ -31,6 +33,35 @@ def add_products(product_id):
     db.session.commit()
     flash(f'Товар {product.name} добавлен в корзину', 'success')
     return redirect(request.referrer or '/')
+
+@app.route('/cart/add_ready_pc/<int:ready_pc_id>',  methods=['GET','POST'])
+def add_ready_pc_to_cart(ready_pc_id):
+    # 1. Находим нужную сборку по её ID
+    ready_pc = ReadyPC.query.get_or_404(ready_pc_id)
+
+    # 2. Проходим циклом по всем продуктам внутри этой сборки
+    for product_in_build in ready_pc.products_in_readypc:
+        product_to_add = product_in_build.product
+
+        # 3. Для каждого продукта используем уже существующую логику добавления
+            #    Проверяем, есть ли уже такой товар в корзине
+        existing_product_in_cart = ProductInCart.query.filter_by(
+            product_id = product_to_add.id,
+            cart_id = current_user.cart.id).first()
+
+        if existing_product_in_cart:
+            # Если есть, увеличиваем количество
+            existing_product_in_cart += 1
+        else:
+            # Если нет, создаем новую запись в корзине
+            new_product = ProductInCart(amount=1, product_id=product_to_add.id, cart_id=current_user.cart.id)
+            db.session.add(new_product)
+
+        # 4. После добавления всех товаров, сохраняем изменения в базе
+        db.session.commit()
+        flash(f'Сборка "{ready_pc.name}" добавлена в корзину', 'success')
+        return redirect(url_for('user_cart'))
+
 
 @app.route('/cart/delete_product/<int:product_id>', methods=['POST','DELETE'])
 @login_required

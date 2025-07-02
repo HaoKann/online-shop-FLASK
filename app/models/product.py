@@ -64,6 +64,64 @@ class ReadyPC(db.Model):
 
     products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan' )
 
+
+     # --- НАЧАЛО НОВЫХ МЕТОДОВ ---
+
+    def get_component(self, category_name):
+        """Универсальный метод для поиска компонента по категории."""
+        for component in self.products_in_readypc:
+            if component.product.category == category_name:
+                return component.product
+        return None
+
+    def get_cpu(self):
+        """Возвращает название процессора."""
+        cpu_product = self.get_component('cpu')
+        return cpu_product.name if cpu_product else 'Не указан'
+
+    def get_gpu(self):
+        """Возвращает название видеокарты."""
+        gpu_product = self.get_component('gpu')
+        return gpu_product.name if gpu_product else 'Не указана'
+        
+    def get_ram(self):
+        """Возвращает название оперативной памяти."""
+        ram_product = self.get_component('ram')
+        return ram_product.name if ram_product else 'Не указана'
+    
+    def get_motherboard(self):
+        motherboard_product = self.get_component('motherboard')
+        return motherboard_product.name if motherboard_product else 'Не указана'
+    
+    def get_power_supply_unit(self):
+        power_supply_unit_product = self.get_component('psu')
+        return power_supply_unit_product.name if power_supply_unit_product else 'Не указан'
+        
+    def get_cooler(self):
+        cooler_product = self.get_component('cooler')
+        return cooler_product.name if cooler_product else 'Не указан'
+    
+    def get_storage(self):
+        storage_product = self.get_component('storage')
+        return storage_product.name if storage_product else 'Не указан'
+
+    def get_pc_case(self):
+        get_pc_case = self.get_component('pc_case')
+        return get_pc_case.name if get_pc_case else 'Не указан'
+        
+    def get_cooler(self):
+        cooler_product = self.get_component('cooler')
+        return cooler_product.name if cooler_product else 'Не указан'
+
+    def get_build_image(self):
+        """Возвращает фото корпуса, если он есть, иначе - фото по умолчанию."""
+        case_product = self.get_component('pc_case')
+        if case_product and case_product.photos.first():
+            return case_product.get_first_photo()
+        return '/static/img/default_pc.webp' # Убедитесь, что у вас есть такое фото
+
+    # --- КОНЕЦ НОВЫХ МЕТОДОВ ---
+
     def get_absent_categories(self):
         category_map = {
             'gpu': 'Видеокарта',

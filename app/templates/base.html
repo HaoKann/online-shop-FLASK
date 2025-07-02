@@ -43,6 +43,7 @@
                             <i class="bi-list-ul"></i> Каталог
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('catalog') }}"> Все товары</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('graphics_card') }}"><i class="bi bi-gpu-card"></i> Видеокарты</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('processor') }}"><i class="bi bi-cpu"></i> Процессоры</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('motherboard') }}"><i class="bi bi-motherboard"></i> Материнские платы</a></li>
@@ -50,7 +51,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('random_access_memory') }}"><i class="bi bi-memory"></i> Оперативная память</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('cooling_system') }}"><i class="bi bi-fan"></i> Кулеры и системы охлаждения</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('storage') }}"><i class="bi bi-nvme"></i> Жесткие диски и твердотельные накопители</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('computer_case') }}"><i class="bi bi-pc"></i> Корпуса</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('computer_case') }}"><i class="bi bi-pc"></i> Корпусы</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
