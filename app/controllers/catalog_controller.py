@@ -8,7 +8,7 @@ def catalog():
     page = request.args.get('page', 1, type=int)
     per_page = 12
     all_products_in_catalog = Product.query.paginate(page=page, per_page=per_page, error_out=False)
-    return render_template('main_screen/catalog.html', all_products_in_catalog=all_products_in_catalog, active_page = 'catalog')
+    return render_template('main_screen/catalog.html', products=all_products_in_catalog, active_page = 'catalog')
 
 @app.route('/gpu')
 def graphics_card():

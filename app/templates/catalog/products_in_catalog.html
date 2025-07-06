@@ -1,95 +1,65 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 style="text-align: center;" class="mt-3">{{ sub_title }}</h2>
+<div class="container py-5">
+    <h2 class="text-center mb-5">{{ sub_title }}</h2>
 
-{% if products %}
-    <div class="products-grid">
-        {% for product in products.items %}
-            <div class="product-card">
-                <div class="product-content">
-                    <h4 class="product-title">{{ product.name }}</h4>
+    {% if products.items %}
+        <div class="product-grid">
+            {% for product in products.items %}
+                <div class="product-card-catalog">
+                    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}" class="product-card-link">
+                        
+                        <div class="product-image-container">
+                            {% if product.discount %}
+                                <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
+                                    -{{ product.discount }}%
+                                </span>
+                            {% endif %}
+                            <img src="{{ product.get_first_photo() }}" alt="{{ product.name }}" class="product-image-catalog">
+                        </div>
 
-                    {% if product.discount %}
-                        <span class="badge rounded-pill bg-success position-absolute top-0 start-50 translate-middle" style="margin-top: 10px; transform: translateX(-50%); z-index: 1;">
-                            -{{ product.discount }}%
-                        </span>
-                    {% endif %}
-
-                    <p class="price" style="color: white;">Цена: {{ product.get_discount_price() }}₸</p>
-
-                    <div class="product-image">
-                        <img class="product-img" src="{{ product.get_first_photo() }}" alt="{{ product.name }}">
-                    </div>
-
-                    <div class="button-group">
-                        <a class="btn btn-success admin-btn" href="{{ url_for('add_products', product_id=product.id) }}">
-                            <i class="bi bi-cart-plus-fill"></i>
-                        </a>
-                        <a class="btn btn-danger admin-btn" href="{{ url_for('add_to_favourites', product_id=product.id) }}">
-                            <i class="bi bi-heart-fill"></i>
-                        </a>
-                        <a class="btn btn-primary admin-btn" href="{{ url_for('show_prod_details', prod_id=product.id) }}">
-                            <i class="bi bi-info-circle-fill"></i>
-                        </a>
+                        <div class="product-content-catalog">
+                            <h4 class="product-title-catalog">{{ product.name }}</h4>
+                            
+                            <div class="price-container mt-2">
+                                {% if product.discount %}
+                                    <span class="text-muted text-decoration-line-through me-2">
+                                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                    </span>
+                                    <span class="product-price-catalog">
+                                        {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
+                                    </span>
+                                {% else %}
+                                    <span class="product-price-catalog">
+                                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="product-actions-catalog">
+                        <div class="favourite-actions">
+                            <a href="{{ url_for('add_products', product_id=product.id) }}" class="btn btn-success" title="Добавить в корзину">
+                                <i class="bi bi-cart-plus-fill"></i>
+                            </a>
+                            <a href="{{ url_for('add_to_favourites', product_id=product.id) }}" class="btn btn-danger" title="Добавить в избранное">
+                                <i class="bi bi-heart-fill"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
 
-    <div class="text-center mt-3">
-        <a class="btn btn-primary" href="{{ url_for('pc_help') }}">
-            Помощь в выборе комплектующих
-        </a>
-    </div>
-{% else %}
-    <p>Нет товаров в этой категории</p>
-{% endif %}
+        <nav aria-label="Page navigation" class="mt-5">
+           </nav>
 
-
-<!-- Пагинация -->
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-
-        {% if products.has_prev %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for(endpoint, page=products.prev_num) }}" aria-label="Previous" >
-                    <span aria-hidden="true">«</span>
-                    <span class="visually-hidden">Прошлая страница</span>
-                </a>
-            </li>
-        {% else %}
-            <li class="page-item disabled" aria-disabled="true">
-                <span class="page-link">« <span class="visually-hidden">Предыдущая страница</span></span>
-                
-            </li>
-        {% endif %}
-
-        
-        {% for page_num in range(1, products.pages + 1) %}
-            <li class="page-item {% if page_num == products.page %}active{% endif %}">
-                <a class="page-link" href="{{ url_for(endpoint, page=page_num) }}">{{ page_num }}</a>
-            </li>
-        {% endfor %}
-                  
-        
-        {% if products.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="{{ url_for(endpoint, page=products.next_num) }}" aria-label="Next" >
-                    <span aria-hidden="true">»</span>
-                </a>
-            </li>
-        {% else %}
-            <li class="page-item disabled" aria-disabled="true">
-                <span class="page-link">» <span class="visually-hidden">Следующая страница</span></span>
-            </li>
-
-        {% endif %}
-
-    </ul>
- </nav>
-
-
-
+    {% else %}
+        <div class="text-center py-5">
+            <p class="h4 text-muted">В этой категории пока нет товаров.</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
