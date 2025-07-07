@@ -3,13 +3,14 @@ from flask import flash, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from app.forms.order_form import UserOrderForm
 from app.models.order import Order, Delivery
-
+from app.models.cart import ProductInCart
 
 @app.route('/user-orders', methods=['GET','POST'])
 @login_required
 def show_orders():
-    all_orders  = Order.query.all()
-    return render_template('user/user_orders.html', all_orders=all_orders)
+    # Загружаем заказы, где user_id совпадает с ID текущего пользователя
+    user_orders = Order.query.filter_by(user_id=current_user.id).order_by(Order.date.desc()).all()
+    return render_template('user/user_orders.html', all_orders=user_orders)
 
 
 @app.route('/order', methods=['GET','POST'])
@@ -23,23 +24,37 @@ def make_order():
         return redirect(url_for('user_cart'))
 
     if form.validate_on_submit():
-        order = Order(user_id=current_user.id, price=current_user.cart.sum_of_products_in_cart())
-        db.session.add(order)
-        db.session.commit()
+        try:
+            # Создаем заказ с начальным статусом
+            new_order = Order(user_id=current_user.id, price=current_user.cart.sum_of_products_in_cart(), status='pending')
+            db.session.add(new_order)
+            # Важно: сначала "смываем" изменения, чтобы получить new_order.id
+            db.session.flush()
 
-        for product_in_cart in current_user.cart.products_in_cart.all():
-            product_in_cart.cart_id = None
-            product_in_cart.order_id = order.id
-        db.session.commit()
+            # Создаем информацию о доставке
+            delivery = Delivery(address=form.address.data, way_of_delivery=form.way_of_delivery.data, 
+                time_of_arrival=form.time_of_arrival.data, order_id=new_order.id
+            )
+            db.session.add(delivery)
 
-        address = form.address.data
-        way_of_delivery = form.way_of_delivery.data
-        time_of_arrival = form.time_of_arrival.data
+            # Перемещаем товары из корзины в заказ
+            for product_in_cart in current_user.cart.products_in_cart.all():
+                product_in_cart.cart_id = None # Отвязываем от корзины
+                product_in_cart.order_id = new_order.id # Привязываем к новому заказу
 
-        delivery = Delivery(address=address, way_of_delivery=way_of_delivery, time_of_arrival=time_of_arrival, order_id=order.id)
-        db.session.add(delivery)
-        db.session.commit()
+            # Делаем ТОЛЬКО ОДИН commit в самом конце
+            db.session.commit()
 
-    
-        flash('Заказ успешно оформлен!','success')
-    return render_template('user/order.html',form=form)
+        
+          # --- КОНЕЦ ТРАНЗАКЦИИ ---
+            
+            flash('Заказ успешно оформлен!','success')
+            # 4. Делаем REDIRECT на страницу заказов
+            return redirect(url_for('show_orders'))
+        
+        except Exception as e:
+            db.session.rollback() # Откатываем все изменения в случае ошибки
+            flash(f'Произошла ошибка при оформлении заказа: {e}', 'danger')
+            return redirect(url_for('user_cart'))
+        
+    return render_template('user/order.html', form=form)
