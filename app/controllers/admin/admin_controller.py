@@ -289,12 +289,28 @@ def admin_edit_readypc(id):
     # Находим сборку для редактирования
     ready_pc = ReadyPC.query.get_or_404(id)  
 
-    # Создаём форму с текущей сборкой, ready_pc передан для предзаполнения текущей сборки   
-    form = EditReadyPC(ready_pc=ready_pc)
+    # ИЗМЕНЕНИЕ: Создаем форму, передавая объект через 'obj'.
+    # Это автоматически заполнит все поля формы данными из ready_pc.
+    # WTForms сама сопоставит ready_pc.name -> form.name.data и т.д.
+    form = EditReadyPC(obj=ready_pc)
+
+
+    # При отправке формы вручную устанавливаем значения для SelectField,
+    # так как они могут быть не установлены автоматически, если модель и форма сложны
+    if request.method == 'GET':
+        for component in ready_pc.products_in_readypc.all():
+            cat = component.product.category
+            if hasattr(form, cat):
+                getattr(form, cat).data = str(component.product_id)
+
 
     if form.validate_on_submit():
         # Удаляем старые комплектующие
         ProductInReadyPC.query.filter(ProductInReadyPC.ready_pc_id == ready_pc.id).delete()
+
+        # Обновляем данные сборки из формы
+        ready_pc.name = form.name.data
+        ready_pc.price = form.price.data
 
         # Добавляем новые комплектующие
         categories = ['cpu','gpu','motherboard','ram','psu','cooler','storage','pc_case']
@@ -302,14 +318,13 @@ def admin_edit_readypc(id):
             # Получает значение выбранного продукта из поля формы (например, form.cpu.data) и преобразует его в число. 
             # Если значение пустое, присваивает None.
             # Как и в форме, getattr это способ получить поле формы по его имени (например, form.cpu вместо getattr(form, 'cpu')).
-            product_id = int(getattr(form, cat).data) if getattr(form, cat).data else None
-            if product_id:
-                new_component = ProductInReadyPC(
-                    ready_pc_id=ready_pc.id,
-                    amount = 1, 
-                    product_id = product_id
-                )
-                db.session.add(new_component)
+            product_id = int(getattr(form, cat).data) 
+            new_component = ProductInReadyPC(
+                ready_pc_id=ready_pc.id,
+                amount = 1, 
+                product_id = product_id
+            )
+            db.session.add(new_component)
         # Обновляем название
         ready_pc.name = form.name.data
 

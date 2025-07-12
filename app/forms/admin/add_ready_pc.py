@@ -13,4 +13,5 @@ class ReadyPCForm(FlaskForm):
         ],
         validators=[DataRequired()]
     )
+    price = IntegerField('Цена сборки', validators=[DataRequired()])
     submit = SubmitField('Добавить готовую сборку')
