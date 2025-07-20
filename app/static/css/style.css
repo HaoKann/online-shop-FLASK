@@ -1,0 +1,1647 @@
+:root {
+    --primary: #2563eb;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --accent: #600018;
+    --dark-bg: rgb(15, 15, 15);
+    --light-bg: #ffffff;
+    --text-dark: #1e1e1e;
+    --text-light: #ffffff;
+    --hover-accent: #800020;
+    --border-dark: #333333;
+    --border-light: #e0e0e0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    font-family: 'Arial', sans-serif;
+}
+
+main {
+    flex-grow: 1;
+    padding: 4rem 0 1rem 0;
+}
+
+main .container {
+    padding-top: 2rem; /* Отступ от навбара */
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* Навигация */
+.navbar {
+    background-color: var(--accent) !important;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-item .nav-link {
+    color: var(--text-light) !important;
+}
+
+.navbar .nav-item .nav-link:hover {
+    color: #ffcccc !important;
+}
+
+.navbar-brand {
+    color: var(--text-light) !important;
+}
+
+/* Форма поиска в навбаре */
+.navbar .d-flex {
+    margin-left: 15px;
+}
+
+.navbar .form-control {
+    color: var(--text-light) !important;
+    border-color: var(--dark-bg) !important;
+    background-color: var(--dark-bg) !important;
+    transition: all 0.3s ease;
+}
+
+.navbar .form-control:focus {
+    background-color: var(--light-bg) !important;
+    color: var(--dark-bg) !important;
+    border-color: var(--light-bg) !important;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.navbar .btn-outline-success {
+    color: var(--text-light) !important;
+    border-color: var(--dark-bg) !important;
+    background-color: var(--dark-bg) !important;
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-success:hover {
+    background-color: var(--light-bg) !important;
+    color: var(--dark-bg) !important;
+    border-color: var(--light-bg) !important;
+}
+
+.navbar .form-control::placeholder {
+    color: #cccccc;
+    opacity: 1;
+}
+
+.form-select {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    border-color: var(--border-dark) !important;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5);
+}
+
+/* Герой секция */
+.hero-section {
+    background: rgb(15, 15, 15);
+    background-size: cover;
+    background-position: center;
+    color: var(--text-light);
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.hero-title span {
+    color: var(--accent);
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.cta-buttons .btn-outline-light {
+    transition: all 0.3s ease;
+}
+
+.cta-buttons .btn-outline-light:hover {
+    color: var(--accent);
+    background-color: rgba(96, 0, 24, 0.1);
+    border-color: var(--accent);
+}
+
+/* Футер */
+footer {
+    flex-shrink: 0;
+    padding: 1rem 0;
+    background-color: var(--accent) !important;
+    color: var(--text-light);
+    text-align: center;
+}
+
+footer a {
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--primary);
+}
+
+/* Аккордеон */
+.accordion-item {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.accordion-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.accordion-body {
+    background-color: #2a2a2a;
+    color: var(--text-light);
+    padding: 1.5rem;
+}
+
+.accordion-body p,
+.accordion-body ul,
+.accordion-body ol {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.accordion-body ul li,
+.accordion-body ol li {
+    margin-bottom: 0.5rem;
+}
+
+.accordion-body .btn {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.bi {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .accordion-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    .accordion-body {
+        padding: 1rem;
+    }
+    .hero-title {
+        font-size: 3rem;
+    }
+}
+
+.accordion-button {
+    background-color: var(--accent) !important;
+    color: var(--text-light) !important;
+    font-weight: 600;
+    padding: 1.5rem;
+}
+
+.accordion-button:hover,
+.accordion-button:not(.collapsed) {
+    background-color: var(--hover-accent) !important;
+    color: var(--text-light) !important;
+}
+
+.accordion-button.collapsed {
+    background-color: #2a2a2a !important;
+    color: var(--text-light) !important;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: var(--accent);
+}
+
+.accordion-button::after {
+    filter: brightness(2);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--hover-accent) !important;
+    color: var(--text-light) !important;
+}
+
+.dropdown-menu {
+    background-color: var(--accent);
+}
+
+.dropdown-item {
+    color: var(--text-light) !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--hover-accent) !important;
+    color: var(--text-light) !important;
+}
+
+/* Основной текст */
+h1, h2, h3, h4, h5, h6, p, div, span {
+    color: var(--text-light) !important;
+}
+
+/* Исключения для навбара */
+.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
+.navbar p, .navbar div, .navbar span {
+    color: var(--text-light) !important;
+}
+
+/* Карточки и товары */
+.card {
+    background-color: #2a2a2a !important;
+    color: var(--text-light) !important;
+    border-color: var(--border-dark) !important;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card * {
+    color: var(--text-light) !important;
+}
+
+.btn {
+    color: var(--text-light) !important;
+}
+
+.btn-primary {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--text-light) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-accent) !important;
+    border-color: var(--hover-accent) !important;
+}
+
+/* Стили для секции заказов */
+.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+
+.bg-light {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.card-text {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-dark);
+}
+
+.card-text strong {
+    color: var(--accent);
+    margin-right: 1rem;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column; /* Элементы будут идти друг под другом */
+}
+
+.card-body .card-text strong {
+    display: inline-block;
+    min-width: 70px; /* Ширина надписей для выравнивания */
+}
+
+.card-body > .badge {
+    align-self: center; /* Центрируем бейдж по горизонтали */
+    margin-top: 0.5rem; /* Отступ сверху от надписи "Статус:" */
+    min-width: 120px; /* Минимальная ширина для красоты */
+    text-align: center;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.8em; /* Увеличим padding для солидности */
+    z-index: 1;
+    color: var(--text-light); /* По умолчанию белый текст для тёмных фонов */
+}
+
+.badge-warning {
+    background-color: #ffc107 !important;
+    color: var(--text-dark) !important; /* Тёмный текст для жёлтого фона */
+}
+
+.badge-info {
+    background-color: #17a2b8 !important;
+    color: var(--text-light) !important; /* Белый текст для синего фона */
+}
+
+.badge-success {
+    background-color: #28a745 !important;
+    color: var(--text-light) !important; /* Белый текст для зелёного фона */
+}
+
+.badge-secondary {
+    background-color: #6c757d !important;
+    color: var(--text-light) !important; /* Белый текст для серого фона */
+}
+
+.btn-outline-primary {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--accent);
+    color: var(--text-light);
+    border-color: var(--accent);
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.1rem;
+    }
+    .card-text {
+        font-size: 0.9rem;
+    }
+    .order-details {
+        flex-direction: column; /* Стек на мобильных */
+        align-items: flex-start; /* Выравнивание в столбец */
+    }
+    .order-details .value {
+        margin-bottom: 0.25rem; /* Отступ снизу вместо справа */
+    }
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.375rem 0.75rem;
+    }
+}
+
+/* Пагинация */
+.pagination {
+    --bs-pagination-color: var(--text-light);
+    --bs-pagination-active-bg: var(--accent);
+    --bs-pagination-active-border-color: var(--accent);
+    --bs-pagination-hover-color: #ffcccc;
+    --bs-pagination-disabled-color: #666666;
+}
+
+.page-link {
+    color: var(--text-light) !important;
+    background-color: #2a2a2a;
+    border-color: var(--border-dark);
+}
+
+.page-link:hover {
+    color: #ffcccc !important;
+    background-color: #333333;
+    border-color: var(--border-dark);
+}
+
+.page-item.active .page-link {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--text-light) !important;
+}
+
+.page-item.disabled .page-link {
+    color: #666666 !important;
+    background-color: #1e1e1e;
+    border-color: var(--border-dark);
+}
+
+/* Алерты */
+.alert {
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-bottom: 1rem;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: var(--text-light);
+    border-left: 4px solid #218838;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: var(--text-light);
+    border-left: 4px solid #c82333;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: #212529;
+    border-left: 4px solid #e0a800;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    color: #ffffff;
+    border-left: 4px solid #138496;
+}
+
+.alert-dismissible .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Дополнительные элементы */
+.product-details {
+    margin-top: 20px;
+    text-align: center;
+    font-size: large;
+}
+
+.admin-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.2rem;
+}
+
+.ready-pc-item {
+    margin-bottom: 1rem;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.bi {
+    font-size: 1.2em;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+.button-group .btn {
+    margin-right: 0.5rem;
+}
+
+.cart-item {
+    transition: all 0.3s ease;
+}
+
+.cart-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+}
+
+.profile-card {
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 4px solid var(--accent);
+    border-radius: 50%;
+}
+
+.profile-info {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.profile-info h5 {
+    margin: 0.5rem 0;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .profile-card {
+        max-width: 100%;
+    }
+    .avatar {
+        width: 120px;
+        height: 120px;
+    }
+    .profile-info h5 {
+        font-size: 0.9rem;
+    }
+}
+
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-color: var(--accent);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    width: 45%;
+    margin-bottom: 40px;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+.timeline-item.visible {
+    opacity: 1;
+}
+
+.timeline-item:nth-child(even) {
+    margin-left: 55%;
+}
+
+.timeline-item:nth-child(odd) {
+    margin-right: 55%;
+}
+
+.timeline-content {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.timeline-year {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.timeline-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+.timeline-description {
+    color: #cccccc;
+    margin-bottom: 15px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: var(--accent);
+    border: 2px solid var(--light-bg);
+    border-radius: 50%;
+    top: 20px;
+}
+
+.timeline-item:nth-child(odd)::before {
+    right: -6px;
+}
+
+.timeline-item:nth-child(even)::before {
+    left: -6px;
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 20px;
+    }
+    .timeline-item {
+        width: 90%;
+        margin-left: 20px;
+    }
+    .timeline-item:nth-child(even) {
+        margin-left: 20px;
+    }
+    .timeline-item::before {
+        left: -6px;
+    }
+}
+
+/* --- Стили для страницы каталога --- */
+
+/* Сетка для всех товаров */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem; /* Расстояние между карточками */
+}
+
+/* Стили для отдельной карточки товара в каталоге */
+.product-card-catalog {
+    background-color: rgb(30, 30, 30); /* Темный фон для карточки */
+    border: 1px solid var(--border-dark);
+    border-radius: 12px; /* Скругленные углы */
+    overflow: hidden; /* Скрывает все, что выходит за рамки скругления */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-card-catalog:hover {
+    transform: translateY(-8px); /* Приподнимаем карточку при наведении */
+    box-shadow: 0 10px 25px rgba(96, 0, 24, 0.4); /* Тень акцентного цвета */
+}
+
+/* Ссылка, оборачивающая карточку для кликабельности */
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Позволяет ссылке занять все доступное пространство карточки */
+}
+
+/* Контейнер для изображения */
+.product-image-container {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* Белый фон для лучшей видимости компонентов */
+    padding: 1rem;
+    position: relative; /* Для позиционирования бейджа */
+}
+
+.product-image-catalog {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Масштабирует изображение, сохраняя пропорции */
+}
+
+/* Исправление для значка скидки на карточке товара */
+.product-image-container .badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    transform: none; /* Убираем лишние сдвиги */
+}
+
+/* Контентная часть карточки */
+.product-content-catalog {
+    padding: 1.5rem;
+    text-align: center;
+    flex-grow: 1; /* Позволяет этому блоку расти */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product-title-catalog {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin: 0 0 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-price-catalog {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #28a745; /* Яркий зеленый цвет для цены */
+    margin: 0;
+}
+
+
+/* ... (существующие стили) ... */
+
+/* Стили для зачеркнутого текста с классом text-muted */
+.text-muted.text-decoration-line-through {
+    text-decoration: line-through;
+    text-decoration-color: var(--accent); /* Линия в цвет акцента */
+    text-decoration-thickness: 2px; /* Толщина линии */
+    color: #cccccc; /* Светло-серый цвет для контраста на тёмном фоне */
+    margin-right: 0.5rem; /* Сохраняем отступ */
+}
+
+/* Общий стиль для text-muted, чтобы он был виден на тёмном фоне */
+.text-muted {
+    color: #cccccc !important; /* Светло-серый для читаемости */
+}
+
+/* ... (остальные стили) ... */
+
+
+
+
+/* Стили для бейджа скидки */
+.badge {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    color: var(--text-light);
+}
+
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+/* Стили для зачеркнутого текста */
+.text-muted.text-decoration-line-through {
+    text-decoration: line-through;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    color: #cccccc;
+    margin-right: 0.5rem;
+}
+
+/* Стили для новой цены */
+.product-price-catalog {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+
+
+
+
+
+
+
+/* --- Финальный дизайн для аккуратных круглых кнопок --- */
+/* --- Финальный, элегантный дизайн для кнопок --- */
+
+/* Контейнер для двух кнопок */
+.favourite-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Делим пространство поровну */
+    gap: 0.75rem; /* Расстояние между кнопками */
+}
+
+/* Общий стиль для обеих кнопок */
+.favourite-actions .btn {
+    padding: 0.6rem;
+    font-size: 1.1rem;
+    border-radius: 8px; /* Слегка скругленные углы */
+    border: 2px solid transparent; /* "Резервируем" место для рамки */
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стиль для кнопки "В корзину" (зеленая, с заливкой) */
+/* НОВЫЙ КОД для кнопки "В корзину" */
+.favourite-actions .btn.btn-success {
+    background-color: var(--accent, #600018); /* Используем ваш фирменный красный */
+    border-color: var(--accent, #600018);
+    color: #ffffff;
+}
+
+.favourite-actions .btn.btn-success:hover {
+    background-color: var(--hover-accent, #800020); /* Затемненный красный при наведении */
+    border-color: var(--hover-accent, #800020);
+}
+
+/* Стиль для кнопки "В избранное" (красная, с обводкой) */
+.favourite-actions .btn.btn-danger {
+    background-color: transparent;
+    border-color: var(--accent, #600018);
+    color: var(--accent, #600018);
+}
+
+.favourite-actions .btn.btn-danger:hover {
+    background-color: var(--accent, #600018);
+    color: #ffffff;
+}
+
+
+
+
+
+/* --- Новый дизайн для страницы корзины --- */
+
+/* Карточка одного товара в корзине */
+.cart-item-card {
+    display: flex;
+    align-items: center;
+    background-color: #1e1e1e; /* Темнее, чем основной фон */
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-dark);
+    gap: 1rem;
+}
+
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background-color: #fff;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.cart-item-details {
+    flex-grow: 1; /* Занимает все доступное место */
+}
+
+.cart-item-title {
+    font-weight: 600;
+    color: var(--text-light);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+.cart-item-title:hover {
+    color: var(--primary);
+}
+
+.cart-item-price-single {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Блок управления количеством */
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.cart-item-quantity .btn {
+    color: var(--text-light);
+}
+.quantity-value {
+    padding: 0 1rem;
+    font-weight: 500;
+    min-width: 40px;
+    text-align: center;
+}
+
+.cart-item-total {
+    font-weight: 600;
+    font-size: 1.1rem;
+    min-width: 120px; /* Чтобы цены не прыгали при изменении */
+    text-align: right;
+    color: var(--text-light);
+}
+
+/* Карточка с итогами заказа */
+.cart-summary-card {
+    background-color: #1e1e1e;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+    position: sticky; /* Делаем ее "липкой" при прокрутке */
+    top: 2rem;
+}
+
+
+/* --- Стили для страницы оформления заказа --- */
+
+.order-summary-card {
+    background-color: #1e1e1e; /* Темный фон для карточек */
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+}
+
+.order-summary-img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    margin-right: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.order-summary-card .list-group-item {
+    background-color: transparent;
+    border-color: var(--border-dark);
+    padding: 1rem 0;
+}
+
+.order-summary-card .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.order-summary-price {
+    font-weight: 500;
+}
+
+
+/* --- Улучшения для карточек готовых сборок --- */
+
+/* Убираем подчеркивание у ссылки по умолчанию */
+.build-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Добавляем подчеркивание названию при наведении на ссылку */
+.build-card-link:hover .build-name {
+    text-decoration: underline;
+    color: var(--accent); /* Опционально: меняем цвет на акцентный */
+}
+
+/* Разделяем контент внутри карточки */
+.build-content-header {
+    padding: 1.5rem 1.5rem 0 1.5rem; /* Отступы только для названия */
+}
+.build-content-main {
+    padding: 1rem 1.5rem 1.5rem 1.5rem; /* Отступы для списка */
+    flex-grow: 1; /* Этот блок будет "расти", прижимая футер к низу */
+}
+
+/* Убираем лишний отступ у списка */
+.build-specs {
+    margin-bottom: 0;
+}
+
+
+
+
+/* --- Стили для Админ-панели --- */
+
+/* Убираем стандартные отступы, чтобы макет занимал весь экран */
+body.admin-body {
+    padding-top: 0;
+    background-color: #2a2a2a; /* Фон для основной области */
+}
+
+.admin-wrapper {
+    display: flex;
+}
+
+/* Стили для боковой панели */
+.admin-sidebar {
+    width: 260px; /* Ширина панели */
+    height: 100vh; /* Высота на весь экран */
+    position: fixed; /* Фиксируем на месте */
+    top: 0;
+    left: 0;
+    background-color: var(--dark-bg, #111); /* Темный фон */
+    padding: 1.5rem 1rem;
+    color: var(--text-light);
+    border-right: 1px solid var(--border-dark);
+}
+
+.sidebar-header {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    color: var(--text-light) !important;
+}
+
+.sidebar-header .back-to-site {
+    font-size: 0.9rem;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.sidebar-header .back-to-site:hover {
+    color: var(--text-light);
+}
+
+/* Стили для навигации в панели */
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: #aaa !important; /* Серый цвет для неактивных ссылок */
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-nav .nav-item .nav-link i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+}
+
+/* Стиль для активной ссылки */
+.sidebar-nav .nav-item.active .nav-link {
+    background-color: var(--accent, #600018);
+    color: #ffffff !important;
+}
+
+/* Стиль при наведении на неактивную ссылку */
+.sidebar-nav .nav-item:not(.active) .nav-link:hover {
+    background-color: #2a2a2a;
+    color: #ffffff !important;
+}
+
+/* Основная область контента */
+.admin-content {
+    margin-left: 260px; /* Сдвигаем контент вправо на ширину панели */
+    width: calc(100% - 260px); /* Занимает оставшееся пространство */
+    padding: 2rem;
+}
+
+/* --- Стили для страниц админ-панели --- */
+
+/* Заголовок страницы с кнопкой */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+/* Стили для таблицы в админке */
+.admin-table {
+    width: 100%;
+    background-color: #1e1e1e;
+    border-collapse: collapse; /* Убираем двойные рамки */
+}
+
+.admin-table thead th {
+    background-color: #2a2a2a;
+    color: #aaa;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.admin-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.admin-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* Убираем нижнюю границу у строки таблицы при наведении,
+   чтобы она не просвечивала под кнопками. */
+.admin-table tbody tr:hover {
+    border-bottom-color: transparent;
+}
+
+.table-product-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 5px;
+}
+/* --- НОВЫЕ, ИЗОЛИРОВАННЫЕ СТИЛИ ДЛЯ КНОПОК ДЕЙСТВИЙ В АДМИНКЕ --- */
+
+/* --- Стили для иконок-кнопок в таблице админки --- */
+
+/* Контейнер для кнопок */
+.table-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Общий стиль для нашей иконки-кнопки */
+.action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.action-icon i {
+    font-size: 1rem;
+    color: inherit; /* Иконка наследует цвет от родителя <a> */
+    background: none;
+}
+
+/* Синяя кнопка "Редактировать" */
+.action-icon.action-edit {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.action-icon.action-edit:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+/* Красная кнопка "Удалить" */
+.action-icon.action-delete {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.action-icon.action-delete:hover {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+/* Голубая кнопка "Просмотр" */
+.action-icon.action-view {
+    border-color: #0dcaf0;
+    color: #0dcaf0;
+}
+.action-icon.action-view:hover {
+    background-color: #0dcaf0;
+    color: #fff;
+}
+
+
+/* --- Стили для карточки с формой в админ-панели --- */
+
+.admin-form-card {
+    background-color: #1e1e1e; /* Темный фон */
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+    max-width: 800px; /* Ограничиваем ширину для лучшей читаемости */
+    margin: 0 auto; /* Центрируем карточку по горизонтали */
+}
+
+
+/* --- Стили для аккордеона заказов в админ-панели --- */
+
+.admin-accordion .accordion-item {
+    background-color: #1e1e1e;
+    border: 1px solid var(--border-dark);
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-accordion .accordion-button {
+    background-color: #2a2a2a !important;
+    color: var(--text-light) !important;
+}
+
+.admin-accordion .accordion-button:not(.collapsed) {
+    background-color: var(--accent) !important;
+    box-shadow: none;
+}
+
+.admin-accordion .accordion-button:focus {
+    box-shadow: none;
+}
+
+/* Сетка для информации о заказе в заголовке аккордеона */
+.order-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1.5fr 1.5fr; /* 5 колонок */
+    width: 100%;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.order-summary-grid .badge {
+    font-size: 0.85rem;
+}
+
+.admin-accordion .accordion-body {
+    background-color: #1a1a1a;
+    padding: 1.5rem;
+}
+
+.admin-accordion .list-group-item {
+    background-color: transparent;
+    color: var(--text-light);
+    border-color: var(--border-dark) !important;
+    display: flex;
+    align-items: center;
+}
+
+
+/* --- Стили для страницы деталей продукта в админке --- */
+
+.admin-card {
+    background-color: #1e1e1e;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+}
+
+.admin-card-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+/* Стили для списка характеристик dl-dt */
+.admin-card dt {
+    font-weight: 500;
+    color: #aaa;
+}
+.admin-card dd {
+    margin-bottom: 0.5rem;
+}
+
+/* Сетка для фотографий */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.photo-item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+/* Кнопка удаления поверх фото */
+.photo-delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.photo-item:hover .photo-delete-btn {
+    opacity: 1;
+}
+
+
+/* --- СТРАНИЦА ДЕТАЛЕЙ ТОВАРА (ФИНАЛЬНАЯ ВЕРСИЯ) --- */
+
+.product-page-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Две равные колонки */
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Левая колонка - Галерея */
+.product-page-main-image {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.product-page-main-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.product-page-thumbnails {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.thumb-item {
+    width: 90px;
+    height: 90px;
+    border: 2px solid var(--border-dark);
+    border-radius: 8px;
+    padding: 5px;
+    background: #fff;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+.thumb-item:hover {
+    opacity: 1;
+    border-color: var(--accent);
+}
+.thumb-item.active {
+    opacity: 1;
+    border-color: var(--primary);
+}
+.thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Правая колонка - Информация */
+.product-page-info {
+    padding-top: 1rem;
+}
+.product-page-category {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #aaa !important;
+    margin-bottom: 1rem;
+}
+.product-page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.product-page-price-block {
+    margin: 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.product-page-price-block .old-price {
+    font-size: 1.5rem;
+    text-decoration: line-through;
+    color: #777 !important;
+}
+.product-page-price-block .current-price,
+.product-page-price-block .current-price-discount {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+.product-page-price-block .current-price-discount {
+    color: #28a745 !important;
+}
+.product-page-price-block .discount-badge {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Кнопки */
+.product-page-actions {
+    display: flex;
+    gap: 1rem;
+}
+.product-page-actions .btn-lg {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+}
+.product-page-actions .btn-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border-dark);
+    color: #aaa;
+}
+.product-page-actions .btn-icon:hover {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    color: #fff;
+}
+
+/* Характеристики */
+.product-page-specs {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-dark);
+    padding-top: 1.5rem;
+}
+.specs-title {
+    margin-bottom: 1rem;
+}
+.specs-list {
+    list-style: none;
+    padding: 0;
+}
+.specs-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-dark);
+    color: #ccc !important;
+}
+.specs-list li span:first-child {
+    color: #888 !important;
+}
+
+
+/* --- Улучшенный дизайн для шапки сайта (КРАСНЫЙ ЦВЕТ) --- */
+
+.navbar.sticky-top {
+    background: none !important;
+    /* ИЗМЕНЕНИЕ: Используем ваш красный цвет (RGB от #600018) с прозрачностью 70% */
+    background-color: rgba(96, 0, 24, 0.7) !important; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    transition: padding 0.3s ease, background-color 0.3s ease;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.navbar.scrolled {
+    /* ИЗМЕНЕНИЕ: Делаем фон более плотным при скролле (90% непрозрачности) */
+    background-color: rgba(96, 0, 24, 0.9) !important; 
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Стили для кнопки "Детали" в аккордеоне заказов */
+.order-details-link-container {
+    padding: 0 1.5rem; /* Отступы слева и справа от кнопки */
+    /* Фон берется от родителя .accordion-header, который уже стилизован */
+}
+
+/* Убираем стрелочку у кнопки аккордеона, т.к. она больше не нужна */
+.accordion-button.flex-grow-1::after {
+    display: none;
+}
+
+
+/* --- Стили для страницы деталей заказа пользователя --- */
+
+.order-details-card {
+    background-color: #1e1e1e;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-dark);
+}
+
+/* Список товаров в заказе */
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.order-item-img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 8px;
+    padding: 5px;
+    flex-shrink: 0;
+}
+.order-item-info {
+    flex-grow: 1;
+}
+.order-item-title {
+    font-weight: 500;
+    color: var(--text-light);
+    text-decoration: none;
+}
+.order-item-title:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+.order-item-meta {
+    font-size: 0.9rem;
+    color: #888 !important;
+}
+.order-item-total {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Блок с деталями доставки */
+.delivery-summary-box {
+    background-color: #2a2a2a;
+    padding: 1.5rem;
+    border-radius: 8px;
+    position: sticky;
+    top: 100px; /* Прилипает при скролле, 100px - отступ от шапки */
+}
+/* Используем стили от характеристик для списка доставки */
+.specs-list {
+    list-style: none;
+    padding: 0;
+}
+.specs-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-dark);
+    color: #ccc !important;
+}
+.specs-list li span:first-child {
+    color: #888 !important;
+}
+.specs-list li:last-child {
+    border-bottom: none;
+}

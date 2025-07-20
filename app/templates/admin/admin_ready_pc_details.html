@@ -1,0 +1,28 @@
+{% extends 'admin/base.html' %}
+
+
+{% block content %}
+
+<h1 style="text-align: center;">Готовая сборка {{ ready_pc_detail.name }}</h1>
+
+{% for component in ready_pc_detail.products_in_readypc.all()  %}
+
+    <a href="{{ url_for('show_prod_details', prod_id=component.product_id) }}" target="_blank">{{component.product.name}}</a>
+    {{ component.amount }}
+    <hr>
+
+{% endfor %}
+
+{% if ready_pc_detail.is_ready() %}
+    <p>Сборка готова</p>
+{% else %}
+    <p>Сборка не готова</p>
+    <p>Не хватает:</p>
+    {% for category in ready_pc_detail.get_absent_categories().values() %} 
+        <div>{{ category }}</div>
+    {% endfor %}
+{% endif %}
+
+
+
+{% endblock %}

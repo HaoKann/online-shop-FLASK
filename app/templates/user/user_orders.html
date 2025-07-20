@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Мои заказы</h1>
+
+    {% if all_orders %}
+        <div class="accordion admin-accordion" id="ordersAccordion">
+            {% for order in all_orders %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header d-flex align-items-center">
+                        <button class="accordion-button collapsed flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ order.id }}" aria-expanded="false" aria-controls="collapse-{{ order.id }}">
+                            <div class="order-summary-grid">
+                                <span><strong>Заказ #{{ order.id }}</strong></span>
+                                <span><i class="bi bi-calendar-event"></i> {{ order.date.strftime('%d-%m-%Y') }}</span>
+                                <span class="fw-bold">{{ "{:,.0f}".format(order.price).replace(",", " ") }} ₸</span>
+                                <span>
+                                    {% if order.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Обрабатывается</span>
+                                    {% elif order.status == 'shipped' %}
+                                        <span class="badge bg-info">Отправлен</span>
+                                    {% elif order.status == 'delivered' %}
+                                        <span class="badge bg-success">Доставлен</span>
+                                    {% elif order.status == 'canceled' %}
+                                        <span class="badge bg-danger">Отменен</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Неизвестно</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </button>
+                        <div class="order-details-link-container">
+                            <a href="{{ url_for('user_order_details', order_id=order.id) }}" class="btn btn-primary"><i class="bi bi-info-circle"></i></a>
+                        </div>
+                    </h2>
+                    
+                    <div id="collapse-{{ order.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ order.id }}" data-bs-parent="#ordersAccordion">
+                        <div class="accordion-body">
+                           <h6 class="mb-3">Состав заказа:</h6>
+                           <ul class="list-group list-group-flush">
+                                {% for item in order.products_in_order %}
+                                    <li class="list-group-item">
+                                        {{ item.product.name }} ({{ item.amount }} шт.)
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-box-seam" style="font-size: 5rem; color: #444;"></i>
+            <p class="h4 mt-3 text-muted">У вас еще нет заказов.</p>
+            <a class="btn btn-primary btn-lg mt-4" href="{{ url_for('catalog') }}">Начать покупки</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

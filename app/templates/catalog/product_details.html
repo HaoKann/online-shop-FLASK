@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="product-page-container">
+    <div class="product-page-gallery">
+        <div class="product-page-main-image">
+            <img src="{{ product.get_first_photo() }}" id="mainProductImage" alt="{{ product.name }}">
+        </div>
+        <div class="product-page-thumbnails">
+            {% for photo in product.photos.all() %}
+                <div class="thumb-item {% if loop.first %}active{% endif %}">
+                    <img src="{{ photo.get_photo() }}" data-full-image="{{ photo.get_photo() }}" alt="Миниатюра {{ loop.index }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="product-page-info">
+        <span class="product-page-category">{{ product.get_category_name() }}</span>
+        <h1 class="product-page-title">{{ product.name }}</h1>
+
+        <div class="product-page-price-block">
+            {% if product.discount %}
+                <span class="old-price">{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</span>
+                <span class="current-price-discount">{{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸</span>
+                <span class="discount-badge">-{{ product.discount }}%</span>
+            {% else %}
+                <span class="current-price">{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</span>
+            {% endif %}
+        </div>
+
+        <div class="product-page-actions">
+            <a href="{{ url_for('add_products', product_id=product.id) }}" class="btn btn-primary btn-lg">
+                <i class="bi bi-cart-plus-fill"></i> Добавить в корзину
+            </a>
+            <a href="{{ url_for('add_to_favourites', product_id=product.id) }}" class="btn btn-icon" title="Добавить в избранное">
+                <i class="bi bi-heart"></i>
+            </a>
+        </div>
+
+        <div class="product-page-specs">
+            <h5 class="specs-title">Характеристики</h5>
+            <ul class="specs-list">
+                {% for char in product.characteristics.all() %}
+                    <li>
+                        <span>{{ char.name }}</span>
+                        <span>{{ char.int_value or char.str_value }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbnails = document.querySelectorAll('.product-page-thumbnails .thumb-item');
+
+    thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+            const fullImageSrc = this.querySelector('img').dataset.fullImage;
+            mainImage.src = fullImageSrc;
+            
+            thumbnails.forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+</script>
+{% endblock %}

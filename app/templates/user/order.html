@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form_row %}
+
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Оформление заказа</h1>
+
+    {% if not current_user.cart or current_user.cart.products_in_cart.count() == 0 %}
+        <div class="text-center py-5">
+            <i class="bi bi-cart-x" style="font-size: 5rem; color: #444;"></i>
+            <p class="h4 mt-3 text-muted">Ваша корзина пуста для оформления заказа.</p>
+            <a class="btn btn-primary btn-lg mt-4" href="{{ url_for('catalog') }}">Перейти в каталог</a>
+        </div>
+    {% else %}
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <div class="order-summary-card">
+                    <h4 class="mb-4">Ваш заказ</h4>
+                    <ul class="list-group list-group-flush">
+                        {% for item in current_user.cart.products_in_cart.all() %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="order-summary-img">
+                                <div>
+                                    <h6 class="my-0">{{ item.product.name }}</h6>
+                                    <small class="text-muted">{{ item.amount }} шт.</small>
+                                </div>
+                            </div>
+                            <span class="order-summary-price">{{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between fs-5 fw-bold">
+                            <span>Итого:</span>
+                            <strong class="text-success">{{ "{:,.0f}".format(current_user.cart.sum_of_products_in_cart()).replace(",", " ") }} ₸</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="order-summary-card">
+                    <h4 class="mb-4">Адрес и способ доставки</h4>
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        {{ render_form_row([form.address, form.way_of_delivery, form.time_of_arrival], row_class='mb-3') }}
+                        <div class="d-grid mt-4">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

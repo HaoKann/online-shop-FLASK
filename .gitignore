@@ -1,0 +1,50 @@
+# Виртуальное окружение
+venv/
+env/
+env2/
+*.pyc
+__pycache__/
+
+# Настройки IDE и редакторов
+.vscode/
+.idea/
+*.swp
+
+# Файлы конфигурации и переменные окружения
+.env
+*.env
+.flaskenv
+
+# Логи и дампы базы данных
+logs/
+*.log
+instance/
+*.sqlite3
+*.db
+
+# Кеш и временные файлы Flask
+*.pid
+*.tar.gz
+*.zip
+
+# Секретные ключи и токены
+config.py
+settings.py
+
+# Node.js зависимости (если есть фронтенд)
+node_modules/
+npm-debug.log
+
+# Docker (если используешь)
+docker-compose.override.yml
+
+# MacOS & Windows
+.DS_Store
+Thumbs.db
+
+migrations/
+
+
+подсказка для гита.md 
+идеи.md
+

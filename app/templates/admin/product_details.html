@@ -1,0 +1,85 @@
+{% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Детали продукта: {{ product.name }}</h1>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('admin_products_list') }}" class="btn btn-outline-light">
+                <i class="bi bi-arrow-left"></i> К списку продуктов
+            </a>
+            <a href="{{url_for('admin_edit_product', id=product.id)}}" class="btn btn-primary">
+                <i class="bi bi-pencil-fill"></i> Редактировать товар
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <h5 class="admin-card-title">Основная информация</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9">{{ product.id }}</dd>
+                    
+                    <dt class="col-sm-3">Название</dt>
+                    <dd class="col-sm-9">{{ product.name }}</dd>
+
+                    <dt class="col-sm-3">Категория</dt>
+                    <dd class="col-sm-9">{{ product.get_category_name() }}</dd>
+
+                    <dt class="col-sm-3">Цена</dt>
+                    <dd class="col-sm-9">{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</dd>
+
+                    <dt class="col-sm-3">Скидка</dt>
+                    <dd class="col-sm-9">{{ product.discount or 0 }}%</dd>
+                </dl>
+            </div>
+
+            <div class="admin-card mt-4">
+                <h5 class="admin-card-title">Характеристики</h5>
+                {% if product.characteristics.all() %}
+                    <table class="table admin-table">
+                        <tbody>
+                        {% for char in product.characteristics.all() %}
+                            <tr>
+                                <td>{{ char.name }}</td>
+                                <td>{{ char.int_value or char.str_value }}</td>
+                                <td class="table-actions">
+                                    <a href="#" class="action-icon action-delete" title="Удалить характеристику"><i class="bi bi-trash3-fill"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">Характеристик пока нет.</p>
+                {% endif %}
+            </div>
+
+            <div class="admin-card mt-4">
+                <h5 class="admin-card-title">Фотографии</h5>
+                <div class="photo-grid">
+                    {% for photo in product.photos.all() %}
+                        <div class="photo-item">
+                            <img src="{{ photo.get_photo() }}" alt="{{ photo.description }}">
+                            <a href="#" class="photo-delete-btn" title="Удалить фото"><i class="bi bi-x"></i></a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="admin-form-card mb-4">
+                <h6>Добавить характеристику</h6>
+                {{ render_form(сharacteristics_form) }}
+            </div>
+
+            <div class="admin-form-card">
+                <h6>Загрузить фото</h6>
+                {{ render_form(photo_form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

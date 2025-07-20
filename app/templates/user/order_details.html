@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="page-header">
+        <h1>Детали заказа #{{ user_order.id }}</h1>
+        <a href="{{ url_for('show_orders') }}" class="btn btn-outline-light">
+            <i class="bi bi-arrow-left"></i> К моим заказам
+        </a>
+    </div>
+
+    <div class="order-details-card">
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <h5 class="mb-4">Состав заказа</h5>
+                <div class="order-items-list">
+                    {% for item in user_order.products_in_order %}
+                        <div class="order-item">
+                            <img src="{{ item.product.get_first_photo() }}" class="order-item-img">
+                            <div class="order-item-info">
+                                <a href="{{ url_for('show_prod_details', prod_id=item.product.id) }}" class="order-item-title">{{ item.product.name }}</a>
+                                <div class="order-item-meta">
+                                    {{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸ x {{ item.amount }} шт.
+                                </div>
+                            </div>
+                            <div class="order-item-total">
+                                {{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="delivery-summary-box">
+                    <h5 class="mb-4">Детали доставки</h5>
+                    <dl class="specs-list">
+                        <li><span>Адрес</span><span>{{ user_order.delivery.address }}</span></li>
+                        <li><span>Способ</span><span>{{ user_order.delivery.way_of_delivery }}</span></li>
+                        <li><span>Время</span><span>{{ user_order.delivery.time_of_arrival }}</span></li>
+                    </dl>
+                    
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-between fs-5 fw-bold">
+                        <span>Итого:</span>
+                        <span class="text-success">{{ "{:,.0f}".format(user_order.price).replace(",", " ") }} ₸</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

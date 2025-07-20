@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="py-5 bg-light">
+        <div class="container">
+            <!-- Заголовок и миссия -->
+            <div class="text-center mb-5">
+                <h1 class="mb-3" style="color: var(--accent); font-weight: 700;">О нас</h1>
+                <p class="lead text-muted">PerfectPC — ваш надёжный партнёр в мире компьютерных технологий с 2015 года. Мы стремимся предоставлять лучшие комплектующие и готовые сборки для энтузиастов и профессионалов.</p>
+            </div>
+
+            <!-- Таймлайн -->
+            <div class="timeline">
+                {% if milestones %}
+                    {% for milestone in milestones %}
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <h3 class="timeline-year">{{ milestone.year }}</h3>
+                                <h4 class="timeline-title">{{ milestone.title }}</h4>
+                                <p class="timeline-description">{{ milestone.description | safe }}</p>
+                                {% if milestone.image_url %}
+                                    <img src="{{ url_for('static', filename=milestone.image_url) }}" alt="{{ milestone.title }}" class="img-fluid mb-2" style="max-width: 200px; border-radius: 8px;">
+                                {% endif %}
+                                <button type="button" class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#milestoneModal-{{ milestone.id }}">
+                                    Узнать больше
+                                </button>
+                            </div>
+
+                            <!-- Модальное окно -->
+                            <div class="modal fade" id="milestoneModal-{{ milestone.id }}" tabindex="-1" aria-labelledby="milestoneModalLabel-{{ milestone.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="milestoneModalLabel-{{ milestone.id }}">{{ milestone.year }} - {{ milestone.title }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ milestone.description | safe }}</p>
+                                            {% if milestone.image_url %}
+                                                <img src="{{ url_for('static', filename=milestone.image_url) }}" alt="{{ milestone.title }}" class="img-fluid mb-3" style="border-radius: 8px;">
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <p class="h4 text-muted">Информация о нашей истории пока недоступна.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Контакты -->
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <h3 class="mb-3" style="color: var(--accent);">Свяжитесь с нами</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-telephone-fill me-2"></i> Телефон: +7 (123) 456-78-90</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill me-2"></i> Email: support@perfectpc.com</li>
+                        <li class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> Адрес: г. Алматы, ул. Техническая 10</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="mb-3" style="color: var(--accent);">Наши ценности</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2 text-success"></i> Качество</li>
+                        <li class="mb-2"><i class="bi bi-shield-fill-check me-2 text-success"></i> Надёжность</li>
+                        <li class="mb-2"><i class="bi bi-people-fill me-2 text-success"></i> Клиентоориентированность</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
+
+{% endblock %}

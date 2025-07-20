@@ -1,0 +1,13 @@
+{% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ sub_title or 'Создание новой сборки' }}</h1>
+    </div>
+
+    <div class="admin-form-card">
+        {{ render_form(form, button_style='primary', button_size='lg') }}
+    </div>
+
+{% endblock %}

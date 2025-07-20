@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+
+    <h1 class="text-center">{{ sub_title }}</h1>
+    <div class="d-flex justify-content-center mt-4">
+        <div class="col-md-2">
+            {{ render_form(form, button_map={'submit': 'success'}) }}
+
+            <a class="btn btn-danger mt-2" href="{{url_for('registration')}}"> Нет аккаунта?</a>
+        </div>
+    </div>
+    <br>
+    
+
+
+
+{% endblock %}

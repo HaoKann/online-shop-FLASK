@@ -1,0 +1,330 @@
+body {
+    background-color: #ffffff; /* Белый фон */
+    color: #1e1e1e; /* Тёмно-серый текст для читаемости */
+    transition: all 0.3s ease; /* Плавные переходы */
+}
+
+.navbar {
+    background-color: #600018 !important; /* Красный акцент для навбара */
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-item .nav-link {
+    color: #ffffff !important; /* Белый текст в навбаре */
+}
+
+.navbar .nav-item .nav-link:hover {
+    color: #ffcccc !important; /* Лёгкий розовый при наведении */
+}
+
+.navbar-brand {
+    color: #ffffff !important; /* Белый бренд - добавлен !important */
+}
+
+/* Основной текст на странице должен быть темным */
+h1, h2, h3, h4, h5, h6, p, div, span {
+    color: #1e1e1e !important; /* Принудительно темный текст */
+}
+
+/* Исключения для элементов навбара */
+.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
+.navbar p, .navbar div, .navbar span {
+    color: #ffffff !important; /* Белый текст в навбаре */
+}
+
+footer .nav {
+    color: #1e1e1e; /* Тёмный текст в футере */
+}
+
+footer .nav-link {
+    color: #1e1e1e !important; /* Тёмный текст ссылок */
+}
+
+footer .nav-link:hover {
+    color: #1e1e1e !important; /* Меняем на темный */
+    text-decoration: underline; /* Добавляем подчеркивание для наглядности */
+}
+footer .copyright {
+    color: #1e1e1e !important; /* Тёмный копирайт */
+}
+
+.accordion-item {
+    background-color: #f0f0f0; /* Светло-серый фон аккордеона */
+    border-color: #e0e0e0; /* Лёгкая граница */
+}
+
+.accordion-body {
+    background-color: #ffffff; /* Белый фон тела аккордеона */
+    color: #1e1e1e !important; /* Тёмный текст */
+}
+
+/* Убеждаемся что весь текст в аккордеоне темный */
+.accordion-body * {
+    color: #1e1e1e !important;
+}
+
+.accordion-button {
+    background-color: #600018 !important; /* Красный акцент */
+    color: #ffffff !important; /* Белый текст */
+    transition: all 0.3s ease;
+}
+
+.accordion-button:hover,
+.accordion-button:not(.collapsed) {
+    background-color: #800020 !important; /* Темнее при наведении или открытии */
+    color: #ffffff !important;
+}
+
+.dropdown-menu {
+    background-color: #600018; /* Красный фон выпадающего меню */
+}
+
+.dropdown-item {
+    color: #ffffff !important; /* Белый текст */
+}
+
+.dropdown-item:hover {
+    background-color: #800020 !important; /* Темнее при наведении */
+    color: #ffffff !important;
+}
+
+/* Форма поиска в навбаре */
+.navbar .d-flex {
+    margin-left: 15px;
+}
+
+.navbar .form-control {
+    color: #1e1e1e !important; /* Тёмный текст */
+    border-color: #e0e0e0 !important; /* Светлая граница */
+    background-color: #ffffff !important; /* Белый фон */
+    transition: all 0.3s ease;
+}
+
+.navbar .form-control:focus {
+    background-color: #f0f0f0 !important; /* Светло-серый при фокусе */
+    color: #600018 !important; /* Красный текст при фокусе */
+    border-color: #600018 !important; /* Красная граница */
+    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Лёгкая тень */
+}
+
+.navbar .btn-outline-success {
+    color: #600018 !important; /* Красный текст кнопки */
+    border-color: #600018 !important; /* Красная граница */
+    background-color: #ffffff !important; /* Белый фон */
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-success:hover {
+    background-color: #600018 !important; /* Красный фон при наведении */
+    color: #ffffff !important; /* Белый текст */
+    border-color: #800020 !important; /* Темнее граница */
+}
+
+.navbar .form-control::placeholder {
+    color: #666666; /* Серый плейсхолдер */
+    opacity: 1;
+}
+
+.form-select {
+    background-color: #ffffff; /* Белый фон */
+    color: #1e1e1e !important; /* Тёмный текст */
+    border-color: #e0e0e0 !important; /* Светлая граница */
+    transition: all 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: #600018 !important; /* Красная граница при фокусе */
+    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Тень */
+}
+
+/* Дополнительные правила для обеспечения видимости текста */
+.card {
+    background-color: #ffffff;
+    color: #1e1e1e !important;
+}
+
+.card * {
+    color: #1e1e1e !important;
+}
+
+.btn {
+    color: #1e1e1e !important;
+}
+
+.btn-primary {
+    background-color: #600018 !important;
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+.text-white {
+    color: #1e1e1e !important; /* Переопределяем Bootstrap класс text-white */
+}
+
+/* Стили для секции "Почему выбирают нас" - СВЕТЛАЯ ТЕМА */
+section.features-section,
+.features-section {
+    background-color: #ffffff !important; /* Белый фон */
+    background: #ffffff !important;
+    color: #1e1e1e !important; /* Темный текст */
+    padding: 60px 0 !important; /* Отступы сверху и снизу */
+}
+
+/* Переопределяем любые темные фоны */
+.features-section * {
+    background-color: transparent !important;
+}
+
+.features-section .container {
+    background-color: transparent !important;
+}
+
+
+section.features-section h2,
+.features-section .section-title,
+.features-section h2 {
+    color: #1e1e1e !important; /* Темный заголовок */
+    background-color: transparent !important;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: transparent !important;
+}
+
+.feature-card {
+    background-color: #f8f9fa !important; /* Светло-серый фон карточек */
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    border-radius: 10px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover {
+    background-color: #f8f9fa !important; /* Добавили эту строку, чтобы фон не менялся */
+    box-shadow: 0 5px 20px rgba(96, 0, 24, 0.15);
+    border-color: #600018 !important;
+}
+
+.feature-card .feature-icon,
+.feature-card i {
+    background-color: #600018 !important;
+    background: #600018 !important;
+    color: #ffffff !important;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.5rem;
+    transition: all 0.3s ease; /* Плавное увеличение */
+}
+
+.feature-card:hover .feature-icon,
+.feature-card:hover i {
+    background-color: #800020 !important; /* Темнее при наведении */
+    transform: scale(1.1); /* Увеличение иконки */
+}
+
+.feature-card h3 {
+    color: #1e1e1e !important; /* Темный заголовок */
+    background-color: transparent !important;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #666666 !important; /* Серый текст описания */
+    background-color: transparent !important;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Исключения для специальных элементов где белый текст нужен */
+.navbar .text-white,
+.btn-primary .text-white,
+.bg-dark .text-white {
+    color: #ffffff !important;
+}
+
+
+/* Стили для пагинации */
+.pagination {
+    --bs-pagination-color: #1e1e1e; /* Тёмный цвет текста по умолчанию */
+    --bs-pagination-active-bg: #600018; /* Красный фон для активной страницы */
+    --bs-pagination-active-border-color: #600018;
+    --bs-pagination-hover-color: #600018; /* Красный при наведении */
+    --bs-pagination-disabled-color: #666666; /* Серый для отключённых элементов */
+}
+
+.page-link {
+    color: #1e1e1e !important; /* Тёмный текст */
+    background-color: #f8f9fa; /* Светлый фон */
+    border-color: #e0e0e0; /* Светлая граница */
+}
+
+.page-link:hover {
+    color: #600018 !important; /* Красный при наведении */
+    background-color: #e9ecef; /* Светлее фон */
+    border-color: #cccccc;
+}
+
+.page-item.active .page-link {
+    background-color: #600018 !important; /* Активная страница */
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+.page-item.disabled .page-link {
+    color: #666666 !important; /* Серый для отключённых */
+    background-color: #f0f0f0;
+    border-color: #e0e0e0;
+}
+
+
+.hero-section {
+    /* Меняем черный фон на очень светло-серый для мягкости */
+    background-color: #f8f9fa !important;
+    padding: 6rem 0; /* Сохраняем отступы для высоты блока */
+    text-align: center;
+}
+
+/* Делаем главный заголовок и подзаголовок темными */
+.hero-section .hero-title,
+.hero-section .hero-subtitle {
+    color: #1e1e1e !important; /* Наш основной темный цвет текста */
+}
+
+/* Делаем акцентную часть заголовка красной */
+.hero-section .hero-title span {
+    color: #600018 !important; /* Ваш фирменный красный */
+}
+
+/* Стилизуем кнопки для светлого фона */
+.hero-section .btn-outline-light {
+    color: #600018 !important; /* Цвет текста - красный */
+    border-color: #600018 !important; /* Цвет рамки - красный */
+    background-color: transparent; /* Прозрачный фон */
+    font-weight: 600; /* Делаем шрифт жирнее */
+}
+
+/* Меняем вид кнопок при наведении */
+.hero-section .btn-outline-light:hover {
+    color: #ffffff !important; /* Текст становится белым */
+    background-color: #600018 !important; /* Заливка становится красной */
+    border-color: #600018 !important;
+}

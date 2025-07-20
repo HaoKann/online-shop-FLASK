@@ -1,0 +1,341 @@
+body {
+    background-color: rgb(15, 15, 15);
+    color: white;
+    transition: all 0.3s ease; /* Плавные переходы */
+}
+
+.navbar {
+    background-color: rgb(74, 0, 0) !important;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-item .nav-link {
+    color: white !important;
+}
+
+.navbar .nav-item .nav-link:hover {
+    color: #ffcccc !important; /* Лёгкий розовый при наведении */
+}
+
+.navbar-brand {
+    color: white !important;
+}
+
+footer .nav {
+    color: white;
+}
+
+footer .nav-link {
+    color: white !important;
+}
+
+footer .nav-link:hover {
+    color: #ffcccc !important; /* Розовый при наведении */
+}
+
+footer .copyright {
+    color: white !important;
+}
+
+.accordion-item {
+    background-color: black;
+    border-color: #333333; /* Темная граница */
+}
+
+.accordion-body {
+    background-color: rgb(15, 15, 15);
+    color: white;
+}
+
+.accordion-button {
+    background-color: #600018 !important; 
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.accordion-button:hover,
+.accordion-button:not(.collapsed) {
+    background-color: #800020 !important; /* Темнее при наведении */
+    color: white !important;
+}
+
+.dropdown-menu {
+    background-color: #600018;
+}
+
+.dropdown-item {
+    color: white !important;
+}
+
+.dropdown-item:hover {
+    background-color: #800020 !important; /* Темнее при наведении */
+    color: white !important;
+}
+
+/* Форма поиска в навбаре */
+.navbar .d-flex {
+    margin-left: 15px;
+}
+
+.navbar .form-control {
+    color: white !important;
+    border-color: rgb(15, 15, 15) !important; 
+    background-color: rgb(15, 15, 15) !important; 
+    transition: all 0.3s ease;
+}
+
+.navbar .form-control:focus {
+    background-color: white !important; /* Белый фон при фокусе */
+    color: rgb(15, 15, 15) !important; /* Тёмный текст при фокусе */
+    border-color: white !important;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Белая тень */
+}
+
+.navbar .btn-outline-success {
+    color: white !important;
+    border-color: rgb(15, 15, 15) !important; 
+    background-color: rgb(15, 15, 15) !important; 
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-success:hover {
+    background-color: white !important; /* Белый фон при наведении */
+    color: rgb(15, 15, 15) !important; /* Тёмный текст при наведении */
+    border-color: white !important;
+}
+
+.navbar .form-control::placeholder {
+    color: #cccccc; /* Серый плейсхолдер */
+    opacity: 1;
+}
+
+.form-select {
+    background-color: rgb(15, 15, 15);
+    color: white;
+    border-color: #333333 !important; /* Темная граница */
+    transition: all 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: #600018 !important; /* Красная граница при фокусе */
+    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Тень */
+}
+
+/* Основной текст на странице */
+h1, h2, h3, h4, h5, h6, p, div, span {
+    color: white !important; /* Белый текст для темной темы */
+}
+
+/* Исключения для элементов навбара (они уже белые) */
+.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
+.navbar p, .navbar div, .navbar span {
+    color: white !important;
+}
+
+/* Стили для карточек в темной теме */
+.card {
+    background-color: #2a2a2a !important; /* Темно-серый фон */
+    color: white !important;
+    border-color: #333333 !important;
+}
+
+.card * {
+    color: white !important;
+}
+
+.btn {
+    color: white !important;
+}
+
+.btn-primary {
+    background-color: #600018 !important;
+    border-color: #600018 !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #800020 !important;
+    border-color: #800020 !important;
+}
+
+/* Стили для секции "Почему выбирают нас" - ТЕМНАЯ ТЕМА */
+section.features-section,
+.features-section {
+    background-color: rgb(15, 15, 15) !important; /* Темный фон */
+    background: rgb(15, 15, 15) !important;
+    color: white !important; /* Белый текст */
+    padding: 60px 0 !important; /* Отступы сверху и снизу */
+}
+
+/* Убираем лишние фоны */
+.features-section * {
+    background-color: transparent !important;
+}
+
+.features-section .container {
+    background-color: transparent !important;
+}
+
+section.features-section h2,
+.features-section .section-title,
+.features-section h2 {
+    color: white !important; /* Белый заголовок */
+    background-color: transparent !important;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: transparent !important;
+}
+
+.feature-card {
+    background-color: #2a2a2a !important; /* Темно-серый фон карточек */
+    background: #2a2a2a !important;
+    border: 1px solid #444444 !important; /* Темная граница */
+    border-radius: 10px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Более темная тень */
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(96, 0, 24, 0.3); /* Красноватая тень */
+    border-color: #600018 !important;
+    background-color: #333333 !important; /* Светлее при наведении */
+}
+
+.feature-card .feature-icon,
+.feature-card i {
+    background-color: #600018 !important;
+    background: #600018 !important;
+    color: white !important;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon,
+.feature-card:hover i {
+    background-color: #800020 !important; /* Темнее при наведении карточки */
+    transform: scale(1.1); /* Увеличение иконки */
+}
+
+.feature-card h3 {
+    color: white !important; /* Белый заголовок */
+    background-color: transparent !important;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #cccccc !important; /* Светло-серый текст описания */
+    background-color: transparent !important;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Дополнительные темные стили */
+.text-dark {
+    color: white !important; /* Переопределяем Bootstrap класс text-dark */
+}
+
+.bg-light {
+    background-color: #2a2a2a !important; /* Темный фон вместо светлого */
+}
+
+.border {
+    border-color: #444444 !important; /* Темные границы */
+}
+
+/* Исключения для элементов где нужны оригинальные цвета */
+.navbar .text-white,
+.btn-primary .text-white {
+    color: white !important;
+}
+
+
+
+/* Стили для пагинации */
+.pagination {
+    --bs-pagination-color: #ffffff; /* Белый цвет текста по умолчанию */
+    --bs-pagination-active-bg: #600018; /* Красный фон для активной страницы */
+    --bs-pagination-active-border-color: #600018;
+    --bs-pagination-hover-color: #ffcccc; /* Розовый при наведении */
+    --bs-pagination-disabled-color: #666666; /* Серый для отключённых элементов */
+}
+
+.page-link {
+    color: #ffffff !important; /* Принудительно белый текст */
+    background-color: #2a2a2a; /* Тёмный фон для ссылок */
+    border-color: #333333; /* Тёмная граница */
+}
+
+.page-link:hover {
+    color: #ffcccc !important; /* Розовый при наведении */
+    background-color: #333333; /* Темнее фон */
+    border-color: #444444;
+}
+
+.page-item.active .page-link {
+    background-color: #600018 !important; /* Активная страница */
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+.page-item.disabled .page-link {
+    color: #666666 !important; /* Серый для отключённых */
+    background-color: #1e1e1e;
+    border-color: #333333;
+}
+
+.alert-success {
+  background-color: var(--success-bg);
+  color: var(--light);
+  border-left: 4px solid darken(var(--success-bg), 10%);
+}
+
+.alert-danger {
+  background-color: var(--danger-bg);
+  color: var(--light);
+  border-left: 4px solid darken(var(--danger-bg), 10%);
+}
+
+
+/* --- Исправление цвета текста в модальных окнах (Темная тема) --- */
+
+.modal-content {
+    /* Устанавливаем базовый цвет текста для всего окна на темный */
+    color: #1e1e1e; 
+}
+
+/* * Дополнительно заставляем ключевые элементы внутри окна 
+ * использовать темный цвет, чтобы переопределить глобальные стили.
+*/
+.modal-header .modal-title,
+.modal-body,
+.modal-body span,
+.modal-body p,
+.modal-body div {
+    color: #1e1e1e !important;
+}
+
+/* * Для кнопок в футере это не нужно, 
+ * так как их цвет определяется классами .btn
+*/

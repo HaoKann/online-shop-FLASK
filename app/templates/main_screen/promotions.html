@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Акции и спецпредложения</h1>
+
+    {% if discounted_products %}
+        <div class="product-grid">
+            {% for product in discounted_products %}
+                <div class="product-card-catalog">
+                    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}" class="product-card-link">
+                        <div class="product-image-container">
+                            <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
+                                -{{ product.discount }}%
+                            </span>
+                            
+                            <img src="{{ product.get_first_photo() }}" alt="{{ product.name }}" class="product-image-catalog">
+                        </div>
+                        <div class="product-content-catalog">
+                            <h4 class="product-title-catalog">{{ product.name }}</h4>
+                            
+                            <div class="price-container mt-2">
+                                <span class="text-muted text-decoration-line-through me-2">
+                                    {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                </span>
+                                <span class="product-price-catalog">
+                                    {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="product-actions-catalog">
+                        <div class="favourite-actions">
+                            <a href="{{ url_for('add_products', product_id=product.id) }}" class="btn btn-success" title="Добавить в корзину">
+                                <i class="bi bi-cart-plus-fill"></i>
+                            </a>
+                            <a href="{{ url_for('add_to_favourites', product_id=product.id) }}" class="btn btn-danger" title="Добавить в избранное">
+                                <i class="bi bi-heart-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="h4 text-muted">Действующих акций пока нет.</p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

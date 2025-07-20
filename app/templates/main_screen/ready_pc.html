@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Готовые сборки</h1>
+
+    {% if all_ready_pc.items %}
+        <div class="builds-grid">
+            {% for ready_pc in all_ready_pc %}
+                <div class="build-card">
+                    <a href="#" class="build-card-link"> <div class="build-image-container">
+                            <img src="{{ ready_pc.get_build_image() }}" alt="{{ ready_pc.name }}">
+                        </div>
+                        <div class="build-content-header">
+                            <h3 class="build-name">{{ ready_pc.name }}</h3>
+                        </div>
+                    </a>
+
+                    <div class="build-content-main">
+                        <ul class="build-specs">
+                            <li><i class="bi bi-cpu-fill"></i><span>{{ ready_pc.get_cpu() }}</span></li>
+                            <li><i class="bi bi-gpu-card"></i><span>{{ ready_pc.get_gpu() }}</span></li>
+                            <li><i class="bi bi-memory"></i><span>{{ ready_pc.get_ram() }}</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="build-footer">
+                        <div class="build-price">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</div>
+                        <a href="{{ url_for('add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" class="btn btn-primary">В корзину</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if all_ready_pc.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('ready_pc', page=all_ready_pc.prev_num) }}">«</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">«</span></li>
+                {% endif %}
+
+                {% for page_num in all_ready_pc.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == all_ready_pc.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('ready_pc', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if all_ready_pc.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('ready_pc', page=all_ready_pc.next_num) }}">»</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">»</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+    {% else %}
+        <div class="text-center py-5">
+            <p class="h4 text-muted">Готовых сборок пока нет.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

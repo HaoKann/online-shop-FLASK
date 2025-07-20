@@ -1,0 +1,27 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+<h2 class="mt-5" style="color: black;" >Результаты поиска по запросу "{{q}}"</h2>
+
+    {% for product in result  %}
+        
+    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}">{{product.name}}</a> <br>
+   
+    <img class="product-img" src="{{ product.get_first_photo() }}"> <br>
+    <a class="btn btn-primary admin-btn" href="{{ url_for('admin_product', id=product.id) }}">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+        <a class="btn btn-danger admin-btn" href="{{ url_for('admin_delete_products', id=product.id) }}">
+            <i class="bi bi-x-circle"></i>
+        </a>
+    <hr>
+    <br>
+
+    {% else %}
+        <p>Товар не найден</p>
+    {% endfor %}
+
+
+
+{% endblock %}
