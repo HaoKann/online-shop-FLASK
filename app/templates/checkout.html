@@ -1,3 +1,26 @@
+<!-- Задача: Дать клиенту безопасное "окошко" для ввода данных карты и, 
+ используя полученный client_secret, завершить платеж. -->
+
+<!-- 1. Инициализация:  Подключаем библиотеку Stripe.js. -->
+
+<!-- 2. Получение "разрешения": Скрипт сразу же обращается к бэкенду (/create-payment-intent) 
+ и получает тот самый client_secret. -->
+
+<!-- 3. Создание формы: JavaScript говорит библиотеке Stripe: 
+ "Используя это разрешение (clientSecret), создай поля для ввода карты и помести их в наш контейнер #payment-element". 
+ Stripe.js создает iframe — полностью изолированное и защищенное окно, которое встроено в страницу. Сайт не имеет доступа к тому, что вводится в эти поля. -->
+
+<!-- Нажатие на кнопку "Оплатить": -->
+<!-- 4.Подтверждение платежа: Когда клиент нажимает "Оплатить", JavaScript выполняет главную команду stripe.confirmPayment(). 
+Это значит что Stripe js берет данные из формы и проводит платеж, перед этим получая client_secret для подтверждения 
+Данные карты идут напрямую в Stripe минуя сервер
+Если client_secret совпадает с той операцией, который подготовил Stripe до этого - деньги списываются -->
+
+<!-- 5.Результат: Если все успешно, Stripe перенаправляет пользователя на указанный return_url.
+Если есть ошибка (неверный номер карты, нехватка средств), Stripe возвращает эту ошибку, и JavaScript показывает ее клиенту. -->
+
+<!-- Таким образом, безопасно принимается платежи, а вся "грязная" работа с картами происходит на стороне Stripe.-->
+ 
 {% extends 'base.html' %}
 
 {% block scripts %}
@@ -7,10 +30,31 @@
 
 {% block content %}
 <div class="container py-5">
+    <h1 class="text-center mb-5">Оформление и оплата</h1>
+ 
     <div class="row g-5">
         <div class="col-lg-7">
             <div class="order-summary-card">
-                </div>
+                <h4 class="mb-4">Состав вашего заказа</h4>
+                <ul class="list-group list-group-flush">
+                    {% for item in current_user.cart.products_in_cart.all() %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="order-summary-img">
+                            <div>
+                                <h6 class="my-0">{{ item.product.name }}</h6>
+                                <small class="text-muted">{{ item.amount }} шт.</small>
+                            </div>
+                        </div>
+                        <span class="order-summary-price">{{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸</span>
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between fs-5 fw-bold">
+                        <span>Итого:</span>
+                        <strong class="text-success">{{ "{:,.0f}".format(current_user.cart.sum_of_products_in_cart()).replace(",", " ") }} ₸</strong>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div class="col-lg-5">
@@ -32,67 +76,79 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Вставьте сюда ваш ПУБЛИЧНЫЙ ключ от Stripe
-    const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");
+document.addEventListener('DOMContentLoaded', async () => {
+    const stripe = Stripe("{{ config['STRIPE_PUBLISHABLE_KEY'] }}");
 
     let elements;
 
-    // 2. Запрашиваем у нашего сервера clientSecret для этой сессии
+    const csrfToken = "{{ csrf_token }}"; // Получаем токен из шаблона
     const response = await fetch('/create-payment-intent', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
     });
-    const { clientSecret } = await response.json();
 
-    // 3. Создаем и вставляем в страницу форму Stripe
+    if (!response.ok) {
+        const { error } = await response.json();
+        showMessage(error || 'Не удалось создать платеж.');
+        return;
+    }
+
+    const { clientSecret } = await response.json();
     elements = stripe.elements({ clientSecret });
     const paymentElement = elements.create("payment");
     paymentElement.mount("#payment-element");
 
-    // 4. Обрабатываем отправку формы
     const paymentForm = document.getElementById("payment-form");
     paymentForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        const { error } = await stripe.confirmPayment({
+        const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                // Указываем URL, куда Stripe вернет пользователя после оплаты
                 return_url: "{{ url_for('order_success', _external=True) }}",
             },
         });
 
-        // Эта часть кода выполнится, только если произошла ошибка
-        if (error.type === "card_error" || error.type === "validation_error") {
+        if (error) {
             showMessage(error.message);
+        } else if (paymentIntent.status === 'succeeded') {
+            window.location.href = "{{ url_for('order_success', _external=True) }}";
         } else {
             showMessage("Произошла непредвиденная ошибка.");
         }
         setLoading(false);
     });
 
-    // --- Вспомогательные функции для отображения статуса ---
     function showMessage(messageText) {
         const messageContainer = document.querySelector("#payment-message");
-        messageContainer.classList.remove("hidden");
-        messageContainer.textContent = messageText;
-        setTimeout(function () {
-            messageContainer.classList.add("hidden");
-            messageText.textContent = "";
-        }, 4000);
+        if (messageContainer) {
+            messageContainer.classList.remove("hidden");
+            messageContainer.textContent = messageText;
+            setTimeout(() => {
+                messageContainer.classList.add("hidden");
+                messageContainer.textContent = "";
+            }, 5000);
+        }
     }
 
     function setLoading(isLoading) {
-        if (isLoading) {
-            document.querySelector("#submit-button").disabled = true;
-            document.querySelector("#spinner").classList.remove("hidden");
-            document.querySelector("#button-text").classList.add("hidden");
-        } else {
-            document.querySelector("#submit-button").disabled = false;
-            document.querySelector("#spinner").classList.add("hidden");
-            document.querySelector("#button-text").classList.remove("hidden");
+        const submitButton = document.querySelector("#submit-button");
+        const spinner = document.querySelector("#spinner");
+        const buttonText = document.querySelector("#button-text");
+
+        if (submitButton) {
+            submitButton.disabled = isLoading;
+            if (isLoading) {
+                spinner.classList.remove("hidden");
+                buttonText.classList.add("hidden");
+            } else {
+                spinner.classList.add("hidden");
+                buttonText.classList.remove("hidden");
+            }
         }
     }
 });

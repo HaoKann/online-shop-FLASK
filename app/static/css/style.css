@@ -1645,3 +1645,7 @@ body.admin-body {
 .specs-list li:last-child {
     border-bottom: none;
 }
+
+#payment-element {
+    margin-bottom: 1rem;
+}
