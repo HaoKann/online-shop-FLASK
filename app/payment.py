@@ -20,38 +20,44 @@ import stripe
 from flask import jsonify, current_app, Blueprint
 from flask_login import login_required, current_user
 
-# Создаем Blueprint (если вы еще не сделали этого)
+# Создаем Blueprint
 payment_bp = Blueprint('payment', __name__)
 
 @payment_bp.route('/create-payment-intent', methods=['POST'])
 @login_required
 def create_payment():
     stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
+    
     try:
-        print("--- DEBUG: Запрос вошел в функцию create_payment ---")
-        
         cart_total = current_user.cart.sum_of_products_in_cart()
-        print(f"--- DEBUG: Сумма из корзины: {cart_total} ---")
 
+        # Проверяем, что корзина не пуста
         if not cart_total or cart_total <= 0:
-            print("--- DEBUG: ОШИБКА! Сумма некорректна. ---")
             return jsonify(error='Сумма для оплаты некорректна или корзина пуста'), 400
 
-        # Конвертация суммы в центы для USD (пример, 1 тенге = 0.0023 USD, но лучше использовать реальный курс)
-        amount_in_cents = int(cart_total * 0.0023 * 100)
-        print(f"--- DEBUG: Сумма в центах (USD): {amount_in_cents} ---")
+        # --- УПРОЩЕНИЕ 1: Работаем напрямую с тенге ---
+        # Stripe требует сумму в минимальных единицах (тиынах), поэтому умножаем на 100
+        amount_in_tiyn = int(cart_total * 100)
 
+        # Минимальная сумма для платежа в Stripe ~200-250 KZT
+        if amount_in_tiyn < 25000: # 250 KZT в тиынах
+            return jsonify({'error': 'Минимальная сумма для оплаты 250 ₸'}), 400
+
+        # Создаем PaymentIntent в тенге
         intent = stripe.PaymentIntent.create(
-            amount=amount_in_cents,
-            currency='usd',
-            description=f'Оплата заказа пользователя {current_user.id}'
+            amount=amount_in_tiyn,
+            currency='kzt',
+            description=f'Оплата заказа от {current_user.email}'
         )
-        print("--- DEBUG: PaymentIntent успешно создан! ---")
+
         return jsonify({'clientSecret': intent.client_secret})
+    
+    # --- УПРОЩЕНИЕ 2: Объединяем обработку ошибок ---
+    # Ловим все возможные ошибки от Stripe в одном блоке
     except stripe.error.StripeError as e:
-        print(f"--- DEBUG: КРИТИЧЕСКАЯ ОШИБКА Stripe: {e} ---")
+        print(f"Stripe Error: {e}")
         return jsonify(error=str(e)), 400
+    # Ловим все остальные ошибки (например, если нет корзины у пользователя)
     except Exception as e:
-        # ЭТОТ БЛОК ПОЙМАЕТ ТОЧНУЮ ОШИБКУ
-        print(f"--- DEBUG: КРИТИЧЕСКАЯ ОШИБКА: {e} ---")
-        return jsonify(error=str(e)), 400
+        print(f"Server Error: {e}")
+        return jsonify(error="Внутренняя ошибка сервера"), 500

@@ -21,6 +21,9 @@
 
 <!-- Таким образом, безопасно принимается платежи, а вся "грязная" работа с картами происходит на стороне Stripe.-->
  
+<!-- Задача: Дать клиенту безопасное "окошко" для ввода данных карты и, 
+ используя полученный client_secret, завершить платеж. -->
+
 {% extends 'base.html' %}
 
 {% block scripts %}
@@ -31,23 +34,14 @@
 {% block content %}
 <div class="container py-5">
     <h1 class="text-center mb-5">Оформление и оплата</h1>
- 
-    <div class="row g-5">
+    <div class="row g-5 justify-content-center">
         <div class="col-lg-7">
             <div class="order-summary-card">
                 <h4 class="mb-4">Состав вашего заказа</h4>
                 <ul class="list-group list-group-flush">
                     {% for item in current_user.cart.products_in_cart.all() %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="order-summary-img">
-                            <div>
-                                <h6 class="my-0">{{ item.product.name }}</h6>
-                                <small class="text-muted">{{ item.amount }} шт.</small>
-                            </div>
-                        </div>
-                        <span class="order-summary-price">{{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸</span>
-                    </li>
+                        <li class="list-group-item">
+                            </li>
                     {% endfor %}
                     <li class="list-group-item d-flex justify-content-between fs-5 fw-bold">
                         <span>Итого:</span>
@@ -56,19 +50,20 @@
                 </ul>
             </div>
         </div>
-
         <div class="col-lg-5">
             <div class="order-summary-card">
                 <h4 class="mb-4">Оплата заказа</h4>
                 <form id="payment-form">
-                    <div id="payment-element"></div>
-                    
-                    <button id="submit-button" class="btn btn-primary btn-lg w-100 mt-4">
-                        <div class="spinner hidden" id="spinner"></div>
+                    {{ form.csrf_token }}
+
+                    <div id="payment-element" class="mb-4"></div>
+                    <button id="submit-button" class="btn btn-primary btn-lg w-100" type="submit">
+                        <div class="spinner-border spinner-border-sm d-none" id="spinner" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                         <span id="button-text">Оплатить {{ "{:,.0f}".format(current_user.cart.sum_of_products_in_cart()).replace(",", " ") }} ₸</span>
                     </button>
-                    
-                    <div id="payment-message" class="hidden"></div>
+                    <div id="payment-message" class="alert alert-danger mt-3 d-none" role="alert"></div>
                 </form>
             </div>
         </div>
@@ -77,27 +72,27 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-    const stripe = Stripe("{{ config['STRIPE_PUBLISHABLE_KEY'] }}");
+    const stripe = Stripe("{{ stripe_publishable_key }}");
+    
+    // Читаем CSRF-токен из скрытого поля, которое сгенерировал form.csrf_token
+    const csrfToken = document.querySelector("input[name='csrf_token']").value;
 
-    let elements;
-
-    const csrfToken = "{{ csrf_token }}"; // Получаем токен из шаблона
     const response = await fetch('/create-payment-intent', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
+            'X-CSRFToken': csrfToken // <-- Используем его здесь
         },
     });
 
     if (!response.ok) {
-        const { error } = await response.json();
-        showMessage(error || 'Не удалось создать платеж.');
+        const errorData = await response.json();
+        showMessage(errorData.error || 'Не удалось создать платеж.');
         return;
     }
-
+    
     const { clientSecret } = await response.json();
-    elements = stripe.elements({ clientSecret });
+    const elements = stripe.elements({ clientSecret });
     const paymentElement = elements.create("payment");
     paymentElement.mount("#payment-element");
 
@@ -106,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         setLoading(true);
 
-        const { error, paymentIntent } = await stripe.confirmPayment({
+        const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
                 return_url: "{{ url_for('order_success', _external=True) }}",
@@ -114,44 +109,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         if (error) {
-            showMessage(error.message);
-        } else if (paymentIntent.status === 'succeeded') {
-            window.location.href = "{{ url_for('order_success', _external=True) }}";
-        } else {
-            showMessage("Произошла непредвиденная ошибка.");
+            showMessage(error.message || "Произошла непредвиденная ошибка.");
         }
         setLoading(false);
     });
 
-    function showMessage(messageText) {
-        const messageContainer = document.querySelector("#payment-message");
-        if (messageContainer) {
-            messageContainer.classList.remove("hidden");
-            messageContainer.textContent = messageText;
-            setTimeout(() => {
-                messageContainer.classList.add("hidden");
-                messageContainer.textContent = "";
-            }, 5000);
-        }
-    }
-
-    function setLoading(isLoading) {
-        const submitButton = document.querySelector("#submit-button");
-        const spinner = document.querySelector("#spinner");
-        const buttonText = document.querySelector("#button-text");
-
-        if (submitButton) {
-            submitButton.disabled = isLoading;
-            if (isLoading) {
-                spinner.classList.remove("hidden");
-                buttonText.classList.add("hidden");
-            } else {
-                spinner.classList.add("hidden");
-                buttonText.classList.remove("hidden");
-            }
-        }
-    }
+    function showMessage(messageText) { /* ... */ }
+    function setLoading(isLoading) { /* ... */ }
 });
 </script>
-
 {% endblock %}

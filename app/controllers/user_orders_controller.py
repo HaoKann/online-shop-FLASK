@@ -5,6 +5,10 @@ from app.forms.order_form import UserOrderForm
 from app.models.order import Order, Delivery
 from app.models.cart import ProductInCart
 from datetime import datetime
+from flask_wtf import FlaskForm
+
+class EmptyForm(FlaskForm):
+    pass
 
 @app.route('/user-orders', methods=['GET','POST'])
 @login_required
@@ -25,9 +29,10 @@ def make_order():
     # ДОБАВЛЯЕМ СТРОКУ ДЛЯ ПРОВЕРКИ
     print(f"DEBUG: Ключ Stripe в контроллере: {current_app.config.get('STRIPE_PUBLISHABLE_KEY')}")
     
+    form = EmptyForm()
     # Просто отображаем страницу оплаты, передавая в нее публичный ключ
     return render_template('checkout.html', # Используем шаблон с формой Stripe
-                           stripe_publishable_key=current_app.config['STRIPE_PUBLISHABLE_KEY'])
+                           stripe_publishable_key=current_app.config['STRIPE_PUBLISHABLE_KEY'], form=form)
 
 @app.route('/order-success')
 @login_required

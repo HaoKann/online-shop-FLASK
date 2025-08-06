@@ -1,8 +1,9 @@
-from app import app
-from flask import render_template
+from flask import render_template, Blueprint
 from app.models.product import Product
 
-@app.route('/promotions')
+promotions_bp = Blueprint('promotions', __name__)
+
+@promotions_bp.route('/promotions')
 def promotions():
 
     discounted_products = Product.query.filter(Product.discount > 0).all()
