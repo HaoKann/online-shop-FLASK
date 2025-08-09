@@ -1,16 +1,16 @@
-from app import app, db
-from flask import flash, render_template, redirect, url_for, abort, current_app
+from app import db
+from flask import flash, render_template, redirect, url_for, current_app, Blueprint
 from flask_login import login_required, current_user
-from app.forms.order_form import UserOrderForm
-from app.models.order import Order, Delivery
-from app.models.cart import ProductInCart
+from app.models.order import Order
 from datetime import datetime
 from flask_wtf import FlaskForm
+
+user_order_bp = Blueprint('user_order', __name__)
 
 class EmptyForm(FlaskForm):
     pass
 
-@app.route('/user-orders', methods=['GET','POST'])
+@user_order_bp.route('/user-orders', methods=['GET','POST'])
 @login_required
 def show_orders():
     # Загружаем заказы, где user_id совпадает с ID текущего пользователя
@@ -18,7 +18,7 @@ def show_orders():
     return render_template('user/user_orders.html', all_orders=user_orders)
 
 
-@app.route('/order', methods=['GET','POST'])
+@user_order_bp.route('/order', methods=['GET','POST'])
 @login_required
 def make_order():
     # Этот маршрут теперь просто готовит страницу для оплаты
@@ -34,7 +34,7 @@ def make_order():
     return render_template('checkout.html', # Используем шаблон с формой Stripe
                            stripe_publishable_key=current_app.config['STRIPE_PUBLISHABLE_KEY'], form=form)
 
-@app.route('/order-success')
+@user_order_bp.route('/order-success')
 @login_required
 def order_success():
     try:
@@ -66,7 +66,7 @@ def order_success():
    
 
 
-@app.route('/user-orders/details/<int:order_id>', methods=['GET','POST'])
+@user_order_bp.route('/user-orders/details/<int:order_id>', methods=['GET','POST'])
 @login_required
 def user_order_details(order_id):
     # Ищем заказ, у которого ID совпадает с order_id И user_id совпадает с ID текущего пользователя

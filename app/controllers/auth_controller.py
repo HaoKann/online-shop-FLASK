@@ -1,5 +1,5 @@
 from app import app, db
-from flask import redirect, render_template, url_for, flash, request
+from flask import redirect, render_template, url_for, flash, request, Blueprint
 from flask_login import login_required, current_user, logout_user, login_user
 from app.forms.user.reg_form import RegForm
 from app.forms.user.login_form import LoginForm
@@ -11,7 +11,9 @@ from app.forms.user.change_user_info_form import ChangeInfo
 import os
 from werkzeug.utils import secure_filename
 
-@app.route('/reg', methods=['GET','POST'])
+auth_bp = Blueprint('auth', __name__)
+
+@auth_bp.route('/reg', methods=['GET','POST'])
 def registration():
     if current_user.is_authenticated:
         return redirect(url_for('main'))
@@ -35,7 +37,7 @@ def registration():
         return redirect(url_for('login'))
     return render_template('auth/registration.html', form=form, sub_title='Регистрация')
 
-@app.route('/login', methods=['GET','POST'])
+@auth_bp.route('/login', methods=['GET','POST'])
 def login():
     
     if current_user.is_authenticated:
@@ -60,7 +62,7 @@ def login():
         return redirect(url_for('login'))
     return render_template('auth/login.html', form=form, sub_title='Авторизация')
 
-@app.route('/logout')
+@auth_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -69,7 +71,7 @@ def logout():
 
 
 
-@app.route('/user/change_password', methods=['GET','POST'])
+@auth_bp.route('/user/change_password', methods=['GET','POST'])
 @login_required
 def change_password():
     
@@ -87,7 +89,7 @@ def change_password():
     
     return render_template('user/change_password.html', form=form, sub_title='Изменение пароля')
 
-@app.route('/user/change_info', methods=['GET', 'POST'])
+@auth_bp.route('/user/change_info', methods=['GET', 'POST'])
 @login_required
 def user_change_info():
 

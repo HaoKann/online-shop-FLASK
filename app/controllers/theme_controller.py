@@ -1,13 +1,15 @@
 from app import app
-from flask import redirect, request, g, make_response
+from flask import redirect, request, g, make_response, Blueprint
 from app.forms.theme_form import ChangeTheme
+
+theme_bp = Blueprint('theme', __name__)
 
 @app.before_request
 def add_theme_form():
     g.change_theme = ChangeTheme(data={'choose_theme':request.cookies.get('theme')})
 
 
-@app.route('/change-theme', methods=['POST'])
+@theme_bp.route('/change-theme', methods=['POST'])
 def change_theme():
     if g.change_theme.validate_on_submit():
         res = make_response('Установка темы')

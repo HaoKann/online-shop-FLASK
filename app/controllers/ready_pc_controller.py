@@ -1,8 +1,10 @@
-from app import app
-from flask import render_template, request
+
+from flask import render_template, request, Blueprint
 from app.models.product import ReadyPC
 
-@app.route('/ready_pc')
+ready_pc_bp = Blueprint('ready_pc', __name__)
+
+@ready_pc_bp.route('/ready_pc')
 def ready_pc():
     # 1. Получаем номер страницы из URL (например, /ready_pc?page=2).
     #    Если номер не указан, по умолчанию будет 1.

@@ -1,19 +1,19 @@
-from app import app, db
-from flask import render_template, redirect, flash, url_for, request, abort, jsonify
+from app import db
+from flask import render_template, redirect, flash, url_for, request, abort, jsonify, Blueprint
 from app.models.product import Product
-from app.models.cart import Cart, ProductInCart
+from app.models.cart import ProductInCart
 from flask_login import login_required, current_user
-from app.forms.confirm_form import ConfirmForm
 from app.models.product import ReadyPC
 
+cart_bp = Blueprint('cart', __name__)
 
-@app.route('/cart')
+@cart_bp.route('/cart')
 @login_required
 def user_cart():
     return render_template('main_screen/cart.html', sub_title='Корзина')
 
 
-@app.route('/cart/add_product/<int:product_id>', methods=['GET','POST'] )
+@cart_bp.route('/cart/add_product/<int:product_id>', methods=['GET','POST'] )
 @login_required
 def add_products(product_id):
 
@@ -34,7 +34,7 @@ def add_products(product_id):
     flash(f'Товар {product.name} добавлен в корзину', 'success')
     return redirect(request.referrer or '/')
 
-@app.route('/cart/add_ready_pc/<int:ready_pc_id>')
+@cart_bp.route('/cart/add_ready_pc/<int:ready_pc_id>')
 @login_required
 def add_ready_pc_to_cart(ready_pc_id):
     """
@@ -60,7 +60,7 @@ def add_ready_pc_to_cart(ready_pc_id):
     flash(f'Сборка "{ready_pc.name}" добавлена в корзину', 'success')
     return redirect(url_for('user_cart'))
 
-@app.route('/cart/delete_product/<int:product_id>', methods=['POST','DELETE'])
+@cart_bp.route('/cart/delete_product/<int:product_id>', methods=['POST','DELETE'])
 @login_required
 def delete_products(product_id):
     try:
@@ -75,7 +75,7 @@ def delete_products(product_id):
         return jsonify({'message': 'Ошибка при удалении продукта', 'status': 'error'}), 400
 
 
-@app.route('/cart/increase_amount/<int:product_id>', methods=['POST']) # Изменен метод на POST
+@cart_bp.route('/cart/increase_amount/<int:product_id>', methods=['POST']) # Изменен метод на POST
 @login_required
 def increase_amount(product_id):
     product_in_cart = ProductInCart.query.get_or_404(product_id)
@@ -96,7 +96,7 @@ def increase_amount(product_id):
 
 
 
-@app.route('/cart/decrease_amount/<int:product_id>', methods=['POST'])
+@cart_bp.route('/cart/decrease_amount/<int:product_id>', methods=['POST'])
 @login_required
 def decrease_amount(product_id):
     product_in_cart = ProductInCart.query.get_or_404(product_id)

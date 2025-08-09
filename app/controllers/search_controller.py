@@ -1,8 +1,10 @@
-from app import app, db
-from flask import render_template, request, flash
+from app import db
+from flask import render_template, request, flash, Blueprint
 from app.models.product import Product
 
-@app.route('/search', methods = ['GET','POST'])
+search_bp = Blueprint('search', __name__)
+
+@search_bp.route('/search', methods = ['GET','POST'])
 def search():
     q = request.args.get('q')
     if not q:
@@ -17,7 +19,7 @@ def search():
     return render_template('search/search.html', result=result, q=q)
 
 
-@app.route('/admin/search', methods = ['GET','POST'])
+@search_bp.route('/admin/search', methods = ['GET','POST'])
 def admin_search():
     q = request.args.get('q')
     if not q:

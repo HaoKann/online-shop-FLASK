@@ -56,8 +56,39 @@ def create_app(config_class=Config):
     from .controllers.promotions_controller import promotions_bp
     app.register_blueprint(promotions_bp)
 
-    from .controllers import ready_pc_controller, user_controller, user_orders_controller, favourites_controller,cart_controller, \
-    auth_controller, search_controller, theme_controller
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ ДЛЯ ready_pc_bp
+    from .controllers.ready_pc_controller import ready_pc_bp
+    app.register_blueprint(ready_pc_bp)
+
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ ДЛЯ user_bp
+    from .controllers.user_controller import user_bp
+    app.register_blueprint(user_bp)
+
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ ДЛЯ user_order_bp
+    from .controllers.user_orders_controller import user_order_bp
+    app.register_blueprint(user_order_bp)
+
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ ДЛЯ favourites_bp
+    from .controllers.favourites_controller import favourites_bp
+    app.register_blueprint(favourites_bp)
+
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ ДЛЯ cart_bp
+    from .controllers.cart_controller import cart_bp
+    app.register_blueprint(cart_bp)
+    
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ ДЛЯ auth_bp
+    from .controllers.auth_controller import auth_bp
+    app.register_blueprint(auth_bp)
+
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ search_bp
+    from .controllers.search_controller import search_bp
+    app.register_blueprint(search_bp)
+
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ theme_bp
+    from .controllers.theme_controller import theme_bp
+    app.register_blueprint(theme_bp)
+
+    from .controllers import theme_controller
     from app.controllers.admin import admin_controller
     from app.models import cart, order, product, user, about
 

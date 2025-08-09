@@ -1,18 +1,20 @@
-from app import app,db
-from flask import render_template, flash, redirect, url_for
+from app import db
+from flask import render_template, flash, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
 from app.models.product import Product
 from app.models.user import FavouriteProduct
 from app.models.cart import ProductInCart
 
-@app.route('/favourites')
+favourites_bp = Blueprint('favourites', __name__)
+
+@favourites_bp.route('/favourites')
 @login_required
 def favourites():
     favourite_products = FavouriteProduct.query.filter_by(user_id=current_user.id).all()
     return render_template('user/favourites.html', sub_title='Избранное', favourite_products=favourite_products)
 
 
-@app.route('/favourites/add_product/<int:product_id>', methods=['GET','POST'])
+@favourites_bp.route('/favourites/add_product/<int:product_id>', methods=['GET','POST'])
 @login_required
 def add_to_favourites(product_id):
     
@@ -30,7 +32,7 @@ def add_to_favourites(product_id):
     flash(f'Товар {product.name} добавлен в избранное', 'success')
     return redirect(url_for('favourites'))
 
-@app.route('/favourites/delete_product/<int:product_id>', methods=['GET','POST'])
+@favourites_bp.route('/favourites/delete_product/<int:product_id>', methods=['GET','POST'])
 @login_required
 def delete_product_from_favourites(product_id):
     
@@ -47,7 +49,7 @@ def delete_product_from_favourites(product_id):
     return redirect(url_for('favourites'))
 
 
-@app.route('/favourites/add_product_to_cart/<int:product_id>', methods=['GET','POST'])
+@favourites_bp.route('/favourites/add_product_to_cart/<int:product_id>', methods=['GET','POST'])
 @login_required
 def add_favourite_product_to_cart(product_id):
 
