@@ -1,5 +1,5 @@
-from app import app, db
-from flask import redirect, render_template, url_for, flash, request, Blueprint
+from app import db
+from flask import redirect, render_template, url_for, flash, request, Blueprint, current_app
 from flask_login import login_required, current_user, logout_user, login_user
 from app.forms.user.reg_form import RegForm
 from app.forms.user.login_form import LoginForm
@@ -105,7 +105,7 @@ def user_change_info():
         f = form.avatar.data
         if f:
             photo_path = os.path.join(
-                os.path.dirname(app.instance_path), 'app', 'static', 'avatars', str(current_user.id)
+                os.path.dirname(current_app.instance_path), 'app', 'static', 'avatars', str(current_user.id)
             )
             filename = secure_filename(f.filename)
             if current_user.avatar and os.path.exists(os.path.join(photo_path, current_user.avatar)):

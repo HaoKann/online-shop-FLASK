@@ -1,5 +1,5 @@
-from app import app, db
-from flask import render_template, flash, redirect, url_for, request, abort, request 
+from app import db
+from flask import render_template, flash, redirect, url_for, request, abort, request, Blueprint, current_app
 from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm, PhotoForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
@@ -15,14 +15,16 @@ from app.models.product import ReadyPC
 from app.forms.admin.edit_ready_pc import EditReadyPC
 
 
-@app.route('/admin')
+admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+
+@admin_bp.route('/admin')
 @login_required
 def admin():
     if not current_user.is_admin:
         abort(403)
     return render_template('admin/admin.html')
 
-@app.route('/admin/products')
+@admin_bp.route('/admin/products')
 @login_required
 def admin_products_list():
     if not current_user.is_admin:
@@ -35,7 +37,7 @@ def admin_products_list():
     return render_template('admin/products_list.html', products=products, active_page = 'products')
 
 
-@app.route('/admin/products/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/products/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_product(id):
     if not current_user.is_admin:
@@ -63,7 +65,7 @@ def admin_product(id):
             old_photo = Photo.query.filter_by(prod_id=id).first()
             if old_photo:
                 old_photo_path = os.path.join(
-                    os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
+                    os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
                     product.category, str(product.id), old_photo.photo_path
                 )
                 try:
@@ -75,7 +77,7 @@ def admin_product(id):
 
         # 2. Сохраняем новое фото
         photo_path = os.path.join(
-            os.path.dirname(app.instance_path), 'app', 'static', 'products_photo',
+            os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
             product.category, str(product.id)
         )
         filename = secure_filename(f.filename)
@@ -90,7 +92,7 @@ def admin_product(id):
         return redirect(url_for('admin_product', id=id))
     return render_template('admin/product_details.html', product=product, сharacteristics_form=characteristics_form, photo_form=photo_form, active_page='products')
 
-@app.route('/admin/add_product', methods=['GET','POST'])
+@admin_bp.route('/admin/add_product', methods=['GET','POST'])
 @login_required
 def admin_add_product():
     if not current_user.is_admin:
@@ -117,7 +119,7 @@ def admin_add_product():
             if f:
                 # Создаем папку для фото
                 photo_dir = os.path.join(
-                    os.path.dirname(app.instance_path),
+                    os.path.dirname(current_app.instance_path),
                     'app', 'static', 'products_photo',
                     product.category, str(product.id)
                 )
@@ -160,7 +162,7 @@ def admin_add_product():
 
 
 
-@app.route('/admin/edit_product/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/edit_product/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_edit_product(id):
     if not current_user.is_admin:
@@ -185,7 +187,7 @@ def admin_edit_product(id):
     return render_template('admin/edit_product.html', form=form, sub_title='Изменение товара', active_page='products')
         
 
-@app.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_delete_products(id):
     if not current_user.is_admin:
@@ -202,7 +204,7 @@ def admin_delete_products(id):
         return redirect (url_for('admin_products_list'))
     return render_template('admin/admin_delete_product.html', form=form, sub_title = f'Вы точно хотите удалить продукт "{deleted_product.name}"?', active_page='products')
 
-@app.route('/admin/user-orders')
+@admin_bp.route('/admin/user-orders')
 @login_required
 def all_user_orders():
     all_orders = Order.query.all()
@@ -210,7 +212,7 @@ def all_user_orders():
     return render_template('admin/admin_orders.html', all_orders=all_orders, active_page='all_orders')
 
 
-@app.route('/admin/user-orders/delete/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/user-orders/delete/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_delete_order(id):
 
@@ -222,7 +224,7 @@ def admin_delete_order(id):
     flash(f'Заказ пользователя {user.name} удалён!', 'success')
     return redirect(url_for('all_user_orders'))
 
-@app.route('/admin/user-orders/edit/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/user-orders/edit/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_edit_order(id):
 
@@ -252,7 +254,7 @@ def admin_edit_order(id):
 
 
 
-@app.route('/admin/ready-pcs')
+@admin_bp.route('/admin/ready-pcs')
 @login_required
 def admin_ready_pcs():
     if not current_user.is_admin:
@@ -264,7 +266,7 @@ def admin_ready_pcs():
 
     return render_template('admin/admin_ready_pcs.html', all_ready_pc=all_ready_pc, active_page='ready_pcs')
 
-@app.route('/admin/ready-pc/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/ready-pc/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_ready_pc_detail(id):
     ready_pc_detail = ReadyPC.query.get_or_404(id)
@@ -272,7 +274,7 @@ def admin_ready_pc_detail(id):
     return render_template('admin/admin_ready_pc_details.html', ready_pc_detail=ready_pc_detail, active_page='ready_pcs')
 
 
-@app.route('/admin/add/ready-pc', methods=['GET','POST'])
+@admin_bp.route('/admin/add/ready-pc', methods=['GET','POST'])
 @login_required
 def admin_add_readypc():
 
@@ -285,7 +287,7 @@ def admin_add_readypc():
         flash('Готовая сборка создана!', 'success')
     return render_template('admin/admin_add_readypc.html', form=form, active_page='add_readypc', sub_title='Создание новой сборки')
 
-@app.route('/admin/ready-pc/edit/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/ready-pc/edit/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_edit_readypc(id):
     if not current_user.is_admin:
@@ -338,7 +340,7 @@ def admin_edit_readypc(id):
         return redirect(url_for('admin_ready_pcs'))
     return render_template('admin/edit_readypc.html', form=form, ready_pc=ready_pc, active_page='ready_pcs')
 
-@app.route('/admin/ready-pc/delete/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/ready-pc/delete/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_delete_readypc(id):
     if not current_user.is_admin:

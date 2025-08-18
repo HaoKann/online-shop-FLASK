@@ -88,7 +88,10 @@ def create_app(config_class=Config):
     from .controllers.theme_controller import theme_bp
     app.register_blueprint(theme_bp)
 
-    from .controllers import theme_controller
+    # ДОБАВЛЯЕМ РЕГИСТРАЦИЮ theme_bp
+    from .controllers.admin.admin_controller import admin_bp
+    app.register_blueprint(admin_bp)
+
     from app.controllers.admin import admin_controller
     from app.models import cart, order, product, user, about
 

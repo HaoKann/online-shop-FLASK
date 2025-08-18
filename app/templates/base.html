@@ -33,7 +33,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('main') }}">PerfectPC</a>
+            <a class="navbar-brand" href="{{ url_for('main.main') }}">PerfectPC</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -44,7 +44,7 @@
                             <i class="bi-list-ul"></i> Каталог
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('catalog') }}">Все товары</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.catalog') }}">Все товары</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('graphics_card') }}"><i class="bi bi-gpu-card"></i> Видеокарты</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('processor') }}"><i class="bi bi-cpu"></i> Процессоры</a></li>
