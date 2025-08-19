@@ -23,14 +23,14 @@ def add_to_favourites(product_id):
     already_in_favourite = FavouriteProduct.query.filter_by(user_id=current_user.id, product_id=product.id).first()
     if already_in_favourite:
         flash(f'Товар {product.name} уже добавлен в избранное', 'warning')
-        return redirect(url_for('favourites'))
+        return redirect(url_for('favourites.favourites'))
     
     new_favourite_product = FavouriteProduct(user_id = current_user.id, product_id=product.id)
     db.session.add(new_favourite_product)
     db.session.commit()
 
     flash(f'Товар {product.name} добавлен в избранное', 'success')
-    return redirect(url_for('favourites'))
+    return redirect(url_for('favourites.favourites'))
 
 @favourites_bp.route('/favourites/delete_product/<int:product_id>', methods=['GET','POST'])
 @login_required
@@ -46,7 +46,7 @@ def delete_product_from_favourites(product_id):
     else:
         flash('Товар не найден в избранном', 'danger')
     
-    return redirect(url_for('favourites'))
+    return redirect(url_for('favourites.favourites'))
 
 
 @favourites_bp.route('/favourites/add_product_to_cart/<int:product_id>', methods=['GET','POST'])
@@ -58,7 +58,7 @@ def add_favourite_product_to_cart(product_id):
     
     if not favourite_product:
        flash('Товар не найден', 'warning')
-       return redirect(url_for('favourites')) 
+       return redirect(url_for('favourites.favourites')) 
     
     # Проверка наличия товара в корзине
     product_in_cart  = ProductInCart.query.filter_by(cart_id=current_user.cart.id, product_id=product_id).first()
@@ -72,7 +72,7 @@ def add_favourite_product_to_cart(product_id):
         flash(f'Товар {favourite_product.product.name} был добавлен в корзину', 'success')
     
     db.session.commit()
-    return redirect(url_for('user_cart'))
+    return redirect(url_for('cart.user_cart'))
 
 
 

@@ -58,7 +58,7 @@ def add_ready_pc_to_cart(ready_pc_id):
     
     db.session.commit()
     flash(f'Сборка "{ready_pc.name}" добавлена в корзину', 'success')
-    return redirect(url_for('user_cart'))
+    return redirect(url_for('cart.user_cart'))
 
 @cart_bp.route('/cart/delete_product/<int:product_id>', methods=['POST','DELETE'])
 @login_required

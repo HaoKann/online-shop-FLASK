@@ -8,7 +8,7 @@
         <div class="product-grid">
             {% for product in discounted_products %}
                 <div class="product-card-catalog">
-                    <a href="{{ url_for('show_prod_details', prod_id=product.id) }}" class="product-card-link">
+                    <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="product-card-link">
                         <div class="product-image-container">
                             <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
                                 -{{ product.discount }}%
@@ -32,10 +32,10 @@
                     
                     <div class="product-actions-catalog">
                         <div class="favourite-actions">
-                            <a href="{{ url_for('add_products', product_id=product.id) }}" class="btn btn-success" title="Добавить в корзину">
+                            <a href="{{ url_for('cart.add_products', product_id=product.id) }}" class="btn btn-success" title="Добавить в корзину">
                                 <i class="bi bi-cart-plus-fill"></i>
                             </a>
-                            <a href="{{ url_for('add_to_favourites', product_id=product.id) }}" class="btn btn-danger" title="Добавить в избранное">
+                            <a href="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" class="btn btn-danger" title="Добавить в избранное">
                                 <i class="bi bi-heart-fill"></i>
                             </a>
                         </div>

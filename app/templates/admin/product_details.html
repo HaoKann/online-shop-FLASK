@@ -5,10 +5,10 @@
     <div class="page-header">
         <h1>Детали продукта: {{ product.name }}</h1>
         <div class="d-flex gap-2">
-            <a href="{{ url_for('admin_products_list') }}" class="btn btn-outline-light">
+            <a href="{{ url_for('admin.admin_products_list') }}" class="btn btn-outline-light">
                 <i class="bi bi-arrow-left"></i> К списку продуктов
             </a>
-            <a href="{{url_for('admin_edit_product', id=product.id)}}" class="btn btn-primary">
+            <a href="{{url_for('admin.admin_edit_product', id=product.id)}}" class="btn btn-primary">
                 <i class="bi bi-pencil-fill"></i> Редактировать товар
             </a>
         </div>

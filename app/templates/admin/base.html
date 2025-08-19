@@ -17,31 +17,31 @@
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <h3>Admin Panel</h3>
-                <a href="{{ url_for('main') }}" class="back-to-site">Вернуться на сайт</a>
+                <a href="{{ url_for('main.main') }}" class="back-to-site">Вернуться на сайт</a>
             </div>
             <ul class="sidebar-nav">
                 <li class="nav-item {% if active_page == 'products' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('admin_products_list') }}">
+                    <a class="nav-link" href="{{ url_for('admin.admin_products_list') }}">
                         <i class="bi bi-box-seam"></i> Продукты
                     </a>
                 </li>
                 <li class="nav-item {% if active_page == 'ready_pcs' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('admin_ready_pcs') }}">
+                    <a class="nav-link" href="{{ url_for('admin.admin_ready_pcs') }}">
                         <i class="bi bi-cpu"></i> Готовые сборки
                     </a>
                 </li>
                 <li class="nav-item {% if active_page == 'add_product' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('admin_add_product') }}">
+                    <a class="nav-link" href="{{ url_for('admin.admin_add_product') }}">
                         <i class="bi bi-plus-circle"></i> Добавить продукт
                     </a>
                 </li>
                 <li class="nav-item {% if active_page == 'add_readypc' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('admin_add_readypc') }}">
+                    <a class="nav-link" href="{{ url_for('admin.admin_add_readypc') }}">
                         <i class="bi bi-plus-circle"></i> Добавить сборку
                     </a>
                 </li>
                 <li class="nav-item {% if active_page == 'all_orders' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('all_user_orders') }}">
+                    <a class="nav-link" href="{{ url_for('admin.all_user_orders') }}">
                         <i class="bi bi-cart-check"></i> Все заказы
                     </a>
                 </li>

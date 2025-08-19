@@ -4,7 +4,7 @@
 <div class="container py-5">
     <div class="page-header">
         <h1>Детали заказа #{{ user_order.id }}</h1>
-        <a href="{{ url_for('show_orders') }}" class="btn btn-outline-light">
+        <a href="{{ url_for('user_order.show_orders') }}" class="btn btn-outline-light">
             <i class="bi bi-arrow-left"></i> К моим заказам
         </a>
     </div>
@@ -18,7 +18,7 @@
                         <div class="order-item">
                             <img src="{{ item.product.get_first_photo() }}" class="order-item-img">
                             <div class="order-item-info">
-                                <a href="{{ url_for('show_prod_details', prod_id=item.product.id) }}" class="order-item-title">{{ item.product.name }}</a>
+                                <a href="{{ url_for('catalog.show_prod_details', prod_id=item.product.id) }}" class="order-item-title">{{ item.product.name }}</a>
                                 <div class="order-item-meta">
                                     {{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸ x {{ item.amount }} шт.
                                 </div>

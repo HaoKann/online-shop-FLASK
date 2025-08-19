@@ -16,7 +16,7 @@ csrf = CSRFProtect()
 bootstrap = Bootstrap5()
 
 
-login_manager.login_view = 'auth_controller.login'
+login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Войдите в аккаунт для получения доступа'
 
 

@@ -18,7 +18,7 @@
                         <div class="cart-item-card" data-product-id="{{ item.id }}">
                             <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="cart-item-img">
                             <div class="cart-item-details">
-                                <a href="{{ url_for('show_prod_details', prod_id=item.product.id) }}" class="cart-item-title">{{ item.product.name }}</a>
+                                <a href="{{ url_for('catalog.show_prod_details', prod_id=item.product.id) }}" class="cart-item-title">{{ item.product.name }}</a>
                                 <div class="cart-item-price-single">{{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸ / шт.</div>
                             </div>
                             <div class="cart-item-quantity">
@@ -54,7 +54,7 @@
                         <span id="cart-grand-total" class="text-success">{{ "{:,.0f}".format(current_user.cart.sum_of_products_in_cart()).replace(",", " ") }} ₸</span>
                     </div>
                     <div class="d-grid mt-4">
-                        <a class="btn btn-primary btn-lg" href="{{ url_for('make_order') }}">Перейти к оформлению</a>
+                        <a class="btn btn-primary btn-lg" href="{{ url_for('user_order.make_order') }}">Перейти к оформлению</a>
                     </div>
                 </div>
             </div>
@@ -79,9 +79,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const action = this.dataset.action;
             const url = `/cart/${action}_amount/${productId}`;
 
-            fetch(url, {
-                method: 'POST',
-            })
+            // --- ВОТ СЮДА ВСТАВЛЯЕТСЯ НОВЫЙ КОД ---
+                // Сначала находим CSRF-токен на странице
+                const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+
+                // Затем выполняем fetch-запрос с этим токеном
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken // <-- Добавляем токен
+                    },
+                })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {

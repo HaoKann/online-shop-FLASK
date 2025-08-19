@@ -30,10 +30,10 @@
         </div>
 
         <div class="product-page-actions">
-            <a href="{{ url_for('add_products', product_id=product.id) }}" class="btn btn-primary btn-lg">
+            <a href="{{ url_for('cart.add_products', product_id=product.id) }}" class="btn btn-primary btn-lg">
                 <i class="bi bi-cart-plus-fill"></i> Добавить в корзину
             </a>
-            <a href="{{ url_for('add_to_favourites', product_id=product.id) }}" class="btn btn-icon" title="Добавить в избранное">
+            <a href="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" class="btn btn-icon" title="Добавить в избранное">
                 <i class="bi bi-heart"></i>
             </a>
         </div>

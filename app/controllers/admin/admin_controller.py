@@ -243,7 +243,7 @@ def admin_edit_order(id):
         db.session.add(edit_order)
         db.session.commit()
         flash(f'Заказ пользователя {user.name} успешно изменён!', 'success')
-        return redirect(url_for('all_user_orders'))
+        return redirect(url_for('order.all_user_orders'))
     form.phone_number.data = edit_order.user.phone_number
     form.email.data = edit_order.user.email
     form.address.data = edit_order.delivery.address
@@ -337,7 +337,7 @@ def admin_edit_readypc(id):
 
         db.session.commit()
         flash('Сборка изменена успешно!','success')
-        return redirect(url_for('admin_ready_pcs'))
+        return redirect(url_for('admin.admin_ready_pcs'))
     return render_template('admin/edit_readypc.html', form=form, ready_pc=ready_pc, active_page='ready_pcs')
 
 @admin_bp.route('/admin/ready-pc/delete/<int:id>', methods=['GET','POST'])
@@ -350,6 +350,6 @@ def admin_delete_readypc(id):
     db.session.delete(delete_ready_pc)
     db.session.commit()
     flash(f'Сборка {delete_ready_pc.name} удалена! ', 'danger')
-    return redirect (url_for('admin_ready_pcs'))
+    return redirect (url_for('admin.admin_ready_pcs'))
 
 

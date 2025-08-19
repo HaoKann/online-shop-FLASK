@@ -8,7 +8,7 @@
         <div class="product-grid">
             {% for favourite_product in favourite_products %}
                 <div class="product-card-catalog">
-                    <a href="{{ url_for('show_prod_details', prod_id=favourite_product.product.id) }}" class="product-card-link">
+                    <a href="{{ url_for('catalog.show_prod_details', prod_id=favourite_product.product.id) }}" class="product-card-link">
                         <div class="product-image-container">
                             <img src="{{ favourite_product.product.get_first_photo() }}" alt="{{ favourite_product.product.name }}" class="product-image-catalog">
                         </div>
@@ -20,10 +20,10 @@
                     
                     <div class="product-actions-catalog">
                         <div class="favourite-actions">
-                            <a href="{{ url_for('add_favourite_product_to_cart', product_id=favourite_product.product.id ) }}" class="btn btn-success w-100">
+                            <a href="{{ url_for('favourites.add_favourite_product_to_cart', product_id=favourite_product.product.id ) }}" class="btn btn-success w-100">
                                 <i class="bi bi-cart-plus-fill"></i>
                             </a>
-                            <a href="{{ url_for('delete_product_from_favourites', product_id=favourite_product.product.id) }}" class="btn btn-danger w-100">
+                            <a href="{{ url_for('favourites.delete_product_from_favourites', product_id=favourite_product.product.id) }}" class="btn btn-danger w-100">
                                 <i class="bi bi-trash3-fill"></i>
                             </a>
                         </div>

@@ -7,7 +7,7 @@
 
 {% for component in ready_pc_detail.products_in_readypc.all()  %}
 
-    <a href="{{ url_for('show_prod_details', prod_id=component.product_id) }}" target="_blank">{{component.product.name}}</a>
+    <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product_id) }}" target="_blank">{{component.product.name}}</a>
     {{ component.amount }}
     <hr>
 

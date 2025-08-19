@@ -328,3 +328,144 @@ section.features-section h2,
     background-color: #600018 !important; /* Заливка становится красной */
     border-color: #600018 !important;
 }
+
+/* =================================================================== */
+/* === СТИЛИ ДЛЯ СВЕТЛОЙ ТЕМЫ (ДОПОЛНЕНИЕ) === */
+/* =================================================================== */
+
+/* --- 1. Исправляем цвет шапки --- */
+/* Убираем полупрозрачность и ставим основной красный цвет */
+.navbar.sticky-top {
+    background-color: #600018 !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.navbar.scrolled {
+    background-color: #600018 !important;
+}
+
+
+/* --- 2. Карточки товаров (Каталог, Избранное) --- */
+.product-card-catalog {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+.product-card-catalog:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+.product-title-catalog,
+.product-price-catalog {
+    color: #1e1e1e !important;
+}
+.price-container .text-muted {
+    color: #6c757d !important;
+}
+.product-price-catalog.discount-price {
+    color: #28a745 !important; /* Оставляем цену со скидкой зеленой */
+}
+
+/* --- 3. Страница корзины --- */
+.cart-item-card {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+}
+.cart-item-title,
+.cart-item-total {
+    color: #1e1e1e !important;
+}
+.cart-item-price-single {
+    color: #6c757d !important;
+}
+.cart-item-quantity {
+    background-color: #e9ecef !important;
+}
+.cart-item-quantity .btn {
+    color: #1e1e1e !important;
+}
+.cart-summary-card {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+}
+#cart-total-sum,
+#cart-grand-total {
+    color: #1e1e1e !important;
+}
+#cart-grand-total.text-success {
+     color: #28a745 !important; /* Оставляем итоговую цену зеленой */
+}
+
+
+/* =================================================================== */
+/* === Адаптация страниц "Заказы" и "О нас" для светлой темы === */
+/* =================================================================== */
+
+/* --- 1. Стили для аккордеона заказов ("Мои заказы") --- */
+.admin-accordion .accordion-item {
+    background-color: #ffffff;
+    border-color: #dee2e6;
+}
+
+.admin-accordion .accordion-button {
+    background-color: #f8f9fa !important; /* Светлый фон для свернутого заголовка */
+    color: #1e1e1e !important;
+}
+
+.admin-accordion .accordion-button:not(.collapsed) {
+    background-color: var(--accent) !important; /* Красный фон для развернутого */
+    color: #ffffff !important;
+}
+.admin-accordion .accordion-button:not(.collapsed) * {
+    color: #ffffff !important; /* Весь текст в развернутом заголовке - белый */
+}
+
+.admin-accordion .accordion-body {
+    background-color: #ffffff; /* Белый фон для содержимого */
+}
+.admin-accordion .list-group-item {
+    color: #1e1e1e !important;
+    border-color: #dee2e6 !important;
+}
+
+
+
+/* --- 2. Стили для страницы "Детали заказа" --- */
+.order-details-card {
+    background-color: #ffffff;
+    border-color: #dee2e6;
+}
+.order-details-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+.order-item-title,
+.order-item-total {
+    color: #1e1e1e !important;
+}
+.delivery-summary-box {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+.specs-list li {
+    color: #1e1e1e !important;
+    border-color: #dee2e6;
+}
+.specs-list li span:first-child {
+    color: #6c757d !important;
+}
+
+/* --- 3. Стили для карточек "О нас" --- */
+.timeline-content {
+    background-color: #f8f9fa; /* Светлый фон для карточки */
+}
+.timeline-title,
+.timeline-description {
+    color: #1e1e1e !important;
+}
+.timeline::before,
+.timeline-item::before {
+    background-color: var(--accent); /* Красный цвет для линии и точек */
+}
+.timeline-item::before {
+    border: 2px solid #ffffff; /* Белая обводка, чтобы точки выделялись */
+}

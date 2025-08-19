@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: "{{ url_for('order_success', _external=True) }}",
+                return_url: "{{ url_for('user_order.order_success', _external=True) }}",
             },
         });
 

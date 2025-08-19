@@ -3,7 +3,7 @@
 {% block content %}
     <div class="page-header">
         <h1>Готовые сборки</h1>
-        <a href="{{ url_for('admin_add_readypc') }}" class="btn btn-primary">
+        <a href="{{ url_for('admin.admin_add_readypc') }}" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> Добавить новую сборку
         </a>
     </div>
@@ -26,7 +26,7 @@
                         <tr>
                             <td>{{ ready_pc.id }}</td>
                             <td>
-                                <a href="{{ url_for('admin_ready_pc_detail', id=ready_pc.id) }}" class="text-decoration-none text-dark">
+                                <a href="{{ url_for('admin.admin_ready_pc_detail', id=ready_pc.id) }}" class="text-decoration-none text-dark">
                                     {{ ready_pc.name }}
                                 </a>
                             </td>
@@ -43,10 +43,10 @@
                                 {% endif %}
                             </td>
                             <td class="table-actions">
-                                <a href="{{ url_for('admin_edit_readypc', id=ready_pc.id) }}" class="action-icon action-edit" title="Редактировать">
+                                <a href="{{ url_for('admin.admin_edit_readypc', id=ready_pc.id) }}" class="action-icon action-edit" title="Редактировать">
                                     <i class="bi bi-pencil-fill"></i>
                                 </a>
-                                <a href="{{ url_for('admin_delete_readypc', id=ready_pc.id) }}" class="action-icon action-delete" title="Удалить">
+                                <a href="{{ url_for('admin.admin_delete_readypc', id=ready_pc.id) }}" class="action-icon action-delete" title="Удалить">
                                     <i class="bi bi-trash3-fill"></i>
                                 </a>
                             </td>
@@ -60,7 +60,7 @@
             <ul class="pagination justify-content-center">
                 {% if all_ready_pc.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('admin_ready_pcs', page=all_ready_pc.prev_num) }}">«</a>
+                        <a class="page-link" href="{{ url_for('admin.admin_ready_pcs', page=all_ready_pc.prev_num) }}">«</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">«</span></li>
@@ -69,7 +69,7 @@
                 {% for page_num in all_ready_pc.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
                     {% if page_num %}
                         <li class="page-item {% if page_num == all_ready_pc.page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('admin_ready_pcs', page=page_num) }}">{{ page_num }}</a>
+                            <a class="page-link" href="{{ url_for('admin.admin_ready_pcs', page=page_num) }}">{{ page_num }}</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">…</span></li>
@@ -78,7 +78,7 @@
 
                 {% if all_ready_pc.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('admin_ready_pcs', page=all_ready_pc.next_num) }}">»</a>
+                        <a class="page-link" href="{{ url_for('admin.admin_ready_pcs', page=all_ready_pc.next_num) }}">»</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">»</span></li>

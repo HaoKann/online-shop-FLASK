@@ -32,8 +32,8 @@
                     <h5 class="nowrap">Номер телефона: {{ current_user.phone_number }}</h5>
                     <h5 class="nowrap">Дата регистрации: {{ current_user.creation_date.strftime('%d.%m.%y %H:%M') }}</h5>
                     <h5 class="nowrap">Дата обновления данных: {{ current_user.update_date.strftime('%d.%m.%y %H:%M') }}</h5>
-                    <a href="{{ url_for('change_password') }}" class="btn btn-primary mt-3">Изменить пароль</a>
-                    <a href="{{ url_for('user_change_info') }}" class="btn btn-primary mt-3">Изменить данные</a>
+                    <a href="{{ url_for('auth.change_password') }}" class="btn btn-primary mt-3">Изменить пароль</a>
+                    <a href="{{ url_for('auth.user_change_info') }}" class="btn btn-primary mt-3">Изменить данные</a>
                 </div>
             </div>
         </div>

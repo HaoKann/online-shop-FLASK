@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     {% block styles %}
     {{ bootstrap.load_css() }}
@@ -46,28 +46,28 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('catalog.catalog') }}">Все товары</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('graphics_card') }}"><i class="bi bi-gpu-card"></i> Видеокарты</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('processor') }}"><i class="bi bi-cpu"></i> Процессоры</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('motherboard') }}"><i class="bi bi-motherboard"></i> Материнские платы</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('power_supply_unit') }}"><i class="bi bi-plug-fill"></i> Блоки питания</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('random_access_memory') }}"><i class="bi bi-memory"></i> Оперативная память</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('cooling_system') }}"><i class="bi bi-fan"></i> Кулеры и системы охлаждения</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('storage') }}"><i class="bi bi-nvme"></i> Жесткие диски и накопители</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('computer_case') }}"><i class="bi bi-pc"></i> Корпусы</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.graphics_card') }}"><i class="bi bi-gpu-card"></i> Видеокарты</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.processor') }}"><i class="bi bi-cpu"></i> Процессоры</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.motherboard') }}"><i class="bi bi-motherboard"></i> Материнские платы</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.power_supply_unit') }}"><i class="bi bi-plug-fill"></i> Блоки питания</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.random_access_memory') }}"><i class="bi bi-memory"></i> Оперативная память</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.cooling_system') }}"><i class="bi bi-fan"></i> Кулеры и системы охлаждения</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.storage') }}"><i class="bi bi-nvme"></i> Жесткие диски и накопители</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalog.computer_case') }}"><i class="bi bi-pc"></i> Корпусы</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('promotions') }}"><i class="bi bi-percent"></i> Акции</a>
+                        <a class="nav-link" href="{{ url_for('promotions.promotions') }}"><i class="bi bi-percent"></i> Акции</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('ready_pc') }}"> <i class="bi bi-pc-display"></i> Готовые сборки</a>
+                        <a class="nav-link" href="{{ url_for('ready_pc.ready_pc') }}"> <i class="bi bi-pc-display"></i> Готовые сборки</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('pc_help') }}"><i class="bi bi-question-diamond"></i> Нужна помощь в сборке ПК?</a>
+                        <a class="nav-link" href="{{ url_for('pc_help.pc_help') }}"><i class="bi bi-question-diamond"></i> Нужна помощь в сборке ПК?</a>
                     </li>
                     
                     <li class="nav-item position-relative">
-                        <a class="nav-link" href="{{ url_for('user_cart') }}"><i class="bi bi-cart"></i> Корзина</a>
+                        <a class="nav-link" href="{{ url_for('cart.user_cart') }}"><i class="bi bi-cart"></i> Корзина</a>
                         {% if current_user.is_authenticated and current_user.cart.sum_of_products_amount() > 0 %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {{ current_user.cart.sum_of_products_amount() }}
@@ -79,27 +79,27 @@
                             <i class="bi bi-person-badge"></i> {{ current_user.name }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('user') }}">Профиль</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('show_orders') }}">Заказы</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('favourites') }}">Избранное</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user.user') }}">Профиль</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user_order.show_orders') }}">Заказы</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('favourites.favourites') }}">Избранное</a></li>
                             
                             {% if current_user.is_admin %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item admin-link" href="{{ url_for('admin') }}">
+                                    <a class="dropdown-item admin-link" href="{{ url_for('admin.admin') }}">
                                         <i class="bi bi-shield-lock-fill"></i> Панель управления
                                     </a>
                                 </li>
                             {% endif %}
 
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Выйти из аккаунта</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Выйти из аккаунта</a></li>
                         </ul>
                     </li>
                 </ul>
                 
                 <div class="d-flex align-items-center">
-                    <form class="d-flex me-2" role="search" action="{{ url_for('search') }}" method="GET">
+                    <form class="d-flex me-2" role="search" action="{{ url_for('search.search') }}" method="GET">
                         <input class="form-control me-2" name="q" placeholder="Искать" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                     </form>
@@ -122,7 +122,7 @@
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
             <li class="nav-item"><a href="#" class="nav-link px-2 text-light">Служба поддержки</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-light">Частые вопросы</a></li>
-            <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link px-2 text-light">О нас</a></li>
+            <li class="nav-item"><a href="{{ url_for('main.about') }}" class="nav-link px-2 text-light">О нас</a></li>
         </ul>
         <p class="copyright text-center text-light">© 2025 PerfectPC, Inc</p>
     </footer>

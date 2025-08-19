@@ -16,7 +16,7 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/reg', methods=['GET','POST'])
 def registration():
     if current_user.is_authenticated:
-        return redirect(url_for('main'))
+        return redirect(url_for('main.main'))
     
     form = RegForm()
 
@@ -34,14 +34,14 @@ def registration():
         db.session.add(cart)
         db.session.commit()
         flash('Аккаунт успешно создан!', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     return render_template('auth/registration.html', form=form, sub_title='Регистрация')
 
 @auth_bp.route('/login', methods=['GET','POST'])
 def login():
     
     if current_user.is_authenticated:
-        return redirect(url_for('main'))
+        return redirect(url_for('main.main'))
     
     form = LoginForm()
     
@@ -51,7 +51,7 @@ def login():
             login_user(user)
             next_page = request.args.get('next')
             if not next_page or urlparse(next_page).netloc != '':
-                next_page = url_for('main')
+                next_page = url_for('main.main')
             flash('Вы вошли в аккаунт!', 'success')
             if not user.cart:
                 cart = Cart(user_id=user.id)
@@ -59,7 +59,7 @@ def login():
                 db.session.commit()
             return redirect(next_page)
         flash('Неверный логин или пароль', 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     return render_template('auth/login.html', form=form, sub_title='Авторизация')
 
 @auth_bp.route('/logout')
@@ -67,7 +67,7 @@ def login():
 def logout():
     logout_user()
     flash('Вы вышли из аккаунта', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login'))
 
 
 
@@ -85,7 +85,7 @@ def change_password():
             return redirect(url_for('user'))
         else:
             flash('Возникла ошибка, попробуйте заново','danger')
-            return redirect(url_for('change_password'))
+            return redirect(url_for('auth.change_password'))
     
     return render_template('user/change_password.html', form=form, sub_title='Изменение пароля')
 
@@ -115,7 +115,7 @@ def user_change_info():
             current_user.avatar = filename
 
         db.session.commit()
-        return redirect(url_for('user'))
+        return redirect(url_for('user.user'))
     form.name.data = current_user.name
     form.nickname.data =  current_user.nickname
     form.date_of_birth.data = current_user.date_of_birth
