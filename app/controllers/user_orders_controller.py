@@ -1,7 +1,8 @@
 from app import db
 from flask import flash, render_template, redirect, url_for, current_app, Blueprint
 from flask_login import login_required, current_user
-from app.models.order import Order
+from app.models.order import Order, Delivery, ProductInOrder
+from app.models.cart import Cart
 from datetime import datetime
 from flask_wtf import FlaskForm
 
@@ -34,6 +35,15 @@ def make_order():
     return render_template('checkout.html', # Используем шаблон с формой Stripe
                            stripe_publishable_key=current_app.config['STRIPE_PUBLISHABLE_KEY'], form=form)
 
+
+@user_order_bp.route('/user-orders/details/<int:order_id>', methods=['GET','POST'])
+@login_required
+def user_order_details(order_id):
+    # Ищем заказ, у которого ID совпадает с order_id И user_id совпадает с ID текущего пользователя
+    user_order = Order.query.filter_by(id=order_id, user_id=current_user.id).first_or_404()
+    return render_template('user/order_details.html', user_order=user_order)
+
+
 @user_order_bp.route('/order-success')
 @login_required
 def order_success():
@@ -51,10 +61,15 @@ def order_success():
         # 2. Перемещаем товары из корзины в заказ
         cart_items = current_user.cart.products_in_cart.all()
         for item in cart_items:
-            # Удаляем товар из корзины
-            db.session.delete(item)
+           # СОЗДАЕМ НОВУЮ ЗАПИСЬ о товаре в заказе
+            order_item = ProductInOrder(
+                order_id = new_order.id,
+                product_id = item.product_id,
+                amount = item.amount
+            )
+            db.session.add(order_item)
         
-        # 3. Сохраняем все изменения (новый заказ и пустую корзину)
+        # 3. Сохраняем все изменения (новый заказ, его состав и пустую корзину)
         db.session.commit()
         flash('Оплата прошла успешно! Ваш заказ оформлен.', 'success')
 
@@ -64,11 +79,3 @@ def order_success():
 
     return render_template('user/order_success.html')
    
-
-
-@user_order_bp.route('/user-orders/details/<int:order_id>', methods=['GET','POST'])
-@login_required
-def user_order_details(order_id):
-    # Ищем заказ, у которого ID совпадает с order_id И user_id совпадает с ID текущего пользователя
-    user_order = Order.query.filter_by(id=order_id, user_id=current_user.id).first_or_404()
-    return render_template('user/order_details.html', user_order=user_order)

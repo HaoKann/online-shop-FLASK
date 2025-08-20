@@ -72,31 +72,78 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-    const stripe = Stripe("{{ stripe_publishable_key }}");
+    // --- Элементы страницы ---
+    const paymentForm = document.getElementById("payment-form");
+    const submitButton = document.getElementById("submit-button");
+    const spinner = document.getElementById("spinner");
+    const buttonText = document.getElementById("button-text");
+    const messageContainer = document.getElementById("payment-message");
     
-    // Читаем CSRF-токен из скрытого поля, которое сгенерировал form.csrf_token
-    const csrfToken = document.querySelector("input[name='csrf_token']").value;
+    // --- Вспомогательные функции ---
+    function showMessage(messageText) {
+        if (messageContainer) {
+            messageContainer.classList.remove("d-none");
+            messageContainer.textContent = messageText;
+            setTimeout(() => {
+                messageContainer.classList.add("d-none");
+                messageContainer.textContent = "";
+            }, 5000);
+        }
+    }
 
-    const response = await fetch('/create-payment-intent', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken // <-- Используем его здесь
-        },
-    });
+    function setLoading(isLoading) {
+        if (submitButton) {
+            submitButton.disabled = isLoading;
+            if (isLoading) {
+                spinner.classList.remove("d-none");
+                buttonText.classList.add("d-none");
+            } else {
+                spinner.classList.add("d-none");
+                buttonText.classList.remove("d-none");
+            }
+        }
+    }
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        showMessage(errorData.error || 'Не удалось создать платеж.');
+    // --- Логика Stripe ---
+    const stripePublicKey = "{{ stripe_publishable_key }}";
+    if (!stripePublicKey) {
+        showMessage('Ошибка конфигурации: отсутствует публичный ключ Stripe.');
         return;
     }
-    
-    const { clientSecret } = await response.json();
-    const elements = stripe.elements({ clientSecret });
-    const paymentElement = elements.create("payment");
-    paymentElement.mount("#payment-element");
+    const stripe = Stripe(stripePublicKey);
 
-    const paymentForm = document.getElementById("payment-form");
+    let elements;
+    
+    // 1. Создаем Payment Intent
+    try {
+        const csrfToken = document.querySelector("input[name='csrf_token']").value;
+        const response = await fetch('/create-payment-intent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            showMessage(errorData.error || 'Не удалось создать платеж.');
+            return;
+        }
+        
+        const { clientSecret } = await response.json();
+
+        // 2. Создаем и монтируем Payment Element
+        elements = stripe.elements({ clientSecret });
+        const paymentElement = elements.create("payment");
+        paymentElement.mount("#payment-element");
+
+    } catch (error) {
+        showMessage('Ошибка при инициализации формы оплаты. Попробуйте обновить страницу.');
+        return;
+    }
+
+    // 3. Обрабатываем отправку формы
     paymentForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -109,13 +156,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         if (error) {
-            showMessage(error.message || "Произошла непредвиденная ошибка.");
+            if (error.type === "card_error" || error.type === "validation_error") {
+                showMessage(error.message);
+            } else {
+                showMessage("Произошла непредвиденная ошибка.");
+            }
         }
+        // Если ошибок нет, Stripe автоматически перенаправит на return_url
         setLoading(false);
     });
-
-    function showMessage(messageText) { /* ... */ }
-    function setLoading(isLoading) { /* ... */ }
 });
 </script>
+
 {% endblock %}
