@@ -8,7 +8,7 @@
         <div class="text-center py-5">
             <i class="bi bi-cart-x" style="font-size: 5rem; color: #444;"></i>
             <p class="h4 mt-3 text-muted">В корзине пока пусто</p>
-            <a class="btn btn-primary btn-lg mt-4" href="{{ url_for('catalog') }}">Перейти в каталог</a>
+            <a class="btn btn-primary btn-lg mt-4" href="{{ url_for('catalog.catalog') }}">Перейти в каталог</a>
         </div>
     {% else %}
         <div class="row gx-5">
@@ -61,54 +61,64 @@
         </div>
     {% endif %}
 
-    <div class="modal fade" id="confirmDeleteModal" ...> ... </div>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить <strong id="productName"></strong> из корзины?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    {{ super() }} <script>
+    {{ super() }}
+<script>
 document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     
-    // ==========================================================
-    // === ЧАСТЬ 1: ЛОГИКА ДЛЯ ИЗМЕНЕНИЯ КОЛИЧЕСТВА ТОВАРОВ   ===
-    // ==========================================================
+    // --- ЧАСТЬ 1: ЛОГИКА ДЛЯ ИЗМЕНЕНИЯ КОЛИЧЕСТВА ТОВАРОВ ---
     const changeButtons = document.querySelectorAll('.quantity-change-btn');
     changeButtons.forEach(button => {
         button.addEventListener('click', function () {
             const productId = this.dataset.productId;
             const action = this.dataset.action;
-            const url = `/cart/${action}_amount/${productId}`;
+            
+            // ИСПРАВЛЕНИЕ: Генерируем URL для каждого действия отдельно
+            let url;
+            if (action === 'increase') {
+                url = `{{ url_for('cart.increase_amount', product_id=0) }}`.replace('0', productId);
+            } else {
+                url = `{{ url_for('cart.decrease_amount', product_id=0) }}`.replace('0', productId);
+            }
 
-            // --- ВОТ СЮДА ВСТАВЛЯЕТСЯ НОВЫЙ КОД ---
-                // Сначала находим CSRF-токен на странице
-                const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
-
-                // Затем выполняем fetch-запрос с этим токеном
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken // <-- Добавляем токен
-                    },
-                })
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Обновляем количество
                     document.getElementById(`quantity-${productId}`).textContent = data.new_quantity;
-                    
-                    // Обновляем сумму для конкретного товара
                     document.getElementById(`item-total-${productId}`).textContent = data.item_total.toLocaleString('ru-RU') + ' ₸';
-                    
-                    // Обновляем итоговую сумму в боковой карточке
                     document.getElementById('cart-total-sum').textContent = data.cart_total.toLocaleString('ru-RU') + ' ₸';
                     document.getElementById('cart-grand-total').textContent = data.cart_total.toLocaleString('ru-RU') + ' ₸';
-
                 } else if (data.status === 'removed') {
-                    // Если товар удалился (при уменьшении до 0), перезагружаем страницу
                     location.reload();
-                } 
-                else {
+                } else {
                     console.error('Ошибка:', data.message);
                 }
             })
@@ -116,9 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ==========================================================
-    // === ЧАСТЬ 2: ЛОГИКА ДЛЯ МОДАЛЬНОГО ОКНА УДАЛЕНИЯ ТОВАРА ===
-    // ==========================================================
+    // --- ЧАСТЬ 2: ЛОГИКА ДЛЯ МОДАЛЬНОГО ОКНА УДАЛЕНИЯ ТОВАРА ---
     const confirmDeleteModal = document.getElementById('confirmDeleteModal');
     if (confirmDeleteModal) {
         const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -128,7 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
             productIdToDelete = button.getAttribute('data-product-id');
-            // Находим название товара в новом дизайне
             const cartItemCard = button.closest('.cart-item-card');
             const productName = cartItemCard.querySelector('.cart-item-title').textContent.trim();
             productNameSpan.textContent = `"${productName}"`;
@@ -136,9 +143,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         confirmDeleteBtn.addEventListener('click', function () {
             if (!productIdToDelete) return;
+            
+            // ИСПРАВЛЕНИЕ: Генерируем URL правильно
+            const deleteUrl = `{{ url_for('cart.delete_products', product_id=0) }}`.replace('0', productIdToDelete);
 
-            fetch(`/cart/delete_product/${productIdToDelete}`, {
+            fetch(deleteUrl, {
                 method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
             })
             .then(response => response.json())
             .then(data => {
@@ -148,14 +162,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('Произошла ошибка при удалении товара.');
                 }
             })
-            .catch(error => {
-                console.error('Сетевая ошибка:', error);
-                alert('Произошла сетевая ошибка.');
-            });
+            .catch(error => console.error('Сетевая ошибка:', error));
         });
     }
-
 });
 </script>
-
-    {% endblock %}
+{% endblock %}

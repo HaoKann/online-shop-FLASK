@@ -11,12 +11,12 @@
  Stripe.js создает iframe — полностью изолированное и защищенное окно, которое встроено в страницу. Сайт не имеет доступа к тому, что вводится в эти поля. -->
 
 <!-- Нажатие на кнопку "Оплатить": -->
-<!-- 4.Подтверждение платежа: Когда клиент нажимает "Оплатить", JavaScript выполняет главную команду stripe.confirmPayment(). 
+<!-- 4. Подтверждение платежа: Когда клиент нажимает "Оплатить", JavaScript выполняет главную команду stripe.confirmPayment(). 
 Это значит что Stripe js берет данные из формы и проводит платеж, перед этим получая client_secret для подтверждения 
 Данные карты идут напрямую в Stripe минуя сервер
 Если client_secret совпадает с той операцией, который подготовил Stripe до этого - деньги списываются -->
 
-<!-- 5.Результат: Если все успешно, Stripe перенаправляет пользователя на указанный return_url.
+<!-- 5. Результат: Если все успешно, Stripe перенаправляет пользователя на указанный return_url.
 Если есть ошибка (неверный номер карты, нехватка средств), Stripe возвращает эту ошибку, и JavaScript показывает ее клиенту. -->
 
 <!-- Таким образом, безопасно принимается платежи, а вся "грязная" работа с картами происходит на стороне Stripe.-->
@@ -39,10 +39,19 @@
             <div class="order-summary-card">
                 <h4 class="mb-4">Состав вашего заказа</h4>
                 <ul class="list-group list-group-flush">
-                    {% for item in current_user.cart.products_in_cart.all() %}
-                        <li class="list-group-item">
-                            </li>
-                    {% endfor %}
+                {% for item in current_user.cart.products_in_cart.all() %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="order-summary-img">
+                            <div>
+                                <h6 class="my-0">{{ item.product.name }}</h6>
+                                <small class="text-muted">{{ item.amount }} шт.</small>
+                            </div>
+                        </div>
+                        <span class="order-summary-price">{{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸</span>
+                    </li>
+                {% endfor %}
+                </ul>
                     <li class="list-group-item d-flex justify-content-between fs-5 fw-bold">
                         <span>Итого:</span>
                         <strong class="text-success">{{ "{:,.0f}".format(current_user.cart.sum_of_products_in_cart()).replace(",", " ") }} ₸</strong>
