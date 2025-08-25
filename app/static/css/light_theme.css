@@ -1,9 +1,11 @@
+/* Основные стили светлой темы */
 body {
     background-color: #ffffff; /* Белый фон */
     color: #1e1e1e; /* Тёмно-серый текст для читаемости */
     transition: all 0.3s ease; /* Плавные переходы */
 }
 
+/* Навбар */
 .navbar {
     background-color: #600018 !important; /* Красный акцент для навбара */
     transition: all 0.3s ease;
@@ -18,20 +20,21 @@ body {
 }
 
 .navbar-brand {
-    color: #ffffff !important; /* Белый бренд - добавлен !important */
+    color: #ffffff !important; /* Белый бренд */
 }
 
-/* Основной текст на странице должен быть темным */
+/* Основной текст */
 h1, h2, h3, h4, h5, h6, p, div, span {
     color: #1e1e1e !important; /* Принудительно темный текст */
 }
 
-/* Исключения для элементов навбара */
+/* Исключения для навбара */
 .navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
 .navbar p, .navbar div, .navbar span {
     color: #ffffff !important; /* Белый текст в навбаре */
 }
 
+/* Футер */
 footer .nav {
     color: #1e1e1e; /* Тёмный текст в футере */
 }
@@ -42,25 +45,26 @@ footer .nav-link {
 
 footer .nav-link:hover {
     color: #1e1e1e !important; /* Меняем на темный */
-    text-decoration: underline; /* Добавляем подчеркивание для наглядности */
+    text-decoration: underline; /* Подчеркивание */
 }
+
 footer .copyright {
     color: #1e1e1e !important; /* Тёмный копирайт */
 }
 
+/* Аккордеон */
 .accordion-item {
-    background-color: #f0f0f0; /* Светло-серый фон аккордеона */
+    background-color: #f0f0f0; /* Светло-серый фон */
     border-color: #e0e0e0; /* Лёгкая граница */
 }
 
 .accordion-body {
-    background-color: #ffffff; /* Белый фон тела аккордеона */
+    background-color: #ffffff; /* Белый фон тела */
     color: #1e1e1e !important; /* Тёмный текст */
 }
 
-/* Убеждаемся что весь текст в аккордеоне темный */
 .accordion-body * {
-    color: #1e1e1e !important;
+    color: #1e1e1e !important; /* Все элементы внутри тёмные */
 }
 
 .accordion-button {
@@ -71,12 +75,13 @@ footer .copyright {
 
 .accordion-button:hover,
 .accordion-button:not(.collapsed) {
-    background-color: #800020 !important; /* Темнее при наведении или открытии */
+    background-color: #800020 !important; /* Темнее при наведении */
     color: #ffffff !important;
 }
 
+/* Выпадающее меню */
 .dropdown-menu {
-    background-color: #600018; /* Красный фон выпадающего меню */
+    background-color: #600018; /* Красный фон */
 }
 
 .dropdown-item {
@@ -102,9 +107,9 @@ footer .copyright {
 
 .navbar .form-control:focus {
     background-color: #f0f0f0 !important; /* Светло-серый при фокусе */
-    color: #600018 !important; /* Красный текст при фокусе */
+    color: #600018 !important; /* Красный текст */
     border-color: #600018 !important; /* Красная граница */
-    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Лёгкая тень */
+    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Тень */
 }
 
 .navbar .btn-outline-success {
@@ -115,7 +120,7 @@ footer .copyright {
 }
 
 .navbar .btn-outline-success:hover {
-    background-color: #600018 !important; /* Красный фон при наведении */
+    background-color: #600018 !important; /* Красный фон */
     color: #ffffff !important; /* Белый текст */
     border-color: #800020 !important; /* Темнее граница */
 }
@@ -133,58 +138,53 @@ footer .copyright {
 }
 
 .form-select:focus {
-    border-color: #600018 !important; /* Красная граница при фокусе */
+    border-color: #600018 !important; /* Красная граница */
     box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Тень */
 }
 
-/* Дополнительные правила для обеспечения видимости текста */
+/* Карточки */
 .card {
-    background-color: #ffffff;
-    color: #1e1e1e !important;
+    background-color: #ffffff; /* Белый фон */
+    color: #1e1e1e !important; /* Тёмный текст */
 }
 
 .card * {
-    color: #1e1e1e !important;
+    color: #1e1e1e !important; /* Все элементы внутри */
 }
 
 .btn {
-    color: #1e1e1e !important;
+    color: #1e1e1e !important; /* Тёмный текст по умолчанию */
 }
 
 .btn-primary {
-    background-color: #600018 !important;
-    border-color: #600018 !important;
-    color: #ffffff !important;
+    background-color: #600018 !important; /* Красный фон */
+    border-color: #600018 !important; /* Красная граница */
+    color: #ffffff !important; /* Белый текст */
 }
 
+/* Переопределяем Bootstrap-классы */
 .text-white {
-    color: #1e1e1e !important; /* Переопределяем Bootstrap класс text-white */
+    color: #1e1e1e !important; /* Переопределяем text-white для светлой темы */
 }
 
-/* Стили для секции "Почему выбирают нас" - СВЕТЛАЯ ТЕМА */
-section.features-section,
+/* Секция "Почему выбирают нас" */
 .features-section {
     background-color: #ffffff !important; /* Белый фон */
-    background: #ffffff !important;
-    color: #1e1e1e !important; /* Темный текст */
-    padding: 60px 0 !important; /* Отступы сверху и снизу */
+    color: #1e1e1e !important; /* Тёмный текст */
+    padding: 60px 0 !important; /* Отступы */
 }
 
-/* Переопределяем любые темные фоны */
 .features-section * {
-    background-color: transparent !important;
+    background-color: transparent !important; /* Убираем тёмные фоны */
 }
 
 .features-section .container {
     background-color: transparent !important;
 }
 
-
-section.features-section h2,
-.features-section .section-title,
-.features-section h2 {
+.features-section h2,
+.features-section .section-title {
     color: #1e1e1e !important; /* Темный заголовок */
-    background-color: transparent !important;
     text-align: center;
     margin-bottom: 40px;
     font-size: 2.5rem;
@@ -197,12 +197,10 @@ section.features-section h2,
     gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
-    background-color: transparent !important;
 }
 
 .feature-card {
-    background-color: #f8f9fa !important; /* Светло-серый фон карточек */
-    background: #f8f9fa !important;
+    background-color: #f8f9fa !important; /* Светло-серый фон */
     border: 1px solid #e9ecef !important;
     border-radius: 10px;
     padding: 30px 20px;
@@ -212,7 +210,6 @@ section.features-section h2,
 }
 
 .feature-card:hover {
-    background-color: #f8f9fa !important; /* Добавили эту строку, чтобы фон не менялся */
     box-shadow: 0 5px 20px rgba(96, 0, 24, 0.15);
     border-color: #600018 !important;
 }
@@ -220,7 +217,6 @@ section.features-section h2,
 .feature-card .feature-icon,
 .feature-card i {
     background-color: #600018 !important;
-    background: #600018 !important;
     color: #ffffff !important;
     width: 70px;
     height: 70px;
@@ -230,18 +226,17 @@ section.features-section h2,
     justify-content: center;
     margin: 0 auto 20px;
     font-size: 1.5rem;
-    transition: all 0.3s ease; /* Плавное увеличение */
+    transition: all 0.3s ease;
 }
 
 .feature-card:hover .feature-icon,
 .feature-card:hover i {
     background-color: #800020 !important; /* Темнее при наведении */
-    transform: scale(1.1); /* Увеличение иконки */
+    transform: scale(1.1); /* Увеличение */
 }
 
 .feature-card h3 {
     color: #1e1e1e !important; /* Темный заголовок */
-    background-color: transparent !important;
     font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 10px;
@@ -249,26 +244,24 @@ section.features-section h2,
 
 .feature-card p {
     color: #666666 !important; /* Серый текст описания */
-    background-color: transparent !important;
     font-size: 1rem;
     margin: 0;
 }
 
-/* Исключения для специальных элементов где белый текст нужен */
+/* Исключения для белого текста */
 .navbar .text-white,
 .btn-primary .text-white,
 .bg-dark .text-white {
     color: #ffffff !important;
 }
 
-
-/* Стили для пагинации */
+/* Пагинация */
 .pagination {
-    --bs-pagination-color: #1e1e1e; /* Тёмный цвет текста по умолчанию */
-    --bs-pagination-active-bg: #600018; /* Красный фон для активной страницы */
+    --bs-pagination-color: #1e1e1e; /* Тёмный цвет */
+    --bs-pagination-active-bg: #600018; /* Красный фон активной */
     --bs-pagination-active-border-color: #600018;
     --bs-pagination-hover-color: #600018; /* Красный при наведении */
-    --bs-pagination-disabled-color: #666666; /* Серый для отключённых элементов */
+    --bs-pagination-disabled-color: #666666; /* Серый для отключённых */
 }
 
 .page-link {
@@ -295,177 +288,148 @@ section.features-section h2,
     border-color: #e0e0e0;
 }
 
-
+/* Герой-секция */
 .hero-section {
-    /* Меняем черный фон на очень светло-серый для мягкости */
-    background-color: #f8f9fa !important;
-    padding: 6rem 0; /* Сохраняем отступы для высоты блока */
+    background-color: #f8f9fa !important; /* Светло-серый фон вместо чёрного */
+    padding: 6rem 0; /* Сохраняем отступы */
     text-align: center;
 }
 
-/* Делаем главный заголовок и подзаголовок темными */
 .hero-section .hero-title,
 .hero-section .hero-subtitle {
-    color: #1e1e1e !important; /* Наш основной темный цвет текста */
+    color: #1e1e1e !important; /* Темный текст */
 }
 
-/* Делаем акцентную часть заголовка красной */
 .hero-section .hero-title span {
-    color: #600018 !important; /* Ваш фирменный красный */
+    color: #600018 !important; /* Красный акцент */
 }
 
-/* Стилизуем кнопки для светлого фона */
 .hero-section .btn-outline-light {
-    color: #600018 !important; /* Цвет текста - красный */
-    border-color: #600018 !important; /* Цвет рамки - красный */
+    color: #600018 !important; /* Красный текст */
+    border-color: #600018 !important; /* Красная граница */
     background-color: transparent; /* Прозрачный фон */
-    font-weight: 600; /* Делаем шрифт жирнее */
+    font-weight: 600; /* Жирный шрифт */
 }
 
-/* Меняем вид кнопок при наведении */
 .hero-section .btn-outline-light:hover {
-    color: #ffffff !important; /* Текст становится белым */
-    background-color: #600018 !important; /* Заливка становится красной */
+    color: #ffffff !important; /* Белый текст */
+    background-color: #600018 !important; /* Красный фон */
     border-color: #600018 !important;
 }
 
-/* =================================================================== */
-/* === СТИЛИ ДЛЯ СВЕТЛОЙ ТЕМЫ (ДОПОЛНЕНИЕ) === */
-/* =================================================================== */
-
-/* --- 1. Исправляем цвет шапки --- */
-/* Убираем полупрозрачность и ставим основной красный цвет */
+/* Шапка сайта */
 .navbar.sticky-top {
     background-color: #600018 !important;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 }
-.navbar.scrolled {
-    background-color: #600018 !important;
-}
 
-
-/* --- 2. Карточки товаров (Каталог, Избранное) --- */
+/* Карточки товаров */
 .product-card-catalog {
     background-color: #ffffff !important;
     border-color: #dee2e6 !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
+
 .product-card-catalog:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-}
-.product-title-catalog,
-.product-price-catalog {
-    color: #1e1e1e !important;
-}
-.price-container .text-muted {
-    color: #6c757d !important;
-}
-.product-price-catalog.discount-price {
-    color: #28a745 !important; /* Оставляем цену со скидкой зеленой */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* --- 3. Страница корзины --- */
-.cart-item-card {
-    background-color: #f8f9fa !important;
-    border-color: #dee2e6 !important;
-}
-.cart-item-title,
-.cart-item-total {
+.product-card-catalog .product-title-catalog {
     color: #1e1e1e !important;
 }
-.cart-item-price-single {
+
+.product-card-catalog .price-container .text-muted {
     color: #6c757d !important;
 }
+
+.product-card-catalog .product-price-catalog {
+    color: #1e1e1e !important;
+}
+
+.price-container .product-price-catalog.discount-price {
+    color: #28a745 !important;
+}
+
+.favourite-actions .btn.btn-danger {
+    color: #600018 !important;
+    border-color: #600018 !important;
+}
+
+/* Корзина */
+.cart-item-card, .cart-summary-card {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #1e1e1e !important;
+}
+
+.cart-item-card *, .cart-summary-card * {
+    color: #1e1e1e !important;
+}
+
+.cart-item-card .cart-item-price-single {
+    color: #6c757d !important;
+}
+
 .cart-item-quantity {
     background-color: #e9ecef !important;
 }
-.cart-item-quantity .btn {
-    color: #1e1e1e !important;
-}
-.cart-summary-card {
-    background-color: #f8f9fa !important;
-    border-color: #dee2e6 !important;
-}
-#cart-total-sum,
-#cart-grand-total {
-    color: #1e1e1e !important;
-}
+
 #cart-grand-total.text-success {
-     color: #28a745 !important; /* Оставляем итоговую цену зеленой */
+    color: #28a745 !important;
 }
 
-
-/* =================================================================== */
-/* === Адаптация страниц "Заказы" и "О нас" для светлой темы === */
-/* =================================================================== */
-
-/* --- 1. Стили для аккордеона заказов ("Мои заказы") --- */
+/* Страницы заказов */
 .admin-accordion .accordion-item {
     background-color: #ffffff;
     border-color: #dee2e6;
 }
 
 .admin-accordion .accordion-button {
-    background-color: #f8f9fa !important; /* Светлый фон для свернутого заголовка */
+    background-color: #f8f9fa !important;
+    color: #1e1e1e !important;
+}
+
+.admin-accordion .accordion-button *,
+.admin-accordion .accordion-button:not(.collapsed) .text-muted {
     color: #1e1e1e !important;
 }
 
 .admin-accordion .accordion-button:not(.collapsed) {
-    background-color: var(--accent) !important; /* Красный фон для развернутого */
+    background-color: #600018 !important;
     color: #ffffff !important;
 }
+
 .admin-accordion .accordion-button:not(.collapsed) * {
-    color: #ffffff !important; /* Весь текст в развернутом заголовке - белый */
+    color: #ffffff !important;
 }
 
 .admin-accordion .accordion-body {
-    background-color: #ffffff; /* Белый фон для содержимого */
+    background-color: #ffffff;
 }
-.admin-accordion .list-group-item {
+
+.admin-accordion .list-group-item,
+.order-details-card,
+.delivery-summary-box {
     color: #1e1e1e !important;
+    border-color: #dee2e6 !important;
+    background-color: #f8f9fa;
+}
+
+.order-details-card *,
+.delivery-summary-box * {
+    color: #1e1e1e !important;
+}
+
+.specs-list li {
     border-color: #dee2e6 !important;
 }
 
-
-
-/* --- 2. Стили для страницы "Детали заказа" --- */
-.order-details-card {
-    background-color: #ffffff;
-    border-color: #dee2e6;
-}
-.order-details-card .card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-}
-.order-item-title,
-.order-item-total {
-    color: #1e1e1e !important;
-}
-.delivery-summary-box {
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-}
-.specs-list li {
-    color: #1e1e1e !important;
-    border-color: #dee2e6;
-}
 .specs-list li span:first-child {
     color: #6c757d !important;
 }
 
-/* --- 3. Стили для карточек "О нас" --- */
-.timeline-content {
-    background-color: #f8f9fa; /* Светлый фон для карточки */
-}
-.timeline-title,
-.timeline-description {
-    color: #1e1e1e !important;
-}
-.timeline::before,
-.timeline-item::before {
-    background-color: var(--accent); /* Красный цвет для линии и точек */
-}
-.timeline-item::before {
-    border: 2px solid #ffffff; /* Белая обводка, чтобы точки выделялись */
+.order-details-card .card-header {
+    background-color: #f0f2f5;
+    border-bottom-color: #dee2e6;
 }

@@ -8,7 +8,6 @@ import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
 from app.models.order import Order
-from app.models.user import User
 from app.forms.admin.edit_order import AdminEditOrder
 from app.forms.admin.add_ready_pc import ReadyPCForm
 from app.models.product import ReadyPC
@@ -222,7 +221,7 @@ def admin_delete_order(id):
     db.session.delete(delete_order)
     db.session.commit()
     flash(f'Заказ пользователя {user.name} удалён!', 'success')
-    return redirect(url_for('all_user_orders'))
+    return redirect(url_for('admin.all_user_orders'))
 
 @admin_bp.route('/admin/user-orders/edit/<int:id>', methods=['GET','POST'])
 @login_required

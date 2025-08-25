@@ -8,7 +8,7 @@
         <div class="builds-grid">
             {% for ready_pc in all_ready_pc %}
                 <div class="build-card">
-                    <a href="#" class="build-card-link"> <div class="build-image-container">
+                    <a href="{{ url_for('ready_pc.ready_pc_details', build_id = ready_pc.id) }}" class="build-card-link"> <div class="build-image-container d-flex justify-content-left">
                             <img src="{{ ready_pc.get_build_image() }}" alt="{{ ready_pc.name }}">
                         </div>
                         <div class="build-content-header">
@@ -18,9 +18,9 @@
 
                     <div class="build-content-main">
                         <ul class="build-specs">
-                            <li><i class="bi bi-cpu-fill"></i><span>{{ ready_pc.get_cpu() }}</span></li>
-                            <li><i class="bi bi-gpu-card"></i><span>{{ ready_pc.get_gpu() }}</span></li>
-                            <li><i class="bi bi-memory"></i><span>{{ ready_pc.get_ram() }}</span></li>
+                            <li><i class="bi bi-cpu-fill"></i> <span>{{ ready_pc.get_cpu() }}</span></li>
+                            <li><i class="bi bi-gpu-card"></i> <span>{{ ready_pc.get_gpu() }}</span></li>
+                            <li><i class="bi bi-memory"></i> <span>{{ ready_pc.get_ram() }}</span></li>
                         </ul>
                     </div>
                     

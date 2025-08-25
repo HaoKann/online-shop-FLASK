@@ -1649,3 +1649,31 @@ body.admin-body {
 #payment-element {
     margin-bottom: 1rem;
 }
+
+/* --- Исправление для списка товаров в аккордеоне заказов --- */
+.admin-accordion .accordion-body .list-group-item {
+    background-color: transparent !important;
+    color: var(--text-light) !important;
+}
+
+.admin-accordion .accordion-body .list-group-item .text-muted {
+    color: #888 !important;
+}
+
+.build-image-container {
+    width: 100%;
+    height: 300px; /* Задаем фиксированную высоту контейнера */
+    text-align: left; /* Выравниваем содержимое контейнера по левому краю */
+    background-color: #fff; /* Добавляем белый фон для картинок */
+    display: flex; /* Используем flexbox для центрирования */
+    justify-content: center;
+    align-items: center;
+}
+
+
+.build-image-container img {
+    max-width: 100%; /* Картинка не будет больше контейнера */
+    max-height: 100%;
+    object-fit: contain; /* Вписываем изображение без искажений */
+    display: inline-block;
+}

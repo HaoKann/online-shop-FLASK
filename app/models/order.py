@@ -20,7 +20,7 @@ class Order(db.Model):
     user = db.relationship('User', back_populates='orders')
 
     # products = db.relationship('Product', secondary=order_product, backref='order')
-    paid_products_in_order = db.relationship('ProductInOrder', backref='order')
+    paid_products_in_order = db.relationship('ProductInOrder', backref='order', lazy='dynamic', cascade='all, delete-orphan')
 
 
 

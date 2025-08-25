@@ -58,6 +58,11 @@
                     </li>
                 </ul>
             </div>
+            <div class="text-center mt-4">
+                <a href="{{ url_for('cart.user_cart') }}" class="btn btn-danger">
+                    <i class="bi bi-arrow-left"></i> Вернуться в корзину
+                </a>
+            </div>
         </div>
         <div class="col-lg-5">
             <div class="order-summary-card">
@@ -164,12 +169,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
         });
 
+        // Новый код
         if (error) {
-            if (error.type === "card_error" || error.type === "validation_error") {
-                showMessage(error.message);
-            } else {
-                showMessage("Произошла непредвиденная ошибка.");
+            let userFriendlyMessage = "Произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз.";
+
+            // Проверяем, содержит ли текст ошибки сообщение о лимите суммы
+            // Новый код
+            // Превращаем сообщение в нижний регистр перед проверкой
+            if (error.message.toLowerCase().includes("amount must be no more than")) {
+                userFriendlyMessage = "Сумма вашего заказа слишком велика для одной транзакции. Пожалуйста, разделите заказ на несколько частей или свяжитесь с поддержкой.";
             }
+            // Другие частые ошибки можно обрабатывать здесь
+            else if (error.type === "card_error" || error.type === "validation_error") {
+                userFriendlyMessage = error.message; // Используем сообщение от Stripe для ошибок карты
+            }
+
+            showMessage(userFriendlyMessage); // Показываем наше красивое сообщение
         }
         // Если ошибок нет, Stripe автоматически перенаправит на return_url
         setLoading(false);
