@@ -42,10 +42,24 @@ def admin_product(id):
     if not current_user.is_admin:
         abort(403)
 
+    product = Product.query.get_or_404(id)
+
+    # ИСПРАВЛЕНИЕ: Передаем obj=product для автозаполнения формы
+    edit_product_form = EditProduct(obj=product,prefix='edit_product_form')
     characteristics_form  = CharacteristicsForm(prefix='characteristics_form')
     photo_form = PhotoForm(prefix='photo_form')
+    
 
-    product = Product.query.get_or_404(id)
+    if edit_product_form.validate_on_submit() and edit_product_form.submit.data:
+        
+        # Обновляем его поля данными из формы
+        product.name = edit_product_form.name.data
+        product.category = edit_product_form.category.data 
+        product.price = edit_product_form.price.data    
+        product.discount = edit_product_form.discount.data
+        db.session.commit()
+        flash('Товар успешно обновлен!', 'success')
+        return redirect(url_for('admin.admin_product', id=id))
 
     if characteristics_form.validate_on_submit() and characteristics_form.submit_characteristics.data:
         characteristic = Characteristic(name=characteristics_form.name.data,
@@ -57,6 +71,7 @@ def admin_product(id):
         flash('Характеристика успешно добавлена!', 'succcess')
         return redirect(url_for('admin_product', id=id))
     
+
     if photo_form.validate_on_submit() and photo_form.submit_photo.data:
         f = photo_form.photo.data
         if f:
@@ -88,8 +103,16 @@ def admin_product(id):
         db.session.add(photo)
         db.session.commit()
         flash('Фото успешно заменено', 'success')
-        return redirect(url_for('admin_product', id=id))
-    return render_template('admin/product_details.html', product=product, сharacteristics_form=characteristics_form, photo_form=photo_form, active_page='products')
+        return redirect(url_for('admin.admin_product', id=id))
+    return render_template(
+    'admin/product_details.html', 
+    product=product, 
+    characteristics_form=characteristics_form, 
+    photo_form=photo_form,
+    edit_form=edit_product_form, # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
+    active_page='products'
+)
+
 
 @admin_bp.route('/admin/add_product', methods=['GET','POST'])
 @login_required

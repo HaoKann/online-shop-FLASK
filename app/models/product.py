@@ -1,4 +1,5 @@
 from app import db
+from flask import url_for
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -170,13 +171,10 @@ class Photo(db.Model):
     __tablename__ = 'photos'
 
     id = db.Column(db.Integer(), primary_key=True)
-
     photo_path = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(100), nullable=False)
-
+    description = db.Column(db.String(100), nullable=True)
     prod_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
 
     def get_photo(self):
-        return  '/static/products_photo/' + self.product.category + '/' + str(self.product.id) + '/' + self.photo_path 
-    
+        return url_for('static', filename=f'products_photo/{self.product.category}/{self.product.id}/{self.photo_path}')
     

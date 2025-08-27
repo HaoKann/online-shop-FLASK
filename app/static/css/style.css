@@ -1257,12 +1257,10 @@ body.admin-body {
 /* --- Стили для карточки с формой в админ-панели --- */
 
 .admin-form-card {
-    background-color: #1e1e1e; /* Темный фон */
-    padding: 2rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-dark);
-    max-width: 800px; /* Ограничиваем ширину для лучшей читаемости */
-    margin: 0 auto; /* Центрируем карточку по горизонтали */
+    background-color: #1e1e1e !important;
+    color: #1e1e1e !important;
+    border-radius: 8px;
+    padding: 1.5rem;
 }
 
 
@@ -1319,12 +1317,12 @@ body.admin-body {
 
 
 /* --- Стили для страницы деталей продукта в админке --- */
-
 .admin-card {
-    background-color: #1e1e1e;
+    background-color: #1e1e1e !important;
+    color: #1e1e1e !important;
+   
+    border-radius: 8px;
     padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-dark);
 }
 
 .admin-card-title {
@@ -1337,7 +1335,7 @@ body.admin-body {
 /* Стили для списка характеристик dl-dt */
 .admin-card dt {
     font-weight: 500;
-    color: #aaa;
+    color: #ffffff;
 }
 .admin-card dd {
     margin-bottom: 0.5rem;
@@ -1660,20 +1658,29 @@ body.admin-body {
     color: #888 !important;
 }
 
+/* --- Исправление для страницы деталей готовой сборки --- */
+
 .build-image-container {
-    width: 100%;
-    height: 300px; /* Задаем фиксированную высоту контейнера */
-    text-align: left; /* Выравниваем содержимое контейнера по левому краю */
-    background-color: #fff; /* Добавляем белый фон для картинок */
-    display: flex; /* Используем flexbox для центрирования */
-    justify-content: center;
+    height: 450px; /* Задаем фиксированную высоту для блока с картинкой */
+    display: flex;
     align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 12px;
 }
 
-
+/* --- Исправление для изображений на странице "Готовые сборки" --- */
 .build-image-container img {
-    max-width: 100%; /* Картинка не будет больше контейнера */
-    max-height: 100%;
+    width: 100%;
+    height: 300px; /* Задаем фиксированную высоту */
     object-fit: contain; /* Вписываем изображение без искажений */
-    display: inline-block;
+}
+
+.specifications-block .list-group-item {
+    background-color: transparent !important; /* Убираем белый фон у списка */
+    color: var(--text-light) !important; /* Возвращаем светлый текст */
+}
+.specifications-block .list-group-item .spec-value {
+    color: var(--text-light) !important;
 }

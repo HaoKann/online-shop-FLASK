@@ -41,9 +41,6 @@
                             <td>{% if product.discount %}{{ product.discount }}%{% else %}-{% endif %}</td>
                             
                             <td class="table-actions">
-                                <a href="{{ url_for('admin.admin_edit_product', id=product.id) }}" class="action-icon action-edit" title="Редактировать">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </a>
                                 <a href="{{ url_for('admin.admin_delete_products', id=product.id) }}" class="action-icon action-delete" title="Удалить">
                                     <i class="bi bi-trash3-fill"></i>
                                 </a>
