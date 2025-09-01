@@ -1684,3 +1684,46 @@ body.admin-body {
 .specifications-block .list-group-item .spec-value {
     color: var(--text-light) !important;
 }
+
+
+/* --- Стили для страницы FAQ --- */
+
+.faq-category-title {
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-dark);
+    color: var(--text-light) !important;
+}
+
+.faq-accordion .accordion-item {
+    background-color: #1e1e1e;
+    border: 1px solid var(--border-dark);
+    margin-bottom: 0.5rem;
+}
+
+.faq-accordion .accordion-button {
+    background-color: #2a2a2a !important;
+    color: var(--text-light) !important;
+    font-weight: 500;
+}
+
+.faq-accordion .accordion-button:not(.collapsed) {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    box-shadow: none;
+}
+
+.faq-accordion .accordion-button:focus {
+    box-shadow: none;
+}
+
+.faq-accordion .accordion-button::after {
+    /* Стиль для стрелочки аккордеона */
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.faq-accordion .accordion-body {
+    background-color: #1a1a1a;
+    line-height: 1.6;
+}

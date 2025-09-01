@@ -155,8 +155,6 @@ class ProductInReadyPC(db.Model):
 
 
 
-
-
 class Characteristic(db.Model):
     __tablename__ = 'characteristics'
 
