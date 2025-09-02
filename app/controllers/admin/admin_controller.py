@@ -12,6 +12,8 @@ from app.forms.admin.edit_order import AdminEditOrder
 from app.forms.admin.add_ready_pc import ReadyPCForm
 from app.models.product import ReadyPC
 from app.forms.admin.edit_ready_pc import EditReadyPC
+from app.forms.admin.faq_form import FAQForm
+from app.models.faq import FAQ
 
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -375,3 +377,48 @@ def admin_delete_readypc(id):
     return redirect (url_for('admin.admin_ready_pcs'))
 
 
+@admin_bp.route('/admin/faqs')
+def list_faqs():
+    faqs = FAQ.query.all()
+    return render_template('admin/faq_list.html', faqs=faqs, active_page='faq')
+
+@admin_bp.route('/admin/faqs/add', methods=['GET','POST'])
+def add_faq():
+    form = FAQForm()
+
+    if form.validate_on_submit():
+        new_faq = FAQ(
+            question = form.question.data,
+            answer = form.answer.data,
+            category = form.category.data
+        )
+        db.session.add(new_faq)
+        db.session.commit()
+        flash('Новый вопрос успешно добавлен!', 'success')
+        return redirect(url_for('admin.list_faqs'))
+    return render_template('admin/faq_form.html', form=form, sub_title='Добавить новый вопрос', active_page='faq')
+
+@admin_bp.route('/admin/faqs/edit/<int:faq_id>', methods=['GET','POST'])
+def edit_faq(faq_id):
+    faq = FAQ.query.get_or_404(faq_id)
+    form = FAQForm(obj=faq) # Предзаполняем форму данными из баз
+
+    if form.validate_on_submit():
+        faq.question = form.question.data
+        faq.answer = form.answer.data
+        faq.category = form.category.data
+        db.session.commit()
+        flash('Вопрос успешно обновлен!', 'success')
+        return redirect(url_for('admin.list_faqs'))
+    return render_template('admin/faq_form.html', form=form, sub_title='Редактировать вопрос', active_page='faq')
+
+
+@admin_bp.route('/admin/faqs/delete/<int:faq_id>', methods=['GET','POST'])
+def delete_faq(faq_id):
+    faq = FAQ.query.get_or_404(faq_id)
+    db.session.delete(faq)
+    db.session.commit()
+    flash('Вопрос удален', 'success')
+    return redirect('admin.list_faqs')
+
+   
