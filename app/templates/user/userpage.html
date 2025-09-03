@@ -1,41 +1,37 @@
 {% extends 'base.html' %}
-{% from 'bootstrap5/form.html' import render_form %}
-
-{% block styles %}
-    {{ super() }}
-    <style>
-        .nowrap {
-            white-space: nowrap;
-        }
-    </style>
-{% endblock %}
 
 {% block content %}
-    <section class="py-5 ">
-        <div class="container">
-            <h1 class="text-center mb-4" style="color: var(--accent); font-weight: 700;">Ваш профиль</h1>
-            <p class="text-center text-muted mb-5">Управляйте своими данными и настройками</p>
+<div class="container py-5">
+    <div class="profile-card-wrapper">
+        <div class="text-center mb-4">
+            <img src="{{ url_for('static', filename='avatars/' + current_user.id|string + '/' + current_user.avatar) if current_user.avatar else url_for('static', filename='avatars/default_avatar.png') }}" alt="Аватар пользователя" class="profile-avatar">
+            <h2 class="mt-3">{{ current_user.name }}</h2>
+            <p class="text-muted">@{{ current_user.nickname }}</p>
+        </div>
 
-            <div class="profile-card">
-                <div class="profile-info">
-                    <div class="mb-4">
-                        {% if current_user.avatar %}
-                            <img class="avatar" src="{{ url_for('static', filename=current_user.get_avatar()) }}" alt="Фото пользователя">
-                        {% else %}
-                            <img class="avatar" src="{{ url_for('static', filename='avatars/default_avatar.jpg') }}" alt="Фото пользователя по умолчанию">
-                        {% endif %}
-                    </div>
-                    <h5 class="nowrap">Имя: {{ current_user.name }}</h5>
-                    <h5 class="nowrap">Логин: {{ current_user.nickname }}</h5>
-                    <h5 class="nowrap">Дата рождения: {{ current_user.date_of_birth.strftime('%d.%m.%y') }}</h5>
-                    <h5 class="nowrap">Почта: {{ current_user.email }}</h5>
-                    <h5 class="nowrap">Номер телефона: {{ current_user.phone_number }}</h5>
-                    <h5 class="nowrap">Дата регистрации: {{ current_user.creation_date.strftime('%d.%m.%y %H:%M') }}</h5>
-                    <h5 class="nowrap">Дата обновления данных: {{ current_user.update_date.strftime('%d.%m.%y %H:%M') }}</h5>
-                    <a href="{{ url_for('auth.change_password') }}" class="btn btn-primary mt-3">Изменить пароль</a>
-                    <a href="{{ url_for('auth.user_change_info') }}" class="btn btn-primary mt-3">Изменить данные</a>
-                </div>
+        <div class="profile-info-list">
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-envelope-fill"></i> Эл. почта</span>
+                <span class="info-value">{{ current_user.email }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-telephone-fill"></i> Телефон</span>
+                <span class="info-value">{{ current_user.phone_number or 'Не указан' }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-calendar-heart"></i> Дата рождения</span>
+                <span class="info-value">{{ current_user.date_of_birth.strftime('%d-%m-%Y') if current_user.date_of_birth else 'Не указана' }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-person-plus-fill"></i> Дата регистрации</span>
+                <span class="info-value">{{ current_user.creation_date.strftime('%d-%m-%Y') }}</span>
             </div>
         </div>
-    </section>
+        
+        <div class="profile-actions">
+            <a href="{{ url_for('auth.user_change_info') }}" class="btn btn-primary">Изменить данные</a>
+            <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-secondary">Изменить пароль</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

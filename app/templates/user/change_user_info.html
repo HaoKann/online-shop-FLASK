@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 
-
 {% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4" style="color: #333; font-weight: 700;">{{ sub_title or 'Изменение данных' }}</h1>
 
-<h1 class="text-center">{{ sub_title }}</h1>
-<div class="d-flex justify-content-center mt-4">
-    <div class="col-md-3">
-        {{ render_form(form, button_map={'submit': 'success'}) }}
-
-       
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="edit-card shadow-sm p-4" style="border-radius: 10px; background-color: #1e1e1e;">
+                    <h4 class="edit-card-title text-center mb-4" style="color: #444;">Редактирование профиля</h4>
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        {{ render_form(form, button_map={'submit': 'edit-btn-submit btn-primary', 'style': 'background-color: #600018; border-color: #600018;'}) }}
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
 {% endblock %}

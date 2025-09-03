@@ -1727,3 +1727,126 @@ body.admin-body {
     background-color: #1a1a1a;
     line-height: 1.6;
 }
+
+/* --- Стили для страницы профиля пользователя --- */
+.profile-card-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #1e1e1e;
+    border-radius: 16px;
+    padding: 2.5rem;
+    border: 1px solid var(--border-dark);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.profile-info-list {
+    margin: 2rem 0;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #888 !important;
+    display: flex;
+    align-items: center;
+}
+
+.info-label i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.info-value {
+    font-weight: 500;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.profile-actions .btn {
+    flex-grow: 1; /* Кнопки будут занимать равное пространство */
+}
+
+
+/* Стили для страницы редактирования */
+.edit-card {
+    transition: all 0.3s ease;
+}
+
+.edit-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.edit-card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.edit-form-input {
+    border-radius: 8px;
+    border-color: #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.edit-form-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.edit-btn-submit {
+    background-color: #28a745;
+    border-color: #28a745;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.edit-btn-submit:hover {
+    background-color: #218838;
+    border-color: #218838;
+    transform: scale(1.05);
+}
+
+.invalid-feedback {
+    font-size: 0.875rem;
+    color: #dc3545;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .col-md-6 {
+        padding: 0 15px;
+    }
+    .edit-card {
+        padding: 2rem;
+    }
+    .edit-card-title {
+        font-size: 1.25rem;
+    }
+    .edit-btn-submit {
+        width: 100%;
+        padding: 0.5rem 1rem;
+    }
+}

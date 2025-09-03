@@ -419,6 +419,7 @@ def delete_faq(faq_id):
     db.session.delete(faq)
     db.session.commit()
     flash('Вопрос удален', 'success')
-    return redirect('admin.list_faqs')
+    return redirect(url_for('admin.list_faqs'))
+
 
    
