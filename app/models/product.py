@@ -160,7 +160,7 @@ class Characteristic(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    int_value = db.Column(db.Integer(), nullable=False)
+    int_value = db.Column(db.Integer())
     str_value = db.Column(db.String(30), nullable=False)
     prod_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     

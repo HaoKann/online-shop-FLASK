@@ -71,7 +71,7 @@ def admin_product(id):
         db.session.add(characteristic)
         db.session.commit()
         flash('Характеристика успешно добавлена!', 'succcess')
-        return redirect(url_for('admin_product', id=id))
+        return redirect(url_for('admin.admin_product', id=id))
     
 
     if photo_form.validate_on_submit() and photo_form.submit_photo.data:
