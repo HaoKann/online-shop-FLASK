@@ -23,9 +23,9 @@ body {
     color: #ffffff !important; /* Белый бренд */
 }
 
-/* Основной текст */
-h1, h2, h3, h4, h5, h6, p, div, span {
-    color: #1e1e1e !important; /* Принудительно темный текст */
+/* Добавьте это в конец вашего CSS файла */
+.dark-card, .dark-card h1, .dark-card p, .dark-card span {
+    color: #ffffff !important; /* Устанавливаем белый цвет текста для тёмной карточки */
 }
 
 /* Исключения для навбара */
@@ -98,6 +98,8 @@ footer .copyright {
     margin-left: 15px;
 }
 
+
+
 .navbar .form-control {
     color: #1e1e1e !important; /* Тёмный текст */
     border-color: #e0e0e0 !important; /* Светлая граница */
@@ -152,8 +154,14 @@ footer .copyright {
     color: #1e1e1e !important; /* Все элементы внутри */
 }
 
-.btn {
-    color: #1e1e1e !important; /* Тёмный текст по умолчанию */
+.btn-primary,
+.btn-danger,
+.btn-success {
+    color: #ffffff !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1e1e1e !important;
 }
 
 .btn-primary {

@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <link id="light-theme-style" rel="stylesheet" href="{{ url_for('static', filename='css/light_theme.css') }}" 
-          {% if request.cookies.get('theme') == 'dark' %}disabled{% endif %}>
-          
-    <link id="dark-theme-style" rel="stylesheet" href="{{ url_for('static', filename='css/dark_theme.css') }}" 
-          {% if request.cookies.get('theme') != 'dark' %}disabled{% endif %}>
+    <link id="light-theme-style" rel="stylesheet" href="{{ url_for('static', filename='css/light_theme.css') }}"
+        {% if request.cookies.get('theme') != 'light' %}disabled{% endif %}>
+
+    <link id="dark-theme-style" rel="stylesheet" href="{{ url_for('static', filename='css/dark_theme.css') }}"
+        {% if request.cookies.get('theme') == 'light' %}disabled{% endif %}>
     {% endblock %}
 
     {% block title %}
