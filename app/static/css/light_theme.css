@@ -40,16 +40,16 @@ footer .nav {
 }
 
 footer .nav-link {
-    color: #1e1e1e !important; /* Тёмный текст ссылок */
+    color: #ffffff !important; /* Тёмный текст ссылок */
 }
 
 footer .nav-link:hover {
-    color: #1e1e1e !important; /* Меняем на темный */
+    color: #ffffff !important; /* Меняем на темный */
     text-decoration: underline; /* Подчеркивание */
 }
 
 footer .copyright {
-    color: #1e1e1e !important; /* Тёмный копирайт */
+    color: #ffffff !important; /* Тёмный копирайт */
 }
 
 /* Аккордеон */
@@ -440,4 +440,28 @@ h1, h2, h3, h4, h5, h6 {
 .order-details-card .card-header {
     background-color: #f0f2f5;
     border-bottom-color: #dee2e6;
+}
+
+
+/* --- Стили для карточки профиля в светлой теме --- */
+
+.profile-card-wrapper {
+    background-color: #1e1e1e; /* Светло-серый фон для карточки */
+    border: 1px solid #dee2e6; /* Светлая рамка */
+}
+
+/* Делаем основной текст внутри карточки темным */
+.profile-card-wrapper h2,
+.profile-card-wrapper .info-value {
+    color: #ffffff !important;
+}
+
+.profile-card-wrapper .text-muted,
+.profile-card-wrapper .info-label {
+    color: #6c757d !important;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
 }

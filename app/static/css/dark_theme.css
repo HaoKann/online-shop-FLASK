@@ -339,3 +339,17 @@ section.features-section h2,
 /* * Для кнопок в футере это не нужно, 
  * так как их цвет определяется классами .btn
 */
+
+/* --- Возвращаем светлый текст в карточке профиля для тёмной темы --- */
+
+/* Устанавливаем белый цвет для имени пользователя и его данных */
+.profile-card-wrapper h2,
+.profile-card-wrapper .info-value {
+    color: #ffffff !important;
+}
+
+/* Устанавливаем светло-серый цвет для никнейма и подписей */
+.profile-card-wrapper .text-muted,
+.profile-card-wrapper .info-label {
+    color: #cccccc !important; /* Более мягкий, чем чисто белый */
+}

@@ -1,24 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container my-5">
+    
+    <h1 class="mb-4">Результаты поиска по запросу "{{ q }}"</h1>
 
+    {% if result %}
+        <div class="product-grid">
+            {% for product in result %}
+                {# Оборачиваем каждый товар в те же div'ы, что и в каталоге #}
+                <div class="product-card-catalog">
+                    <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="product-card-link">
+                        
+                        <div class="product-image-container">
+                            <img src="{{ product.get_first_photo() }}" alt="{{ product.name }}" class="product-image-catalog">
+                        </div>
 
-<h2 class="mt-5" >Результаты поиска по запросу "{{q}}"</h2>
-
-    {% for product in result  %}
-        
-    <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}">{{product.name}}</a> <br>
-   
-    <img class="product-img" src="{{ product.get_first_photo() }}">
-    <hr>
-    <br>
-
+                        <div class="product-content-catalog">
+                            <h4 class="product-title-catalog">{{ product.name }}</h4>
+                            
+                            {# Сюда можно будет добавить и цену, если захотите #}
+                            
+                        </div>
+                    </a>
+                    <div class="product-actions-catalog">
+                       {# Здесь можно добавить кнопки "В корзину" и "В избранное" #}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Товар не найден</p>
-    {% endfor %}
+        <div class="text-center py-5">
+            <h3 class="text-muted">К сожалению, по вашему запросу ничего не найдено.</h3>
+            <p class="text-muted">Попробуйте изменить формулировку.</p>
+            <a href="{{ url_for('catalog.catalog') }}" class="btn btn-primary mt-3">Вернуться в каталог</a>
+        </div>
+    {% endif %}
 
-
-
-
-
+</div>
 {% endblock %}

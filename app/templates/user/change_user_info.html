@@ -9,10 +9,25 @@
             <div class="col-md-6">
                 <div class="edit-card shadow-sm p-4" style="border-radius: 10px; background-color: #1e1e1e;">
                     <h4 class="edit-card-title text-center mb-4" style="color: #444;">Редактирование профиля</h4>
-                    <form method="POST" action="">
-                        {{ form.hidden_tag() }}
-                        {{ render_form(form, button_map={'submit': 'edit-btn-submit btn-primary', 'style': 'background-color: #600018; border-color: #600018;'}) }}
-                    </form>
+                    <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+                    {% for field in form if field.widget.input_type != 'submit' and field.name != 'csrf_token' %}
+                        <div class="mb-3"> 
+                            {{ field.label(class="form-label") }}
+                            {{ field(class="form-control") }}
+
+                            {# Показываем ошибки, если они есть #}
+                            {% for error in field.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="text-center mt-4"> {# mt-4 добавляет отступ сверху #}
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
                 </div>
             </div>
         </div>
