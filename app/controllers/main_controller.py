@@ -35,4 +35,4 @@ def faq():
     for faq_item in faqs_from_db:
         grouped_faqs[faq_item.category].append(faq_item)
 
-    return render_template('main_screen/faq.html', grouped_faqs=grouped_faqs, subtitle='Часто задаваемые вопросы')
+    return render_template('main_screen/faq.html', grouped_faqs=grouped_faqs, sub_title='Часто задаваемые вопросы')

@@ -63,16 +63,29 @@ def admin_product(id):
         flash('Товар успешно обновлен!', 'success')
         return redirect(url_for('admin.admin_product', id=id))
 
+    # Получаем данные из формы
     if characteristics_form.validate_on_submit() and characteristics_form.submit_characteristics.data:
-        characteristic = Characteristic(name=characteristics_form.name.data,
+        name = characteristics_form.name.data
+        str_value = characteristics_form.str_value.data
+        int_value = characteristics_form.int_value.data
+        
+    # --- НОВАЯ ПРОВЕРКА НА ДУБЛИКАТЫ ---
+    # Ищем, существует ли уже характеристика с таким именем для ЭТОГО продукта
+        existing_spec = Characteristic.query.filter_by(prod_id=product.id, name=name).first()
+        if existing_spec:
+            # Если нашли дубликат, выводим сообщение об ошибке
+            flash(f'Характеристика "{name}" уже существует для этого товара.', 'danger')
+        else:
+            characteristic = Characteristic(name=characteristics_form.name.data,
                                         int_value=characteristics_form.int_value.data, 
                                         str_value=characteristics_form.str_value.data, 
                                         prod_id=id )
-        db.session.add(characteristic)
-        db.session.commit()
-        flash('Характеристика успешно добавлена!', 'succcess')
-        return redirect(url_for('admin.admin_product', id=id))
-    
+
+            db.session.add(characteristic)
+            db.session.commit()
+            flash('Характеристика успешно добавлена!', 'success')
+            return redirect(url_for('admin.admin_product', id=id))
+        
 
     if photo_form.validate_on_submit() and photo_form.submit_photo.data:
         f = photo_form.photo.data
@@ -115,6 +128,25 @@ def admin_product(id):
     active_page='products'
 )
 
+
+@admin_bp.route('/characteristic/delete/<int:characteristic_id>', methods=['POST'])
+@login_required
+def admin_delete_characteristic(characteristic_id):
+    if not current_user.is_admin:
+        abort(403)
+
+    # Находим характеристику по ID. Если не найдена - будет ошибка 404
+    spec_to_delete = Characteristic.query.get_or_404(characteristic_id)
+
+    # Перед удалением запоминаем ID продукта, чтобы знать, куда вернуться
+    product_id = spec_to_delete.prod_id
+
+    db.session.delete(spec_to_delete)
+    db.session.commit()
+
+    flash('Характеристика была успешно удалена.', 'success')
+    return redirect(url_for('admin.admin_product', id = product_id))
+    
 
 @admin_bp.route('/admin/add_product', methods=['GET','POST'])
 @login_required

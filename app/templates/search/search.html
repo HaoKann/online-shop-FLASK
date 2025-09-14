@@ -8,7 +8,6 @@
     {% if result %}
         <div class="product-grid">
             {% for product in result %}
-                {# Оборачиваем каждый товар в те же div'ы, что и в каталоге #}
                 <div class="product-card-catalog">
                     <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="product-card-link">
                         
@@ -19,12 +18,31 @@
                         <div class="product-content-catalog">
                             <h4 class="product-title-catalog">{{ product.name }}</h4>
                             
-                            {# Сюда можно будет добавить и цену, если захотите #}
-                            
+                            <div class="price-container mt-2">
+                                {% if product.discount %}
+                                    <span class="text-muted text-decoration-line-through me-2">
+                                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                    </span>
+                                    <span class="product-price-catalog">
+                                        {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
+                                    </span>
+                                {% else %}
+                                    <span class="product-price-catalog">
+                                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                    </span>
+                                {% endif %}
+                            </div>
                         </div>
                     </a>
                     <div class="product-actions-catalog">
-                       {# Здесь можно добавить кнопки "В корзину" и "В избранное" #}
+                        <div class="favourite-actions">
+                            <a href="{{ url_for('cart.add_products', product_id=product.id) }}" class="btn btn-success" title="Добавить в корзину">
+                                <i class="bi bi-cart-plus-fill"></i>
+                            </a>
+                            <a href="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" class="btn btn-danger" title="Добавить в избранное">
+                                <i class="bi bi-heart-fill"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

@@ -32,9 +32,36 @@
             </div>
 
             <div class="admin-card mt-4">
-                <h5 class="admin-card-title">Характеристики</h5>
-                <!-- Здесь можно добавить отображение характеристик, если нужно -->
-            </div>
+    <h5 class="admin-card-title">Характеристики</h5>
+
+    {% if product.characteristics.count() > 0 %}
+        <dl class="row">
+            {% for spec in product.characteristics %}
+                <dt class="col-sm-5">{{ spec.name }}</dt>
+                <dd class="col-sm-7 d-flex justify-content-between align-items-center">
+                    
+                    {# Выводим значение характеристики #}
+                    <span>{{ spec.int_value or spec.str_value }}</span>
+                    
+                    {# Форма с кнопкой для удаления #}
+                    <form action="{{ url_for('admin.admin_delete_characteristic', characteristic_id=spec.id) }}" 
+                          method="POST" 
+                          onsubmit="return confirm('Вы уверены, что хотите удалить эту характеристику?');"
+                          class="ms-2">
+                        
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Удалить характеристику">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </form>
+
+                </dd>
+            {% endfor %}
+        </dl>
+    {% else %}
+        <p class="text-muted">Для этого товара характеристики ещё не добавлены.</p>
+    {% endif %}
+</div>
 
             <div class="admin-card mt-4">
                 <h5 class="admin-card-title">Фотографии</h5>
