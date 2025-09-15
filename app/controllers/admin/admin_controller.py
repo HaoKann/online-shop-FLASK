@@ -33,7 +33,7 @@ def admin_products_list():
     page = request.args.get('page', 1, type=int) 
     # метод db.paginate для получения объектов Product с пагинацией
     # page: Номер страницы, берётся из запроса (request.args.get('page', 1, type=int)), по умолчанию 1.
-    per_page = 5
+    per_page = 10
     products = Product.query.paginate(page=page, per_page=per_page, error_out=False)
     return render_template('admin/products_list.html', products=products, active_page = 'products')
 

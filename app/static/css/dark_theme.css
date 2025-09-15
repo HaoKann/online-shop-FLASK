@@ -354,7 +354,3 @@ section.features-section h2,
     color: #cccccc !important; /* Более мягкий, чем чисто белый */
 }
 
-/* Делаем текст данных в карточках админ-панели белым */
-.admin-card dd {
-    color: #e10c0c;
-}

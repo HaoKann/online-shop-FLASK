@@ -1151,27 +1151,28 @@ body.admin-body {
 }
 
 /* Стили для таблицы в админке */
+/* Стиль для всей таблицы */
 .admin-table {
-    width: 100%;
-    background-color: #1e1e1e;
-    border-collapse: collapse; /* Убираем двойные рамки */
+    background-color: #1e1e1e; /* Темный фон таблицы */
+    color: #ffffff;             /* Белый текст */
+    border-collapse: collapse;
 }
 
+/* Стиль для заголовков (Фото, Название и т.д.) */
 .admin-table thead th {
-    background-color: #2a2a2a;
-    color: #aaa;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    font-weight: 600;
+    background-color: #2a2a2a; /* Чуть более светлый фон для заголовков */
+    color: #aaa;              /* Серый цвет текста */
+    border-bottom: 2px solid #600018; /* Та самая красная линия */
     text-transform: uppercase;
     font-size: 0.8rem;
-    border-bottom: 2px solid var(--accent);
+    padding: 0.75rem 1rem;
 }
 
+/* Стиль для ячеек и строк таблицы */
 .admin-table tbody td {
     padding: 1rem;
     vertical-align: middle;
-    border-bottom: 1px solid #2a2a2a;
+    border-bottom: 1px solid #2a2a2a; /* Разделитель между строками */
 }
 
 .admin-table tbody tr {
@@ -1185,8 +1186,8 @@ body.admin-body {
 }
 
 .table-product-img {
-    width: 60px;
-    height: 60px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
     background-color: #fff;
     border-radius: 6px;
@@ -1849,4 +1850,9 @@ body.admin-body {
         width: 100%;
         padding: 0.5rem 1rem;
     }
+}
+
+/* Делаем текст данных (в тегах <dd>) в карточках админ-панели белым */
+.admin-card dd {
+    color: #ffffff;
 }
