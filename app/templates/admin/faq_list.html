@@ -1,6 +1,9 @@
 {% extends 'admin/base.html' %}
 
 {% block content %}
+
+<div class="container">  
+
     <div class="page-header">
         <h1>Часто задаваемые вопросы</h1>
         <a href="{{ url_for('admin.add_faq') }}" class="btn btn-primary">
@@ -9,7 +12,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table admin-table">
+        <table class="admin-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -58,4 +61,5 @@
         </div>
     </div>
     {% endfor %}
+</div>
 {% endblock %}

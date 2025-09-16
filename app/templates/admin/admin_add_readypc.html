@@ -2,12 +2,17 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-    <div class="page-header">
+    {# Центрируем заголовок #}
+    <div class="text-center mb-4">
         <h1>{{ sub_title or 'Создание новой сборки' }}</h1>
     </div>
 
-    <div class="admin-form-card">
-        {{ render_form(form, button_style='primary', button_size='lg') }}
+    {# Центрируем саму форму, ограничивая её ширину для лучшего вида #}
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-8">
+            <div class="admin-form-card">
+                {{ render_form(form, button_style='primary', button_size='lg') }}
+            </div>
+        </div>
     </div>
-
 {% endblock %}

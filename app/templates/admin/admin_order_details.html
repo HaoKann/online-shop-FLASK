@@ -1,0 +1,76 @@
+{% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    {# Шапка страницы с названием заказа и кнопкой "Назад" #}
+    <div class="page-header">
+        <h1>Детали Заказа #{{ order.id }}</h1>
+        <a href="{{ url_for('admin.all_user_orders') }}" class="btn btn-outline-light">
+            <i class="bi bi-arrow-left"></i> К списку заказов
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {# Левая колонка: Состав заказа и информация о пользователе #}
+        <div class="col-lg-8">
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title">Состав заказа</h5>
+                <ul class="list-group list-group-flush">
+                    {% for item in order.products_in_order %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <img src="{{ item.product.get_first_photo() }}" class="table-product-img me-3" alt="{{ item.product.name }}">
+                                <a href="{{ url_for('admin.admin_product', id=item.product.id) }}" class="text-white">{{ item.product.name }}</a>
+                            </div>
+                            <span>{{ item.amount }} шт. x {{ "{:,.0f}".format(item.product.price).replace(",", " ") }} ₸</span>
+                        </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                        <span>Итого:</span>
+                        <span>{{ "{:,.0f}".format(order.price).replace(",", " ") }} ₸</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-card">
+                <h5 class="admin-card-title">Данные покупателя</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Имя:</dt>
+                    <dd class="col-sm-8">{{ order.user.name }}</dd>
+                    <dt class="col-sm-4">Email:</dt>
+                    <dd class="col-sm-8">{{ order.user.email }}</dd>
+                    <dt class="col-sm-4">Телефон:</dt>
+                    <dd class="col-sm-8">{{ order.user.phone_number or 'Не указан' }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        {# Правая колонка: Доставка и управление статусом #}
+        <div class="col-lg-4">
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title">Информация о доставке</h5>
+                <dl class="row">
+                    <dt class="col-sm-5">Адрес:</dt>
+                    <dd class="col-sm-7">{{ order.delivery.address }}</dd>
+                    <dt class="col-sm-5">Способ:</dt>
+                    <dd class="col-sm-7">{{ order.delivery.way_of_delivery }}</dd>
+                    <dt class="col-sm-5">Время:</dt>
+                    <dd class="col-sm-7">{{ order.delivery.time_of_arrival }}</dd>
+                </dl>
+            </div>
+
+            <div class="admin-form-card">
+                <h5 class="admin-card-title">Управление заказом</h5>
+                {# Эта форма пока не будет работать #}
+                <form method="POST" action="{{ url_for('admin.update_order_status', order_id=order.id) }}">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Изменить статус:</label>
+                        {{ form.status(class="form-select") }}
+                    </div>
+                    {{ form.submit(class="btn btn-primary w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

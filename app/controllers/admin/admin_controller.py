@@ -268,6 +268,16 @@ def all_user_orders():
     return render_template('admin/admin_orders.html', all_orders=all_orders, active_page='all_orders')
 
 
+@admin_bp.route('/admin/orders/<int:order_id>')
+@login_required
+def admin_order_details(order_id):
+    if not current_user.is_admin:
+            abort(403)
+    
+    order = Order.query.get_or_404(order_id)
+
+    return render_template('/admin/admin_order_details.html', order=order)
+
 @admin_bp.route('/admin/user-orders/delete/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_delete_order(id):

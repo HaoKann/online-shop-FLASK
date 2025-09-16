@@ -2,12 +2,19 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-    <div class="page-header">
+<div class="container">
+        <div class="text-center mb-4">
         <h1>{{ sub_title or 'Управление формой' }}</h1>
     </div>
 
-    <div class="admin-form-card">
-        {{ render_form(form, button_style='primary', button_size='lg') }}
+    {# Создаём строку с колонками #}
+    <div class="row d-flex justify-content-center">
+        {# Задаём ширину колонки (например, 8 из 12) #}
+        <div class="col-lg-8">
+            <div class="admin-form-card">
+                {{ render_form(form, button_style='primary', button_size='lg') }}
+            </div>
+        </div>
     </div>
-
+</div>
 {% endblock %}
