@@ -2,7 +2,6 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-    {# Шапка страницы с названием заказа и кнопкой "Назад" #}
     <div class="page-header">
         <h1>Детали Заказа #{{ order.id }}</h1>
         <a href="{{ url_for('admin.all_user_orders') }}" class="btn btn-outline-light">
@@ -11,9 +10,9 @@
     </div>
 
     <div class="row g-4">
-        {# Левая колонка: Состав заказа и информация о пользователе #}
+        {# Левая колонка: теперь здесь ТОЛЬКО состав заказа #}
         <div class="col-lg-8">
-            <div class="admin-card mb-4">
+            <div class="admin-card">
                 <h5 class="admin-card-title">Состав заказа</h5>
                 <ul class="list-group list-group-flush">
                     {% for item in order.products_in_order %}
@@ -32,20 +31,10 @@
                 </ul>
             </div>
 
-            <div class="admin-card">
-                <h5 class="admin-card-title">Данные покупателя</h5>
-                <dl class="row">
-                    <dt class="col-sm-4">Имя:</dt>
-                    <dd class="col-sm-8">{{ order.user.name }}</dd>
-                    <dt class="col-sm-4">Email:</dt>
-                    <dd class="col-sm-8">{{ order.user.email }}</dd>
-                    <dt class="col-sm-4">Телефон:</dt>
-                    <dd class="col-sm-8">{{ order.user.phone_number or 'Не указан' }}</dd>
-                </dl>
-            </div>
+            {# БЛОК "ДАННЫЕ ПОКУПАТЕЛЯ" ОТСЮДА УБРАН #}
         </div>
 
-        {# Правая колонка: Доставка и управление статусом #}
+        {# Правая колонка: Доставка, ДАННЫЕ ПОКУПАТЕЛЯ и Управление #}
         <div class="col-lg-4">
             <div class="admin-card mb-4">
                 <h5 class="admin-card-title">Информация о доставке</h5>
@@ -59,17 +48,24 @@
                 </dl>
             </div>
 
-            <div class="admin-form-card">
+            {# ↓↓ БЛОК "ДАННЫЕ ПОКУПАТЕЛЯ" ТЕПЕРЬ ЗДЕСЬ ↓↓ #}
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title">Данные покупателя</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Имя:</dt>
+                    <dd class="col-sm-8">{{ order.user.name }}</dd>
+                    <dt class="col-sm-4">Email:</dt>
+                    <dd class="col-sm-8">{{ order.user.email }}</dd>
+                    <dt class="col-sm-4">Телефон:</dt>
+                    <dd class="col-sm-8">{{ order.user.phone_number or 'Не указан' }}</dd>
+                </dl>
+            </div>
+
+            <div class="admin-card">
                 <h5 class="admin-card-title">Управление заказом</h5>
-                {# Эта форма пока не будет работать #}
-                <form method="POST" action="{{ url_for('admin.update_order_status', order_id=order.id) }}">
-                    {{ form.hidden_tag() }}
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Изменить статус:</label>
-                        {{ form.status(class="form-select") }}
-                    </div>
-                    {{ form.submit(class="btn btn-primary w-100") }}
-                </form>
+                <a href="{{ url_for('admin.admin_edit_order', id=order.id) }}" class="btn btn-primary w-100">
+                    <i class="bi bi-pencil-square me-2"></i> Редактировать заказ
+                </a>
             </div>
         </div>
     </div>

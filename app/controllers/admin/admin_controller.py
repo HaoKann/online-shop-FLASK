@@ -14,6 +14,7 @@ from app.models.product import ReadyPC
 from app.forms.admin.edit_ready_pc import EditReadyPC
 from app.forms.admin.faq_form import FAQForm
 from app.models.faq import FAQ
+from app.models.user import User
 
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -23,7 +24,18 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 def admin():
     if not current_user.is_admin:
         abort(403)
-    return render_template('admin/admin.html')
+
+    # Вычисление статистики
+    product_count = Product.query.count()
+    user_count = User.query.count()
+
+    # Считаем "новые" заказы (например, со статусом 'pending' - "Обрабатывается")
+    new_orders_count = Order.query.filter_by(status='pending').count()
+
+    recent_orders_count = Order.query.order_by(Order.date.desc()).limit(5).all()
+    
+    return render_template('admin/admin.html', product_count=product_count,  user_count=user_count, new_orders_count=new_orders_count, recent_orders_count=recent_orders_count)
+
 
 @admin_bp.route('/admin/products')
 @login_required
@@ -275,8 +287,10 @@ def admin_order_details(order_id):
             abort(403)
     
     order = Order.query.get_or_404(order_id)
+    
 
     return render_template('/admin/admin_order_details.html', order=order)
+
 
 @admin_bp.route('/admin/user-orders/delete/<int:id>', methods=['GET','POST'])
 @login_required
@@ -294,29 +308,31 @@ def admin_delete_order(id):
 @login_required
 def admin_edit_order(id):
 
-    edit_order = Order.query.get_or_404(id)
-    user = edit_order.user
-
+    order_to_edit = Order.query.get_or_404(id)
     form = AdminEditOrder()
 
     if form.validate_on_submit():
-        edit_order.user.phone_number = form.phone_number.data
-        edit_order.user.email = form.email.data
-        edit_order.delivery.address = form.address.data
-        edit_order.delivery.way_of_delivery = form.way_of_delivery.data
-        edit_order.delivery.time_of_arrival = form.time_of_arrival.data
-        edit_order.status = form.status.data
-        db.session.add(edit_order)
+        order_to_edit.user.phone_number = form.phone_number.data
+        order_to_edit.user.email = form.email.data
+        order_to_edit.delivery.address = form.address.data
+        order_to_edit.delivery.way_of_delivery = form.way_of_delivery.data
+        order_to_edit.delivery.time_of_arrival = form.time_of_arrival.data
+        order_to_edit.status = form.status.data
+        db.session.add(order_to_edit)
+
         db.session.commit()
-        flash(f'Заказ пользователя {user.name} успешно изменён!', 'success')
-        return redirect(url_for('order.all_user_orders'))
-    form.phone_number.data = edit_order.user.phone_number
-    form.email.data = edit_order.user.email
-    form.address.data = edit_order.delivery.address
-    form.way_of_delivery.data = edit_order.delivery.way_of_delivery
-    form.way_of_delivery.data = edit_order.delivery.time_of_arrival
-    form.status.data = edit_order.status
-    return render_template('admin/admin_edit_order.html', form=form, active_page='all_orders', sub_title= f'Редактирование заказа №{edit_order.id}')
+        flash(f'Заказ #{order_to_edit.id} успешно изменён!', 'success')
+        return redirect(url_for('admin.all_user_orders'))
+    
+    elif request.method == 'GET':
+        form.phone_number.data = order_to_edit.user.phone_number
+        form.email.data = order_to_edit.user.email
+        form.address.data = order_to_edit.delivery.address
+        form.way_of_delivery.data = order_to_edit.delivery.way_of_delivery
+        form.way_of_delivery.data = order_to_edit.delivery.time_of_arrival
+        form.status.data = order_to_edit.status
+
+    return render_template('admin/admin_edit_order.html', form=form, active_page='all_orders', sub_title= f'Редактирование заказа №{order_to_edit.id}')
 
 
 

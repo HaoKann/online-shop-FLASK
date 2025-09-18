@@ -2,6 +2,7 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
+<div class="container">
     <div class="page-header">
         <h1>{{ sub_title or 'Управление формой' }}</h1>
     </div>
@@ -9,4 +10,5 @@
     <div class="admin-form-card">
         {{ render_form(form, button_style='primary', button_size='lg') }}
     </div>
+</div>
 {% endblock %}

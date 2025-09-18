@@ -1856,3 +1856,19 @@ body.admin-body {
 .admin-card dd {
     color: #ffffff;
 }
+
+/* --- Стили для списка товаров в деталях заказа (Админка) --- */
+
+.admin-card .list-group {
+    --bs-list-group-bg: transparent; /* Убираем фон у самого списка */
+    --bs-list-group-border-color: #444; /* Делаем рамки темными */
+}
+
+.admin-card .list-group-item {
+    color: #ffffff; /* Делаем текст белым */
+}
+
+/* Делаем фон у последнего элемента (Итого) чуть заметнее */
+.admin-card .list-group-item.fw-bold {
+    background-color: rgba(255, 255, 255, 0.05);
+}

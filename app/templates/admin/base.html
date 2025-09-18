@@ -16,9 +16,13 @@
     <div class="admin-wrapper">
         <aside class="admin-sidebar">
             <div class="sidebar-header">
-                <h3>Admin Panel</h3>
-                <a href="{{ url_for('main.main') }}" class="back-to-site">Вернуться на сайт</a>
-            </div>
+        <h3>
+            <a href="{{ url_for('admin.admin') }}" class="text-white text-decoration-none">
+                Admin Panel
+            </a>
+        </h3>
+        <a href="{{ url_for('main.main') }}" class="back-to-site">Вернуться на сайт</a>
+    </div>
             <ul class="sidebar-nav">
                 <li class="nav-item {% if active_page == 'products' %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('admin.admin_products_list') }}">
