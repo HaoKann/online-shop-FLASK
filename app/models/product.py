@@ -110,10 +110,6 @@ class ReadyPC(db.Model):
         get_pc_case = self.get_component('pc_case')
         return get_pc_case.name if get_pc_case else 'Не указан'
         
-    def get_cooler(self):
-        cooler_product = self.get_component('cooler')
-        return cooler_product.name if cooler_product else 'Не указан'
-
     def get_build_image(self):
         """Возвращает фото корпуса, если он есть, иначе - фото по умолчанию."""
         case_product = self.get_component('pc_case')

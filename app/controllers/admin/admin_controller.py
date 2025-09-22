@@ -7,7 +7,7 @@ from app.models.product import Product, Characteristic, Photo, ProductInReadyPC
 import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
-from app.models.order import Order
+from app.models.order import Order, Delivery
 from app.forms.admin.edit_order import AdminEditOrder
 from app.forms.admin.add_ready_pc import ReadyPCForm
 from app.models.product import ReadyPC
@@ -314,6 +314,12 @@ def admin_edit_order(id):
     if form.validate_on_submit():
         order_to_edit.user.phone_number = form.phone_number.data
         order_to_edit.user.email = form.email.data
+
+        # --- НОВАЯ ЛОГИКА ДЛЯ ДОСТАВКИ ---
+        # Если у заказа еще нет объекта доставки, создаем его
+        if not order_to_edit.delivery:
+            order_to_edit.delivery = Delivery(order_id=order_to_edit.id)
+
         order_to_edit.delivery.address = form.address.data
         order_to_edit.delivery.way_of_delivery = form.way_of_delivery.data
         order_to_edit.delivery.time_of_arrival = form.time_of_arrival.data
@@ -327,11 +333,15 @@ def admin_edit_order(id):
     elif request.method == 'GET':
         form.phone_number.data = order_to_edit.user.phone_number
         form.email.data = order_to_edit.user.email
-        form.address.data = order_to_edit.delivery.address
-        form.way_of_delivery.data = order_to_edit.delivery.way_of_delivery
-        form.way_of_delivery.data = order_to_edit.delivery.time_of_arrival
         form.status.data = order_to_edit.status
 
+        # --- НОВАЯ ПРОВЕРКА ПЕРЕД ЗАПОЛНЕНИЕМ ---
+        # Заполняем поля доставки, только если она существует
+        if order_to_edit.delivery:
+            form.address.data = order_to_edit.delivery.address
+            form.way_of_delivery.data = order_to_edit.delivery.way_of_delivery
+            form.way_of_delivery.data = order_to_edit.delivery.time_of_arrival
+      
     return render_template('admin/admin_edit_order.html', form=form, active_page='all_orders', sub_title= f'Редактирование заказа №{order_to_edit.id}')
 
 

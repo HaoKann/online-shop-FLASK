@@ -54,7 +54,7 @@
                         <span id="cart-grand-total" class="text-success">{{ "{:,.0f}".format(current_user.cart.sum_of_products_in_cart()).replace(",", " ") }} ₸</span>
                     </div>
                     <div class="d-grid mt-4">
-                        <a class="btn btn-primary btn-lg" href="{{ url_for('user_order.make_order') }}">Перейти к оформлению</a>
+                        <a class="btn btn-primary btn-lg" href="{{ url_for('user_order.checkout') }}">Оформить заказ</a>
                     </div>
                 </div>
             </div>

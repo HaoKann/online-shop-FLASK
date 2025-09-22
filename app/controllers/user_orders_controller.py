@@ -1,10 +1,10 @@
 from app import db
-from flask import flash, render_template, redirect, url_for, current_app, Blueprint
+from flask import flash, render_template, redirect, session, url_for, current_app, Blueprint
 from flask_login import login_required, current_user
-from app.models.order import Order, Delivery, ProductInOrder
-from app.models.cart import Cart
+from app.models.order import Order, ProductInOrder, Delivery
 from datetime import datetime
 from flask_wtf import FlaskForm
+from app.forms.order_form import UserOrderForm
 
 user_order_bp = Blueprint('user_order', __name__)
 
@@ -43,6 +43,19 @@ def user_order_details(order_id):
     user_order = Order.query.filter_by(id=order_id, user_id=current_user.id).first_or_404()
     return render_template('user/order_details.html', user_order=user_order)
 
+@user_order_bp.route('/chechout', methods=['GET','POST'])
+@login_required
+def checkout():
+    form = UserOrderForm()
+    if form.validate_on_submit():
+        # Сохраняем данные о доставке в сессию
+        session['delivery_info'] = {
+            'address': form.address.data,
+            'way_of_delivery': form.way_of_delivery.data,
+            'time_of_arrival': form.time_of_arrival.data
+        }
+        return redirect('user/checkout_delivery.html', form=form)
+
 
 @user_order_bp.route('/order-success')
 @login_required
@@ -58,7 +71,20 @@ def order_success():
         db.session.add(new_order)
         db.session.flush() # Это нужно, чтобы получить new_order.id до коммита
 
-        # 2. Перемещаем товары из корзины в заказ
+        # --- НОВЫЙ БЛОК: Создаём доставку ---
+        # 2. Получаем информацию о доставке из сессии
+        delivery_info = session.get('delivery_info')
+        if delivery_info:
+            new_delivery = Delivery(
+                address = delivery_info.get('address'),
+                way_of_delivery = delivery_info.get('way_of_delivery'),
+                time_of_arrival = delivery_info.get('time_of_arrival'),
+                order_id = new_order.id
+            )
+            db.session.add(new_delivery)
+        
+
+        # 3. Перемещаем товары из корзины в заказ
         cart_items = current_user.cart.products_in_cart.all()
         for item in cart_items:
            # СОЗДАЕМ НОВУЮ ЗАПИСЬ о товаре в заказе
@@ -69,7 +95,15 @@ def order_success():
             )
             db.session.add(order_item)
         
-        # 3. Сохраняем все изменения (новый заказ, его состав и пустую корзину)
+        # --- НОВЫЙ БЛОК: Очищаем корзину ---
+        # 4. Теперь удаляем скопированные товары из корзины
+        for item in cart_items:
+            db.session.delete(item)
+
+        # 5. Очищаем информацию о доставке из сессии, так как она больше не нужна
+        session.pop('delivery_info', None)
+
+        # 6. Сохраняем все изменения (новый заказ, его состав и пустую корзину)
         db.session.commit()
         flash('Оплата прошла успешно! Ваш заказ оформлен.', 'success')
 

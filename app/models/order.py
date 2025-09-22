@@ -15,13 +15,11 @@ class Order(db.Model):
     status = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Integer())
 
-    products_in_order = db.relationship('ProductInCart', backref='order', lazy='dynamic')
+    products_in_order = db.relationship('ProductInOrder', backref='order', lazy='dynamic', cascade='all, delete-orphan') 
     delivery = db.relationship('Delivery', backref='order', uselist=False)
     user = db.relationship('User', back_populates='orders')
 
-    # products = db.relationship('Product', secondary=order_product, backref='order')
-    paid_products_in_order = db.relationship('ProductInOrder', backref='order', lazy='dynamic', cascade='all, delete-orphan')
-
+   
 
 
 class Delivery(db.Model):
@@ -35,9 +33,11 @@ class Delivery(db.Model):
 
 
 class ProductInOrder(db.Model):
-    __tablename__ = 'productsinorder'
+    __tablename__ = 'products_in_order'
 
     id = db.Column(db.Integer(), primary_key=True)
     order_id = db.Column(db.Integer(), db.ForeignKey('orders.id'), nullable=False)
     product_id = db.Column(db.Integer(), db.ForeignKey('products.id'), nullable=False)
-    amount = db.Column(db.Integer(), nullable=False)    
+    amount = db.Column(db.Integer(), nullable=False)   
+
+    product = db.relationship('Product') 
