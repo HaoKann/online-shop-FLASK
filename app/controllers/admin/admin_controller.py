@@ -140,6 +140,34 @@ def admin_product(id):
     active_page='products'
 )
 
+@admin_bp.route('/characteristic/edit/<int:characteristic_id>', methods=['GET','POST'])
+@login_required
+def edit_characteristic(characteristic_id):
+    if not current_user.is_admin:
+        abort(403)
+
+     # Находим характеристику, которую хотим отредактировать
+    spec_to_edit = Characteristic.query.get_or_404(characteristic_id)
+
+    # Используем вашу существующую форму, передавая в неё объект для предзаполнения
+    form = CharacteristicsForm(obj=spec_to_edit)
+
+    # Меняем текст на кнопке для ясности
+    form.submit_characteristics.label.text = 'Сохранить изменения'
+
+    if form.validate_on_submit():
+        spec_to_edit.name = form.name.data
+        spec_to_edit.str_value = form.str_value.data
+        spec_to_edit.int_value = form.int_value.data
+        db.session.commit()
+        flash('Характеристика успешно обновлена!', 'success')
+
+        return redirect(url_for('admin.admin_product', id=spec_to_edit.prod_id))
+    
+    return render_template('admin/edit_characteristic.html',
+                           form=form,
+                           characteristic=spec_to_edit)
+
 
 @admin_bp.route('/characteristic/delete/<int:characteristic_id>', methods=['POST'])
 @login_required

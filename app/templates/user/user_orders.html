@@ -29,8 +29,28 @@
                                 </span>
                             </div>
                         </button>
-                        <div class="order-details-link-container">
-                             <a href="{{ url_for('user_order.user_order_details', order_id=order.id) }}" class="btn btn-primary"><i class="bi bi-info-circle"></i></a>
+                        
+                        {# --- БЛОК С КНОПКАМИ ДЕЙСТВИЙ --- #}
+                        <div class="order-details-link-container d-flex align-items-center p-2">
+                            
+                            {# Показываем кнопку отмены, только если статус 'pending' #}
+                            {% if order.status == 'pending' %}
+                                <form action="{{ url_for('user_order.cancel_order', order_id=order.id) }}" 
+                                      method="POST" 
+                                      class="me-2" 
+                                      onsubmit="return confirm('Вы уверены, что хотите отменить этот заказ?');">
+                                    
+                                    {{ csrf_form.hidden_tag() }}
+                                    <button type="submit" class="btn btn-danger" title="Отменить заказ">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
+                            
+                            {# Кнопка "Детали" #}
+                            <a href="{{ url_for('user_order.user_order_details', order_id=order.id) }}" class="btn btn-primary" title="Посмотреть детали">
+                                <i class="bi bi-info-circle"></i>
+                            </a>
                         </div>
                     </h2>
                     

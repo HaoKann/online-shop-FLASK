@@ -1,0 +1,19 @@
+{% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Редактирование характеристики</h1>
+        <a href="{{ url_for('admin.admin_product', id=characteristic.prod_id) }}" class="btn btn-outline-light">
+            <i class="bi bi-arrow-left"></i> К деталям продукта
+        </a>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-8">
+            <div class="admin-form-card">
+                {{ render_form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

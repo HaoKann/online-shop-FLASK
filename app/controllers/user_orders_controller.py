@@ -5,6 +5,7 @@ from app.models.order import Order, ProductInOrder, Delivery
 from datetime import datetime
 from flask_wtf import FlaskForm
 from app.forms.order_form import UserOrderForm
+from app.forms.empty_form import EmptyForm
 
 user_order_bp = Blueprint('user_order', __name__)
 
@@ -14,9 +15,12 @@ class EmptyForm(FlaskForm):
 @user_order_bp.route('/user-orders', methods=['GET','POST'])
 @login_required
 def show_orders():
+    # Создаём экземпляр пустой формы
+    csrf_form = EmptyForm()
+
     # Загружаем заказы, где user_id совпадает с ID текущего пользователя
     user_orders = Order.query.filter_by(user_id=current_user.id).order_by(Order.date.desc()).all()
-    return render_template('user/user_orders.html', all_orders=user_orders)
+    return render_template('user/user_orders.html', all_orders=user_orders, csrf_form=csrf_form)
 
 
 @user_order_bp.route('/order', methods=['GET','POST'])
@@ -54,7 +58,9 @@ def checkout():
             'way_of_delivery': form.way_of_delivery.data,
             'time_of_arrival': form.time_of_arrival.data
         }
-        return redirect('user/checkout_delivery.html', form=form)
+        return redirect(url_for('user_order.make_order'))
+    
+    return render_template('user/checkout_delivery.html', form=form)
 
 
 @user_order_bp.route('/order-success')
@@ -113,3 +119,22 @@ def order_success():
 
     return render_template('user/order_success.html')
    
+
+@user_order_bp.route('/cancel_order/<int:order_id>', methods=['POST'])
+@login_required
+def cancel_order(order_id):
+
+    # Находим заказ, убедившись, что он принадлежит текущему пользователю
+    order_to_cancel = Order.query.filter_by(id=order_id, user_id=current_user.id).first_or_404()
+    # Принудительно обновляем объект из базы данных перед проверкой
+    db.session.refresh(order_to_cancel)
+
+    # Проверяем, можно ли ещё отменить заказ
+    if order_to_cancel.status == 'pending':
+        order_to_cancel.status = 'canceled'
+        db.session.commit()
+        flash('Ваш заказ был отмененён', 'success')
+    else:
+        flash('Этот заказ уже нельзя отменить', 'danger')
+
+    return redirect(url_for('user_order.show_orders'))
