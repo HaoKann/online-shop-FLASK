@@ -44,7 +44,7 @@
                 {% for char in product.characteristics.all() %}
                     <li>
                         <span>{{ char.name }}</span>
-                        <span>{{ char.int_value or char.str_value }}</span>
+                        <span>{{ char.value }}</span>
                     </li>
                 {% endfor %}
             </ul>

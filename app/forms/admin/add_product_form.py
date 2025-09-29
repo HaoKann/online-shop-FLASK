@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
-from flask_wtf.file import FileField, FileRequired, FileAllowed
+from flask_wtf.file import FileField, FileAllowed
 
 class AddProduct(FlaskForm):
     name = StringField('Название товара', validators=[DataRequired()])
@@ -26,8 +26,8 @@ class AddProduct(FlaskForm):
 
 class CharacteristicsForm(FlaskForm):
     name = StringField('Название характиристики',validators=[DataRequired()])
-    int_value = IntegerField('Числовая характеристика', validators=[DataRequired()], default=0)
-    str_value = StringField('Строковая характиристика',validators=[DataRequired()])
+    value = StringField('Значение', validators=[DataRequired()])
+    value_type = SelectField('Тип значения', choices=[('string','Текст'),('integer','Число')], validators=[DataRequired()]) 
     submit_characteristics = SubmitField('Добавить характеристику')
 
 class PhotoForm(FlaskForm):

@@ -78,8 +78,8 @@ def admin_product(id):
     # Получаем данные из формы
     if characteristics_form.validate_on_submit() and characteristics_form.submit_characteristics.data:
         name = characteristics_form.name.data
-        str_value = characteristics_form.str_value.data
-        int_value = characteristics_form.int_value.data
+        value = characteristics_form.value.data
+        value_type = characteristics_form.value_type.data
         
     # --- НОВАЯ ПРОВЕРКА НА ДУБЛИКАТЫ ---
     # Ищем, существует ли уже характеристика с таким именем для ЭТОГО продукта
@@ -89,8 +89,8 @@ def admin_product(id):
             flash(f'Характеристика "{name}" уже существует для этого товара.', 'danger')
         else:
             characteristic = Characteristic(name=characteristics_form.name.data,
-                                        int_value=characteristics_form.int_value.data, 
-                                        str_value=characteristics_form.str_value.data, 
+                                        value=characteristics_form.value.data, 
+                                        value_type=characteristics_form.value_type.data, 
                                         prod_id=id )
 
             db.session.add(characteristic)
@@ -157,8 +157,8 @@ def edit_characteristic(characteristic_id):
 
     if form.validate_on_submit():
         spec_to_edit.name = form.name.data
-        spec_to_edit.str_value = form.str_value.data
-        spec_to_edit.int_value = form.int_value.data
+        spec_to_edit.value = form.value.data
+        spec_to_edit.value_type = form.value_type.data
         db.session.commit()
         flash('Характеристика успешно обновлена!', 'success')
 

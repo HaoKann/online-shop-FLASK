@@ -6,7 +6,7 @@ class Product(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String(100), nullable=False)
+    category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'), nullable=False)
     price = db.Column(db.Integer(), nullable=False)
     discount = db.Column(db.Integer(), default=0)
 
@@ -23,6 +23,7 @@ class Product(db.Model):
                                        cascade='all, delete-orphan', passive_deletes=True)
     product_in_ready_pcs = db.relationship('ProductInReadyPC', backref='product', lazy='dynamic',
                                            cascade='all, delete-orphan')
+    category = db.relationship('Category', backref=db.backref('products', lazy=True))
 
     def get_first_photo(self):
         if self.photos.first():
@@ -156,10 +157,30 @@ class Characteristic(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    int_value = db.Column(db.Integer())
-    str_value = db.Column(db.String(30), nullable=False)
+    value = db.Column(db.String(255), nullable=True) # Единое поле для любого значения
+    value_type = db.Column(db.String(20), default='string', nullable=False) # Тип значения (например, 'string', 'integer')
+    
     prod_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    # Имя категории, которое видит пользователь (напр., "Видеокарта")
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    # Системное имя для использования в коде (напр., "gpu")
+    slug = db.Column(db.String(100), unique=True, nullable=False)
+
+    # Связь со справочником характеристик для этой категории
+    required_characteristics = db.relationship('CategoryCharacteristic', backref = 'category', lazy='dynamic')
+
+class CategoryCharacteristic(db.Model):
+    __tablename__ = 'category_characteristics'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    value_type = db.Column(db.String(50), nullable=False, default='string')
+
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
 
 class Photo(db.Model):
     __tablename__ = 'photos'
