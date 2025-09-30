@@ -36,7 +36,7 @@
                                 <img src="{{ product.get_first_photo() }}" alt="{{ product.name }}" class="table-product-img">
                             </td>
                             <td>{{ product.name }}</td>
-                            <td>{{ product.get_category_name() }}</td>
+                            <td>{{ product.category.slug }}</td>
                             <td>{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</td>
                             <td class="text-end">
                                 <div class="table-actions">

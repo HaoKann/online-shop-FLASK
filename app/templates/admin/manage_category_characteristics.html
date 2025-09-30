@@ -1,0 +1,61 @@
+{% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Настройка шаблона для категории: "{{ category.name }}"</h1>
+        <a href="{{ url_for('admin.admin_categories') }}" class="btn btn-outline-light">
+            <i class="bi bi-arrow-left"></i> К списку категорий
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {# Левая колонка: Список существующих характеристик в шаблоне #}
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <h5 class="admin-card-title">Существующие характеристики в шаблоне</h5>
+                
+                {% if characteristics %}
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Тип</th>
+                                <th class="text-end">Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for char in characteristics %}
+                                <tr>
+                                    <td>{{ char.name }}</td>
+                                    <td><code>{{ char.value_type }}</code></td>
+                                    <td class="text-end">
+                                        {# Кнопка удаления, которая пока не работает #}
+                                        <form action="{{ url_for('admin.delete_category_characteristic', characteristic_id=char.id) }}" 
+                                              method="POST"
+                                              onsubmit="return confirm('Вы уверены, что хотите удалить эту характеристику из шаблона?');">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="action-icon action-delete" title="Удалить из шаблона">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">Для этой категории ещё не добавлено ни одной характеристики в шаблон.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Правая колонка: Форма для добавления новой характеристики в шаблон #}
+        <div class="col-lg-4">
+            <div class="admin-form-card">
+                <h5 class="admin-card-title">Добавить характеристику в шаблон</h5>
+                {{ render_form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

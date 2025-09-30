@@ -34,6 +34,11 @@
                         <i class="bi bi-cpu"></i> Готовые сборки
                     </a>
                 </li>
+                <li class="nav-item {% if active_page == 'categories' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('admin.admin_categories') }}">
+                        <i class="bi bi-tags-fill"></i> Категории и Шаблоны
+                    </a>
+                </li>
                  <li class="nav-item {% if active_page == 'faq' %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('admin.list_faqs') }}">
                         <i class="bi bi-question-circle"></i> FAQ

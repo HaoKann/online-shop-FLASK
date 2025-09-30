@@ -30,6 +30,11 @@ class CharacteristicsForm(FlaskForm):
     value_type = SelectField('Тип значения', choices=[('string','Текст'),('integer','Число')], validators=[DataRequired()]) 
     submit_characteristics = SubmitField('Добавить характеристику')
 
+class CategoryCharacteristicForm(FlaskForm):
+    name = StringField('Название характеристики', validators=[DataRequired()])
+    value_type = SelectField('Тип значения',choices=[('string', 'Текст'),('integer', 'Число')], validators=[DataRequired()])
+    submit = SubmitField('Добавить в шаблон')
+
 class PhotoForm(FlaskForm):
     photo = FileField('Добавить фото товара: ', validators=[FileAllowed(['jpg','png','gif'], 'Можно загружать только картинки!' )])
     description = StringField('Описание картинки',validators=[DataRequired()])

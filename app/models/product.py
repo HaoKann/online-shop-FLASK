@@ -182,6 +182,7 @@ class CategoryCharacteristic(db.Model):
 
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
 
+
 class Photo(db.Model):
     __tablename__ = 'photos'
 
@@ -191,5 +192,5 @@ class Photo(db.Model):
     prod_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
 
     def get_photo(self):
-        return url_for('static', filename=f'products_photo/{self.product.category}/{self.product.id}/{self.photo_path}')
+        return url_for('static', filename=f'products_photo/{self.product.category.slug}/{self.product.id}/{self.photo_path}')
     

@@ -1,0 +1,39 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Управление категориями</h1>
+    </div>
+
+    <div class="admin-card">
+        <p class="text-muted">
+            Здесь вы можете управлять шаблонами характеристик для каждой категории товаров. 
+            Например, для категории "Видеокарта" можно задать обязательные характеристики "Объем видеопамяти" и "Тип памяти".
+        </p>
+    </div>
+
+    <div class="mt-4">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Название категории</th>
+                    <th>Системное имя (slug)</th>
+                    <th class="text-end">Управление</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td><strong>{{ category.name }}</strong></td>
+                        <td><code>{{ category.slug }}</code></td>
+                        <td class="text-end">
+                            <a href="{{ url_for('admin.manage_category_characteristics', category_id=category.id) }}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-pencil-square me-2"></i>Настроить характеристики
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

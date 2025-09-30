@@ -15,7 +15,8 @@ from app.forms.admin.edit_ready_pc import EditReadyPC
 from app.forms.admin.faq_form import FAQForm
 from app.models.faq import FAQ
 from app.models.user import User
-
+from app.models.product import Category, CategoryCharacteristic
+from app.forms.admin.add_product_form import CategoryCharacteristicForm
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -139,6 +140,51 @@ def admin_product(id):
     edit_form=edit_product_form, # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
     active_page='products'
 )
+
+
+@admin_bp.route('/admin/categories')
+@login_required
+def admin_categories():
+    if not current_user.is_admin:
+        abort(403)
+        
+    all_categories = Category.query.all()
+    
+    return render_template('admin/categories_list.html', 
+                           categories=all_categories, 
+                           active_page='categories')
+
+@admin_bp.route('/admin/categories/<int:category_id>', methods=['GET','POST'])
+@login_required
+def manage_category_characteristics(category_id):
+    if not current_user.is_admin:
+        abort(403)
+
+    category = Category.query.get_or_404(category_id)
+
+    form = CategoryCharacteristicForm()
+    if form.validate_on_submit():
+        new_char_template = CategoryCharacteristic(
+            name=form.name.data,
+            value_type=form.value_type.data,
+            category_id=category.id # Привязываем к текущей категории
+        )
+        db.session.add(new_char_template)
+        db.session.commit()
+        flash('Новая харакьеоисьтка для шаблона успешно добавлена!', 'success')
+        return redirect(url_for('admin.manage_category_characteristics', category_id=category.id))
+    
+    # Получаем все существующие характеристики для этой категории
+    existing_characteristics = category.required_characteristics.all()
+
+    return render_template(
+        'admin/manage_category_characteristics.html',
+        category=category,
+        form=form,
+        characteristic=existing_characteristics
+    )
+
+
 
 @admin_bp.route('/characteristic/edit/<int:characteristic_id>', methods=['GET','POST'])
 @login_required
