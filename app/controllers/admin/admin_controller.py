@@ -66,22 +66,21 @@ def admin_product(id):
     
 
     if edit_product_form.validate_on_submit() and edit_product_form.submit.data:
-        
         # Обновляем его поля данными из формы
         product.name = edit_product_form.name.data
-        product.category = edit_product_form.category.data 
+        product.category_id = edit_product_form.category_id.data 
         product.price = edit_product_form.price.data    
         product.discount = edit_product_form.discount.data
         db.session.commit()
         flash('Товар успешно обновлен!', 'success')
         return redirect(url_for('admin.admin_product', id=id))
 
-    # Получаем данные из формы
+
+     # --- ОБРАБОТКА ФОРМЫ ДОБАВЛЕНИЯ ХАРАКТЕРИСТИКИ ---
     if characteristics_form.validate_on_submit() and characteristics_form.submit_characteristics.data:
         name = characteristics_form.name.data
         value = characteristics_form.value.data
         value_type = characteristics_form.value_type.data
-        
     # --- НОВАЯ ПРОВЕРКА НА ДУБЛИКАТЫ ---
     # Ищем, существует ли уже характеристика с таким именем для ЭТОГО продукта
         existing_spec = Characteristic.query.filter_by(prod_id=product.id, name=name).first()
@@ -132,13 +131,25 @@ def admin_product(id):
         db.session.commit()
         flash('Фото успешно заменено', 'success')
         return redirect(url_for('admin.admin_product', id=id))
+    
+       # --- ПОДГОТОВКА ДАННЫХ ДЛЯ ОТОБРАЖЕНИЯ СТРАНИЦЫ (GET-запрос) ---
+    # Получаем ШАБЛОН обязательных характеристик для категории этого товара
+    required_specs_template = []
+    if product.category:
+        required_specs_template = product.category.required_characteristics.order_by('id').all()
+
+     # Создаем словарь существующих значений для удобного доступа в шаблоне
+    existing_spec_values = {spec.name: spec.value for spec in product.characteristics}
+
     return render_template(
-    'admin/product_details.html', 
-    product=product, 
-    characteristics_form=characteristics_form, 
-    photo_form=photo_form,
-    edit_form=edit_product_form, # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
-    active_page='products'
+        'admin/product_details.html', 
+        product=product, 
+        characteristics_form=characteristics_form, 
+        photo_form=photo_form,
+        edit_form=edit_product_form, # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
+        active_page='products',
+        required_specs=required_specs_template,
+        spec_values=existing_spec_values
 )
 
 
@@ -171,7 +182,7 @@ def manage_category_characteristics(category_id):
         )
         db.session.add(new_char_template)
         db.session.commit()
-        flash('Новая харакьеоисьтка для шаблона успешно добавлена!', 'success')
+        flash('Новая характеристика для шаблона успешно добавлена!', 'success')
         return redirect(url_for('admin.manage_category_characteristics', category_id=category.id))
     
     # Получаем все существующие характеристики для этой категории
@@ -181,7 +192,7 @@ def manage_category_characteristics(category_id):
         'admin/manage_category_characteristics.html',
         category=category,
         form=form,
-        characteristic=existing_characteristics
+        characteristics=existing_characteristics
     )
 
 
@@ -213,6 +224,26 @@ def edit_characteristic(characteristic_id):
     return render_template('admin/edit_characteristic.html',
                            form=form,
                            characteristic=spec_to_edit)
+
+
+@admin_bp.route('/categories/characteristic/delete/<int:characteristic_id>', methods=['POST'])
+@login_required 
+def delete_category_characteristic(characteristic_id):
+    if not current_user.is_admin:
+        abort(403)
+
+        # Находим характеристику в шаблоне по её ID
+    char_to_delete = CategoryCharacteristic.query.get_or_404(characteristic_id)
+
+        # Запоминаем ID категории, чтобы вернуться на нужную страницу
+    category_id = char_to_delete.category_id
+
+    db.session.delete(char_to_delete)
+    db.session.commit()
+
+    flash('Характиристика успешно удалена из шаблона.', 'success')
+        
+    return redirect(url_for('admin.manage_category_characteristics', category_id=category_id))
 
 
 @admin_bp.route('/characteristic/delete/<int:characteristic_id>', methods=['POST'])

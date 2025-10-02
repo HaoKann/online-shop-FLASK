@@ -21,7 +21,7 @@
                     <dd class="col-sm-9">{{ product.name }}</dd>
 
                     <dt class="col-sm-3">Категория</dt>
-                    <dd class="col-sm-9">{{ product.get_category_name() }}</dd>
+                    <dd class="col-sm-9">{{ product.category.slug }}</dd>
 
                     <dt class="col-sm-3">Цена</dt>
                     <dd class="col-sm-9">{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</dd>
