@@ -2,6 +2,7 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
+<div class="container">
     <div class="page-header">
         <h1>Детали продукта: {{ product.name }}</h1>
         <a href="{{ url_for('admin.admin_products_list') }}" class="btn btn-outline-light">
@@ -91,31 +92,42 @@
                 </div>
             </div>
 
-            <div class="admin-form-card mt-4">
-                <h6 class="admin-card-title">Загрузить фото</h6>
-                <form method="POST" enctype="multipart/form-data">
-                    {{ photo_form.hidden_tag() }}
-                    {{ render_form(photo_form) }}
-                </form>
-            </div>
-        </div>
+            {# --- НАЧАЛО НОВОГО БЛОКА ХАРАКТЕРИСТИК --- #}
 
-        <div class="col-lg-4">
-            <div class="admin-form-card mb-4">
-                <h6 class="admin-card-title">Редактировать товар</h6>
-                <form method="POST" action="">
-                    {{ edit_form.hidden_tag() }}
-                    {{ render_form(edit_form) }}
-                </form>
-            </div>
-            
-            <div class="admin-form-card mb-4">
-                <h6 class="admin-card-title">Добавить характеристику</h6>
-                <form method="POST" action="">
-                    {{ characteristics_form.hidden_tag() }}
-                    {{ render_form(characteristics_form) }}
-                </form>
-            </div>
-        </div>
+    <div class="admin-form-card mt-4">
+        <h5 class="admin-card-title">Характеристики</h5>
+        <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
+            {{ characteristics_form.hidden_tag() }}
+
+            {# Проходим по ШАБЛОНУ обязательных характеристик #}
+            {% for spec_template in required_specs %}
+                <div class="mb-3">
+                    <label for="spec_{{ spec_template.id }}" class="form-label">{{ spec_template.name }}</label>
+                    
+                    {# Проверяем, какой тип у характеристики #}
+                    {% if spec_template.value_type == 'integer' %}
+                        <input type="number" 
+                            class="form-control" 
+                            id="spec_{{ spec_template.id }}" 
+                            name="spec_{{ spec_template.name }}" 
+                            value="{{ spec_values.get(spec_template.name, '') }}">
+                    {% else %}
+                        <input type="text" 
+                            class="form-control" 
+                            id="spec_{{ spec_template.id }}" 
+                            name="spec_{{ spec_template.name }}" 
+                            value="{{ spec_values.get(spec_template.name, '') }}">
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {% if required_specs %}
+            <button type="submit" class="btn btn-primary mt-2">Сохранить характеристики</button>
+            {% else %}
+            <p class="text-muted">Для категории этого товара (<a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}">{{ product.category.name }}</a>) ещё не задан шаблон характеристик.</p>
+            {% endif %}
+
+        </form>
     </div>
+</div>
 {% endblock %}

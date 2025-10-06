@@ -58,9 +58,12 @@ def admin_product(id):
         abort(403)
 
     product = Product.query.get_or_404(id)
-
     # ИСПРАВЛЕНИЕ: Передаем obj=product для автозаполнения формы
     edit_product_form = EditProduct(obj=product,prefix='edit_product_form')
+
+    # Заполняем выпадающий список категориями из базы данных
+    edit_product_form.category_id.choices = [(c.id, c.name) for c in Category.query.order_by('name').all()]
+
     characteristics_form  = CharacteristicsForm(prefix='characteristics_form')
     photo_form = PhotoForm(prefix='photo_form')
     
@@ -225,6 +228,47 @@ def edit_characteristic(characteristic_id):
                            form=form,
                            characteristic=spec_to_edit)
 
+
+@admin_bp.route('/products/<int:product_id>/save_characteristics', methods=['POST'])
+@login_required
+def save_product_characteristics(product_id):
+    if not current_user.is_admin:
+        abort(403)
+
+    product = Product.query.get_or_404(product_id)
+
+    # Проходим по всем данным, отправленным из формы
+    for key, value in request.form.items():
+        
+        # Обрабатываем ключ, только если он начинается с 'spec_'
+        if key.startswith('spec_'):
+            spec_name = key.replace('spec_', '', 1)
+            
+            # Ищем, существует ли уже такая характеристика у этого товара
+            existing_spec = Characteristic.query.filter_by(prod_id=product.id, name=spec_name).first()
+
+            if existing_spec:
+                # Если существует - просто обновляем её значение
+                existing_spec.value = value
+            else:
+                # Если не существует - создаём новую
+                spec_template = CategoryCharacteristic.query.filter_by(
+                    category_id=product.category_id, name=spec_name
+                ).first()
+                
+                if spec_template:
+                    new_spec = Characteristic(
+                        name=spec_name, 
+                        value=value,
+                        value_type=spec_template.value_type,
+                        prod_id=product.id
+                    )
+                    db.session.add(new_spec)
+
+    db.session.commit()
+    flash('Характеристики успешно сохранены!', 'success')
+    return redirect(url_for('admin.admin_product', id=product.id))
+    
 
 @admin_bp.route('/categories/characteristic/delete/<int:characteristic_id>', methods=['POST'])
 @login_required 
