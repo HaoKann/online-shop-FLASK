@@ -9,6 +9,7 @@ class Product(db.Model):
     category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'), nullable=False)
     price = db.Column(db.Integer(), nullable=False)
     discount = db.Column(db.Integer(), default=0)
+    is_active = db.Column(db.Boolean(), default=True, nullable=False)
 
     # db.ForeignKey - создает связь на стороне 'Много'
     # user_id = db.Column(db.Integer(), db.ForeignKey('users.id')) 

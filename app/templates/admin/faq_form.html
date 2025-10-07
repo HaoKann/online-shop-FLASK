@@ -2,6 +2,7 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
+<div class="container">
     <div class="page-header">
         <h1>{{ sub_title }}</h1>
         <a href="{{ url_for('admin.list_faqs') }}" class="btn btn-outline-light">
@@ -12,4 +13,5 @@
     <div class="admin-form-card">
         {{ render_form(form) }}
     </div>
+</div>
 {% endblock %}

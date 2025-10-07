@@ -3,4 +3,4 @@ from wtforms import SubmitField
 
 
 class ConfirmForm(FlaskForm):
-    confirm = SubmitField('Подтвердить')
+    submit = SubmitField('Подтвердить')

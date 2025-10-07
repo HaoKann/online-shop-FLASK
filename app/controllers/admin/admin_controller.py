@@ -33,9 +33,9 @@ def admin():
     # Считаем "новые" заказы (например, со статусом 'pending' - "Обрабатывается")
     new_orders_count = Order.query.filter_by(status='pending').count()
 
-    recent_orders_count = Order.query.order_by(Order.date.desc()).limit(5).all()
+    recent_orders = Order.query.order_by(Order.date.desc()).limit(5).all()
     
-    return render_template('admin/admin.html', product_count=product_count,  user_count=user_count, new_orders_count=new_orders_count, recent_orders_count=recent_orders_count)
+    return render_template('admin/admin.html', product_count=product_count,  user_count=user_count, new_orders_count=new_orders_count, recent_orders =recent_orders )
 
 
 @admin_bp.route('/admin/products')
@@ -410,16 +410,17 @@ def admin_delete_products(id):
     if not current_user.is_admin:
         abort(403)
 
-    deleted_product = Product.query.get_or_404(id)
+    product_to_deactivate  = Product.query.get_or_404(id)
 
     form = ConfirmForm()
 
     if form.validate_on_submit():
-        db.session.delete(deleted_product)
+        product_to_deactivate.is_active = False
         db.session.commit()
         flash('Товар удален успешно!','success')
-        return redirect (url_for('admin_products_list'))
-    return render_template('admin/admin_delete_product.html', form=form, sub_title = f'Вы точно хотите удалить продукт "{deleted_product.name}"?', active_page='products')
+        flash(f'Товар "{product_to_deactivate.name}" был деактивирован и скрыт из каталога.', 'success')    
+    return redirect(url_for('admin.admin_products_list'))
+
 
 @admin_bp.route('/admin/user-orders')
 @login_required

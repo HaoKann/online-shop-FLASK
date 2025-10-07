@@ -1,6 +1,7 @@
 {% extends 'admin/base.html' %}
 
 {% block content %}
+<div class="container">
     {# Header row with a welcome message #}
     <div class="row mb-4 align-items-center">
         <div class="col-md-12">
@@ -41,9 +42,9 @@
 <div class="admin-card">
     <h5 class="admin-card-title">Последние заказы</h5>
 
-    {% if recent_orders %}
+    {% if recent_orders  %}
         <div class="table-responsive">
-            <table class="table admin-table">
+            <table class="admin-table w-100">
                 <thead>
                     <tr>
                         <th>ID Заказа</th>
@@ -54,7 +55,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in recent_orders %}
+                    {% for order in recent_orders  %} 
                         <tr>
                             <td>
                                 <a href="{{ url_for('admin.admin_order_details', order_id=order.id) }}" class="text-white">
@@ -86,5 +87,5 @@
         <p class="text-muted">Новых заказов пока нет.</p>
     {% endif %}
 </div>
-
+</div>
 {% endblock %}

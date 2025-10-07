@@ -2,13 +2,37 @@
 {% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
-    <h1>{{sub_title}}</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ render_form(form) }}
+    {# Используем нашу стандартную сетку для выравнивания заголовка и кнопки "Назад" #}
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h1>Подтверждение удаления</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{{ url_for('admin.admin_products_list') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Отмена, вернуться к списку
+            </a>
         </div>
     </div>
 
-    
+    {# Оборачиваем форму в карточку для красивого вида #}
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-8">
+            <div class="admin-form-card text-center">
+                
+                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+                
+                <h4 class="mt-3">{{ sub_title }}</h4>
+                <p class="text-muted">Это действие необратимо.</p>
+
+                {# Вместо render_form() создаём кнопки вручную для большего контроля #}
+                <form method="POST" action="" class="mt-4">
+                    {{ form.hidden_tag() }}
+                    
+                    {# Кнопка "Подтвердить" от формы #}
+                    {{ form.submit(class="btn btn-danger btn-lg") }}
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
