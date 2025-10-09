@@ -411,15 +411,18 @@ def admin_delete_products(id):
         abort(403)
 
     product_to_deactivate  = Product.query.get_or_404(id)
-
     form = ConfirmForm()
 
     if form.validate_on_submit():
         product_to_deactivate.is_active = False
         db.session.commit()
-        flash('Товар удален успешно!','success')
         flash(f'Товар "{product_to_deactivate.name}" был деактивирован и скрыт из каталога.', 'success')    
-    return redirect(url_for('admin.admin_products_list'))
+        return redirect(url_for('admin.admin_products_list'))
+    return render_template('admin/admin_delete_product.html',
+                           form= form,
+                           sub_title=f'Вы точно хотите деактивировать продукт {product_to_deactivate.name}?',
+                           active_page='products'
+                        )
 
 
 @admin_bp.route('/admin/user-orders')

@@ -12,10 +12,14 @@ def search():
         flash('Неправильно введеный запрос', 'danger')
     else:
         words = q.split(' ')
-        result = db.session.query(Product).filter(Product.name.ilike(f'%{words[0]}%'))
-        for word in words[1:]:
-            result = result.filter(Product.name.ilike(f'%{word}%'))
-        result = result.all()    
+        # Начинаем запрос с фильтра по активным товарам
+        query = db.session.query(Product).filter(Product.is_active == True)
+
+        # Добавляем фильтры для каждого слова в запросе
+        for word in words:
+            query = query.filter(Product.name.ilike(f'%{word}%'))
+            
+        result = query.all()    
     return render_template('search/search.html', result=result, q=q)
 
 

@@ -38,17 +38,26 @@
             </a>
         </div>
 
+        {# --- НАЧАЛО ИЗМЕНЕНИЙ --- #}
         <div class="product-page-specs">
             <h5 class="specs-title">Характеристики</h5>
-            <ul class="specs-list">
-                {% for char in product.characteristics.all() %}
-                    <li>
-                        <span>{{ char.name }}</span>
-                        <span>{{ char.value }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
+            
+            {% if required_specs %}
+                <ul class="specs-list">
+                    {# Проходим по ШАБЛОНУ обязательных характеристик #}
+                    {% for spec_template in required_specs %}
+                        <li>
+                            <span>{{ spec_template.name }}</span>
+                            {# Ищем значение в словаре. Если его нет - выводим прочерк #}
+                            <strong>{{ spec_values.get(spec_template.name, '-') }}</strong>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Для этого товара характеристики не указаны.</p>
+            {% endif %}
         </div>
+        {# --- КОНЕЦ ИЗМЕНЕНИЙ --- #}
     </div>
 </div>
 {% endblock %}

@@ -17,7 +17,7 @@ def user_cart():
 @login_required
 def add_products(product_id):
 
-    product = Product.query.get_or_404(product_id)
+    product = Product.query.filter(Product.id == product_id, Product.is_active == True).first_or_404()
 
     # Проверка есть ли уже такой товар в корзине текущего пользователя
     existing_product = ProductInCart.query.filter_by(
