@@ -10,7 +10,7 @@ favourites_bp = Blueprint('favourites', __name__)
 @favourites_bp.route('/favourites')
 @login_required
 def favourites():
-    favourite_products = FavouriteProduct.query.filter_by(user_id=current_user.id).all()
+    favourite_products = FavouriteProduct.query.join(Product).filter(FavouriteProduct.user_id == current_user.id, Product.is_active == True).all()
     return render_template('user/favourites.html', sub_title='Избранное', favourite_products=favourite_products)
 
 
