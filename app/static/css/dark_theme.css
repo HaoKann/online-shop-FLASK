@@ -77,15 +77,34 @@ footer .copyright {
     margin-left: 15px;
 }
 
-.form-control {
-    color: #1e1e1e !important;           /* Тёмный цвет для вводимого текста */
-    background-color: #ffffff !important; /* Белый фон самого поля */
-    border-color: #444;                 /* Тёмно-серая рамка для контраста */
+/* Форма: тёмный фон, светлый текст */
+.form-control, .form-select {
+    background-color: rgb(15, 15, 15) !important;
+    color: #ffffff !important; /* Белый текст для ввода */
+    border-color: #333333 !important;
+    transition: all 0.3s ease;
 }
 
-.form-control:focus {
-    border-color: #600018; /* Рамка становится красной (ваш фирменный цвет) */
-    box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25); /* Добавляем лёгкую тень для акцента */
+.form-control:focus, .form-select:focus {
+    background-color: #ffffff !important; /* Белый фон при фокусе */
+    color: rgb(15, 15, 15) !important; /* Тёмный текст при фокусе */
+    border-color: #600018 !important; /* Красная граница */
+    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5) !important; /* Красная тень */
+}
+
+.form-control::placeholder {
+    color: #cccccc !important; /* Серый плейсхолдер, видимый на тёмном фоне */
+    opacity: 1;
+}
+
+.dark-mode .form-control::placeholder {
+    color: #666666 !important; /* Тёмно-серый для светлой темы при фокусе */
+}
+
+/* Убираем любые Bootstrap-стильности */
+.input-group .form-control {
+    background-color: rgb(15, 15, 15) !important;
+    color: #ffffff !important;
 }
 
 .navbar .form-control:focus {
@@ -126,8 +145,25 @@ footer .copyright {
 }
 
 /* Основной текст на странице */
-h1, h2, h3, h4, h5, h6, p, div, span {
-    color: white !important; /* Белый текст для темной темы */
+.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
+.navbar p, .navbar div, .navbar span {
+    color: white !important;
+}
+
+.auth-form {
+  background-color: #2a2a2a; /* Темно-серый фон для самой формы */
+}
+
+/* Стили для надписей "Введите логин", "Введите пароль" */
+.auth-form label {
+  color: #e0e0e0 !important; /* Светло-серый, хорошо видимый текст */
+}
+
+/* Стили для полей ввода */
+.auth-form input {
+  background-color: #3a3a3a;   /* Темный фон для поля */
+  color: #ffffff;             /* Белый текст, который вводит пользователь */
+  border: 1px solid #555555;   /* Рамка потемнее */
 }
 
 /* Исключения для элементов навбара (они уже белые) */

@@ -10,6 +10,21 @@
     --hover-accent: #800020;
     --border-dark: #333333;
     --border-light: #e0e0e0;
+    /* -- Цвета для СВЕТЛОЙ темы (по умолчанию) -- */
+    --form-background-color: #f0f0f0; /* Светло-серый фон для формы */
+    --primary-text-color: #222222;    /* Темный цвет для основного текста */
+    --input-background-color: #ffffff; /* Белый фон для полей ввода */
+    --input-text-color: #000000; 
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* -- Переопределяем те же переменные для ТЕМНОЙ темы -- */
+    --form-background-color: #2a2a2a; /* Темно-серый фон для формы */
+    --primary-text-color: #e0e0e0;    /* Светлый цвет для основного текста */
+    --input-background-color: #3a3a3a; /* Темный фон для полей ввода */
+    --input-text-color: #ffffff;      /* Белый текст в полях ввода */
+  }
 }
 
 body {
@@ -266,10 +281,11 @@ footer a:hover {
 }
 
 /* Основной текст */
-h1, h2, h3, h4, h5, h6, p, div, span {
+/*  Также удали блок с исключениями для навбара, он больше не нужен  */
+.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
+.navbar p, .navbar div, .navbar span {
     color: var(--text-light) !important;
 }
-
 /* Исключения для навбара */
 .navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
 .navbar p, .navbar div, .navbar span {
