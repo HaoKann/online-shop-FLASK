@@ -361,20 +361,17 @@ section.features-section h2,
 /* --- Исправление цвета текста в модальных окнах (Темная тема) --- */
 
 .modal-content {
-    /* Устанавливаем базовый цвет текста для всего окна на темный */
-    color: #1e1e1e; 
+    color: #ffffff;
+    background-color: #2a2a2a; /* или rgb(15, 15, 15) для единого стиля */
 }
 
-/* * Дополнительно заставляем ключевые элементы внутри окна 
- * использовать темный цвет, чтобы переопределить глобальные стили.
-*/
-.modal-header .modal-title,
 .modal-body,
 .modal-body span,
 .modal-body p,
 .modal-body div {
-    color: #1e1e1e !important;
+    color: #ffffff !important;
 }
+
 
 /* * Для кнопок в футере это не нужно, 
  * так как их цвет определяется классами .btn

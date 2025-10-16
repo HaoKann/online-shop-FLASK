@@ -6,20 +6,7 @@ from flask_wtf.file import FileField, FileAllowed
 
 class AddProduct(FlaskForm):
     name = StringField('Название товара', validators=[DataRequired()])
-    category = SelectField(
-        'Категория товара',
-        choices=[
-            ('gpu', 'Видеокарта'),
-            ('cpu', 'Процессор'),
-            ('motherboard', 'Материнская плата'),
-            ('ram', 'Оперативная память'),
-            ('psu', 'Блок питания'),
-            ('cooler', 'Система охлаждения'),
-            ('storage', 'Накопитель'),
-            ('pc_case', 'Корпус'),
-        ],
-        validators=[DataRequired()]
-    )
+    category_id = SelectField('Категория', coerce=int, validators=[DataRequired()])
     price = IntegerField('Цена товара', validators=[DataRequired()])
     discount = IntegerField('Скидка(необязательно)', default=0)
     submit = SubmitField('Добавить товар')

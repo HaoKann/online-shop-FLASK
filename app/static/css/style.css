@@ -1275,7 +1275,7 @@ body.admin-body {
 
 .admin-form-card {
     background-color: #1e1e1e !important;
-    color: #1e1e1e !important;
+    color: #ffffff !important;
     border-radius: 8px;
     padding: 1.5rem;
 }
@@ -1347,6 +1347,7 @@ body.admin-body {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--border-dark);
+    color: white;
 }
 
 /* Стили для списка характеристик dl-dt */

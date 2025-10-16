@@ -318,11 +318,14 @@ def admin_add_product():
     form = AddProduct()
     photo_form = PhotoForm()
 
+    # --- ИЗМЕНЕНИЕ: Заполняем выпадающий список категориями ---
+    form.category_id.choices = [(c.id, c.name) for c in Category.query.order_by('name').all()]
+
     if form.validate_on_submit():
         # 1. Создаем продукт
         product = Product(
             name=form.name.data,
-            category=form.category.data,
+            category_id=form.category_id.data,
             price=form.price.data,
             discount=form.discount.data
         )
@@ -338,7 +341,7 @@ def admin_add_product():
                 photo_dir = os.path.join(
                     os.path.dirname(current_app.instance_path),
                     'app', 'static', 'products_photo',
-                    product.category, str(product.id)
+                    product.category.slug, str(product.id)
                 )
                 os.makedirs(photo_dir, exist_ok=True)
 
@@ -363,16 +366,16 @@ def admin_add_product():
 
         # 3. Редирект
         category_routes = {
-            'gpu': 'graphics_card',
-            'cpu': 'processor',
-            'motherboard': 'motherboard',
-            'psu': 'power_supply_unit',
-            'ram': 'random_access_memory',
-            'cooler': 'cooling_system',
-            'storage': 'storage',
-            'pc_case': 'computer_case',
+            'gpu': 'catalog.graphics_card',
+            'cpu': 'catalog.processor',
+            'motherboard': 'catalog.motherboard',
+            'psu': 'catalog.power_supply_unit',
+            'ram': 'catalog.random_access_memory',
+            'cooler': 'catalog.cooling_system',
+            'storage': 'catalog.storage',
+            'pc_case': 'catalog.computer_case',
         }
-        route_name = category_routes.get(product.category, 'catalog')
+        route_name = category_routes.get(product.category.slug, 'catalog.catalog')
         return redirect(url_for(route_name))
 
     return render_template('admin/add_product.html', form=form, photo_form=photo_form, active_page='add_product', sub_title='Добавление нового продукта')
