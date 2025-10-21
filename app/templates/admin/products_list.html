@@ -43,7 +43,10 @@
                                     <a href="{{ url_for('admin.admin_product', id=product.id) }}" class="action-icon action-edit" title="Редактировать">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <a href="{{ url_for('admin.admin_delete_products', id=product.id) }}" class="action-icon action-delete" title="Удалить">
+                                    <a href="{{ url_for('admin.admin_deactivate_products', id=product.id) }}" class="action-icon action-deactivate" title="Деактивировать">
+                                        <i class="bi bi-archive-fill"></i>
+                                    </a>
+                                    <a href="{{ url_for('admin.admin_delete_product', id=product.id) }}" class="action-icon action-delete " title="Удалить">
                                         <i class="bi bi-trash-fill"></i>
                                     </a>
                                 </div>

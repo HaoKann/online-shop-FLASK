@@ -29,17 +29,19 @@
                         <img src="{{ product.get_first_photo() }}" class="table-product-img" alt="{{ product.name }}">
                     </td>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.get_category_name() }}</td>
+                    <td>{{ product.category.slug }}</td>
                     <td>{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</td>
                     <td class="text-end">
                         <div class="table-actions">
                             <a href="{{ url_for('admin.admin_product', id=product.id) }}" class="action-icon action-edit" title="Редактировать">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            {# Ссылка на удаление. Убедитесь, что у вас есть view-функция admin_delete_products #}
-                            <a href="{{ url_for('admin.admin_delete_products', id=product.id) }}" class="action-icon action-delete" title="Удалить">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{{ url_for('admin.admin_deactivate_products', id=product.id) }}" class="action-icon action-deactivate" title="Деактивировать">
+                                    <i class="bi bi-archive-fill"></i>
+                                </a>
+                                <a href="{{ url_for('admin.admin_delete_product', id=product.id) }}" class="action-icon action-delete " title="Удалить">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
                         </div>
                     </td>
                 </tr>

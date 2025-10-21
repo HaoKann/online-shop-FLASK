@@ -32,7 +32,7 @@
                 </dl>
             </div>
 
-            <div class="admin-card mt-4">
+<div class="admin-card mt-4">
     <h5 class="admin-card-title">Характеристики</h5>
 
     {% if product.characteristics.count() > 0 %}
@@ -72,62 +72,70 @@
     {% endif %}
 </div>
 
-            <div class="admin-card mt-4">
-                <h5 class="admin-card-title">Фотографии</h5>
-                <div class="row g-3">
-                    {% if product.photos.count() > 0 %}
-                        {% for photo in product.photos %}
-                            <div class="col-4">
-                                <img src="{{ photo.get_photo() }}" 
-                                    alt="Фото продукта: {{ product.name }}" 
-                                    class="img-fluid rounded" 
-                                    style="max-height: 150px; object-fit: cover;">
-                                <small class="text-muted">{{ photo.description or 'Без описания' }}</small>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p class="text-muted">Фотографий нет.</p>
-                        <img src="{{ product.get_first_photo() }}" alt="Фото по умолчанию" class="img-fluid rounded" style="max-height: 150px; object-fit: cover;">
-                    {% endif %}
-                </div>
-            </div>
-
-            {# --- НАЧАЛО НОВОГО БЛОКА ХАРАКТЕРИСТИК --- #}
-
-    <div class="admin-form-card mt-4">
-        <h5 class="admin-card-title">Характеристики</h5>
-        <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
-            {{ characteristics_form.hidden_tag() }}
-
-            {# Проходим по ШАБЛОНУ обязательных характеристик #}
-            {% for spec_template in required_specs %}
-                <div class="mb-3">
-                    <label for="spec_{{ spec_template.id }}" class="form-label">{{ spec_template.name }}</label>
-                    
-                    {# Проверяем, какой тип у характеристики #}
-                    {% if spec_template.value_type == 'integer' %}
-                        <input type="number" 
-                            class="form-control" 
-                            id="spec_{{ spec_template.id }}" 
-                            name="spec_{{ spec_template.name }}" 
-                            value="{{ spec_values.get(spec_template.name, '') }}">
-                    {% else %}
-                        <input type="text" 
-                            class="form-control" 
-                            id="spec_{{ spec_template.id }}" 
-                            name="spec_{{ spec_template.name }}" 
-                            value="{{ spec_values.get(spec_template.name, '') }}">
-                    {% endif %}
+            {# --- НАЧАЛО БЛОКА ОТОБРАЖЕНИЯ ФОТОГРАФИЙ --- #}
+<div class="admin-card mt-4">
+    <h5 class="admin-card-title">Фотографии</h5>
+    <div class="row g-3 mb-3"> 
+        {% if product.photos.count() > 0 %}
+            {% for photo in product.photos %}
+                <div class="col-4">
+                    <img src="{{ photo.get_photo() }}"
+                         alt="Фото продукта: {{ product.name }}"
+                         class="img-fluid rounded"
+                         style="max-height: 150px; object-fit: cover;">
+                    <!-- <small class="text-muted">{{ photo.description or 'Без описания' }}</small> -->
                 </div>
             {% endfor %}
-
-            {% if required_specs %}
-            <button type="submit" class="btn btn-primary mt-2">Сохранить характеристики</button>
-            {% else %}
-            <p class="text-muted">Для категории этого товара (<a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}">{{ product.category.name }}</a>) ещё не задан шаблон характеристик.</p>
-            {% endif %}
-
-        </form>
+        {% else %}
+            <p class="text-muted">Фотографий нет.</p>
+            <img src="{{ product.get_first_photo() }}" alt="Фото по умолчанию" class="img-fluid rounded" style="max-height: 150px; object-fit: cover;">
+        {% endif %}
     </div>
+    {# --- ДОБАВЛЯЕМ ФОРМУ ЗАГРУЗКИ ФОТО СЮДА --- #}
+    <h6 class="admin-card-title mt-4 pt-3 border-top">Загрузить/Заменить фото</h6> {# Отделяем заголовок #}
+    <form method="POST" enctype="multipart/form-data">
+        {{ photo_form.hidden_tag() }}
+        {{ render_form(photo_form) }}
+    </form>
 </div>
+{# --- КОНЕЦ БЛОКА ОТОБРАЖЕНИЯ ФОТОГРАФИЙ --- #}
+
+
+{# --- НАЧАЛО НОВОГО БЛОКА ХАРАКТЕРИСТИК --- #}
+<div class="admin-form-card mt-4">
+    <h5 class="admin-card-title">Характеристики</h5>
+    <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
+        {{ characteristics_form.hidden_tag() }} {# Используем токен из этой формы #}
+
+        {# Проходим по ШАБЛОНУ обязательных характеристик #}
+        {% for spec_template in required_specs %}
+            <div class="mb-3">
+                <label for="spec_{{ spec_template.id }}" class="form-label">{{ spec_template.name }}</label>
+
+                {# Проверяем, какой тип у характеристики #}
+                {% if spec_template.value_type == 'integer' %}
+                    <input type="number"
+                           class="form-control"
+                           id="spec_{{ spec_template.id }}"
+                           name="spec_{{ spec_template.name }}"
+                           value="{{ spec_values.get(spec_template.name, '') }}">
+                {% else %}
+                    <input type="text"
+                           class="form-control"
+                           id="spec_{{ spec_template.id }}"
+                           name="spec_{{ spec_template.name }}"
+                           value="{{ spec_values.get(spec_template.name, '') }}">
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if required_specs %}
+        <button type="submit" class="btn btn-primary mt-2">Сохранить характеристики</button>
+        {% else %}
+        <p class="text-muted">Для категории этого товара (<a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}">{{ product.category.name }}</a>) ещё не задан шаблон характеристик.</p>
+        {% endif %}
+
+    </form>
+</div>
+{# --- КОНЕЦ НОВОГО БЛОКА ХАРАКТЕРИСТИК --- #}
 {% endblock %}

@@ -110,7 +110,7 @@ def admin_product(id):
             if old_photo:
                 old_photo_path = os.path.join(
                     os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
-                    product.category, str(product.id), old_photo.photo_path
+                    product.category.slug, str(product.id), old_photo.photo_path
                 )
                 try:
                     os.remove(old_photo_path)
@@ -122,7 +122,7 @@ def admin_product(id):
         # 2. Сохраняем новое фото
         photo_path = os.path.join(
             os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
-            product.category, str(product.id)
+            product.category.slug, str(product.id)
         )
         filename = secure_filename(f.filename)
         os.makedirs(photo_path, exist_ok=True)
@@ -407,9 +407,9 @@ def admin_edit_product(id):
     return render_template('admin/edit_product.html', form=form, sub_title='Изменение товара', active_page='products')
         
 
-@admin_bp.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
+@admin_bp.route('/admin/deactivate_product/<int:id>', methods=['GET','POST'])
 @login_required
-def admin_delete_products(id):
+def admin_deactivate_products(id):
     if not current_user.is_admin:
         abort(403)
 
@@ -421,11 +421,30 @@ def admin_delete_products(id):
         db.session.commit()
         flash(f'Товар "{product_to_deactivate.name}" был деактивирован и скрыт из каталога.', 'success')    
         return redirect(url_for('admin.admin_products_list'))
-    return render_template('admin/admin_delete_product.html',
-                           form= form,
+    return render_template('admin/admin_deactivate_product.html',
+                           form=form,
                            sub_title=f'Вы точно хотите деактивировать продукт {product_to_deactivate.name}?',
                            active_page='products'
                         )
+
+
+@admin_bp.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_delete_product(id):
+    if not current_user.is_admin:
+        abort(403)
+
+    product_to_delete = Product.query.get_or_404(id)
+    form = ConfirmForm()
+
+    if form.validate_on_submit():
+        db.session.delete(product_to_delete)
+        db.session.commit()
+        flash(f'Товар {product_to_delete.name} был полностью удалён из базы данных.', 'success')
+        return redirect(url_for('admin.admin_products_list'))
+    return render_template('admin/admin_delete_product.html',
+                           form=form,
+                           sub_title=f'Вы точно хотите деактивировать продукт {product_to_delete.name}?')
 
 
 @admin_bp.route('/admin/user-orders')
