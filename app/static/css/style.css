@@ -344,16 +344,16 @@ footer a:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.card-title {
+.card .card-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
 }
 
-.card-text {
+.card .card-text {
     font-size: 0.95rem;
     margin-bottom: 0.75rem;
-    color: var(--text-dark);
+    color: var(--text-dark) !important;
 }
 
 .card-text strong {
@@ -475,44 +475,52 @@ footer a:hover {
     border-color: var(--border-dark);
 }
 
-/* Алерты */
+/* --- Улучшенные стили для всплывающих сообщений (Alerts) на тёмной теме --- */
+
 .alert {
-    border: none;
     border-radius: 8px;
     padding: 1rem 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    margin-bottom: 1rem;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-in;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: none; /* Убираем все рамки по умолчанию */
+    border-left-width: 4px; /* Добавляем место для левой акцентной линии */
+    border-left-style: solid; /* Указываем стиль линии */
 }
 
-.alert-success {
-    background-color: #28a745;
-    color: var(--text-light);
-    border-left: 4px solid #218838;
-}
-
-.alert-danger {
-    background-color: #dc3545;
-    color: var(--text-light);
-    border-left: 4px solid #c82333;
-}
-
-.alert-warning {
-    background-color: #ffc107;
-    color: #212529;
-    border-left: 4px solid #e0a800;
-}
-
-.alert-info {
-    background-color: #17a2b8;
+/* Успешное сообщение (Зелёное) */
+.alert.alert-success { /* Делаем селектор чуть конкретнее */
+    background-color: #198754 !important; /* Гарантируем зелёный фон */
     color: #ffffff;
-    border-left: 4px solid #138496;
+    border-left-color: #157347;
 }
 
+/* Сообщение об ошибке (Красное) */
+.alert.alert-danger {
+    background-color: #dc3545 !important;
+    color: #ffffff;
+    border-left-color: #bb2d3b;
+}
+
+/* Предупреждение (Жёлтое) */
+.alert.alert-warning {
+    background-color: #ffc107 !important;
+    color: #000000; /* Чёрный текст */
+    border-left-color: #ffb300;
+}
+
+/* Информационное сообщение (Синее) */
+.alert.alert-info {
+    background-color: #0dcaf0 !important;
+    color: #000000; /* Чёрный текст */
+    border-left-color: #31d2f2;
+}
+
+/* Кнопка "Закрыть" (крестик) */
 .alert-dismissible .btn-close {
-    filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1); /* Белый крестик */
+    opacity: 0.7;
+}
+.alert-dismissible .btn-close:hover {
+    opacity: 1;
 }
 
 @keyframes fadeIn {
@@ -886,7 +894,7 @@ footer a:hover {
     justify-content: center;
 }
 
-/* Стиль для кнопки "В корзину" (зеленая, с заливкой) */
+/* Стиль для кнопки "В корзину" (красная, с заливкой) */
 /* НОВЫЙ КОД для кнопки "В корзину" */
 .favourite-actions .btn.btn-success {
     background-color: var(--accent, #600018); /* Используем ваш фирменный красный */
@@ -1336,7 +1344,7 @@ body.admin-body {
 /* --- Стили для страницы деталей продукта в админке --- */
 .admin-card {
     background-color: #1e1e1e !important;
-    color: #1e1e1e !important;
+    color: #ffffff !important;
    
     border-radius: 8px;
     padding: 1.5rem;
@@ -1951,4 +1959,17 @@ input:focus, textarea:focus, select:focus {
     border-color: #600018 !important;
     box-shadow: 0 0 4px #600018 !important;
     color: #ffffff !important; /* Белый текст при фокусе */
+}
+
+/* --- Стили для текста в обзоре заказа (Страница оплаты) --- */
+
+.order-summary-card .list-group-item h6, /* Product Name */
+.order-summary-card .list-group-item .order-summary-price, /* Price */
+.order-summary-card .list-group-item strong /* Total Price Label */ {
+    color: var(--text-light, #ffffff) !important; /* Force white text */
+}
+
+/* Делаем итоговую сумму на странице оплаты зелёной */
+.order-summary-card .list-group-item strong.text-success {
+    color: #28a745 !important; /* Зелёный цвет Bootstrap */
 }

@@ -1,67 +1,52 @@
 {% extends 'base.html' %}
+{% from 'bootstrap5/pagination.html' import render_pagination %} {# Import pagination helper #}
 
 {% block content %}
 <div class="container py-5">
     <h1 class="text-center mb-5">Готовые сборки</h1>
 
     {% if all_ready_pc.items %}
-        <div class="builds-grid">
-            {% for ready_pc in all_ready_pc %}
-                <div class="build-card">
-                    <a href="{{ url_for('ready_pc.ready_pc_details', build_id = ready_pc.id) }}" class="build-card-link"> <div class="build-image-container d-flex justify-content-left">
-                            <img src="{{ ready_pc.get_build_image() }}" alt="{{ ready_pc.name }}">
-                        </div>
-                        <div class="build-content-header">
-                            <h3 class="build-name">{{ ready_pc.name }}</h3>
-                        </div>
-                    </a>
-
-                    <div class="build-content-main">
-                        <ul class="build-specs">
-                            <li><i class="bi bi-cpu-fill"></i> <span>{{ ready_pc.get_cpu() }}</span></li>
-                            <li><i class="bi bi-gpu-card"></i> <span>{{ ready_pc.get_gpu() }}</span></li>
-                            <li><i class="bi bi-memory"></i> <span>{{ ready_pc.get_ram() }}</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="build-footer">
-                        <div class="build-price">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</div>
-                        <a href="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" class="btn btn-primary">В корзину</a>
+        {# Use Bootstrap's responsive grid system #}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for ready_pc in all_ready_pc.items %} {# Make sure to iterate over .items for pagination #}
+                <div class="col">
+                    {# Use Bootstrap's standard card component #}
+                    <div class="card h-100 shadow-sm product-card-catalog"> {# Reuse product card style #}
+                        <a href="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}" class="text-decoration-none text-white">
+                            {# Card Image Container #}
+                            <div class="product-image-container">
+                                <img src="{{ ready_pc.get_build_image() }}" class="card-img-top product-image-catalog" alt="{{ ready_pc.name }}">
+                            </div>
+                            {# Card Body #}
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title product-title-catalog">{{ ready_pc.name }}</h5>
+                                {# Simplified Specs List #}
+                                <ul class="list-unstyled text-muted small mt-2 mb-3">
+                                    <li><i class="bi bi-cpu-fill me-2"></i>{{ ready_pc.get_cpu() }}</li>
+                                    <li><i class="bi bi-gpu-card me-2"></i>{{ ready_pc.get_gpu() }}</li>
+                                    <li><i class="bi bi-memory me-2"></i>{{ ready_pc.get_ram() }}</li>
+                                </ul>
+                                {# Price - Push to bottom #}
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold fs-5 product-price-catalog">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>
+                                    {# Add to Cart Button #}
+                                    <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST">
+                                        {{ csrf_token() }} {# Use the built-in csrf_token function #}
+                                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-cart-plus"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <nav aria-label="Page navigation" class="mt-5">
-            <ul class="pagination justify-content-center">
-                {% if all_ready_pc.has_prev %}
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url_for('ready_pc', page=all_ready_pc.prev_num) }}">«</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled"><span class="page-link">«</span></li>
-                {% endif %}
-
-                {% for page_num in all_ready_pc.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
-                    {% if page_num %}
-                        <li class="page-item {% if page_num == all_ready_pc.page %}active{% endif %}">
-                            <a class="page-link" href="{{ url_for('ready_pc.ready_pc', page=page_num) }}">{{ page_num }}</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled"><span class="page-link">…</span></li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if all_ready_pc.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url_for('ready_pc', page=all_ready_pc.next_num) }}">»</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled"><span class="page-link">»</span></li>
-                {% endif %}
-            </ul>
+        {# Pagination (using Bootstrap helper) #}
+        <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
+             {{ render_pagination(all_ready_pc, endpoint='ready_pc.ready_pc') }}
         </nav>
-        
+
     {% else %}
         <div class="text-center py-5">
             <p class="h4 text-muted">Готовых сборок пока нет.</p>

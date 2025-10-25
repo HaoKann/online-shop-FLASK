@@ -348,13 +348,13 @@ section.features-section h2,
 .alert-success {
   background-color: var(--success-bg);
   color: var(--light);
-  border-left: 4px solid darken(var(--success-bg), 10%);
+  border-left: 4px solid #218838; /* Use a darker green for success alert */
 }
 
 .alert-danger {
   background-color: var(--danger-bg);
   color: var(--light);
-  border-left: 4px solid darken(var(--danger-bg), 10%);
+  border-left: 4px solid #a80016; /* Replace with a darker red or suitable color */
 }
 
 
