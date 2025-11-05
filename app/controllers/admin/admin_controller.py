@@ -573,9 +573,14 @@ def admin_edit_readypc(id):
     # так как они могут быть не установлены автоматически, если модель и форма сложны
     if request.method == 'GET':
         for component in ready_pc.products_in_readypc.all():
-            cat = component.product.category
-            if hasattr(form, cat):
-                getattr(form, cat).data = str(component.product_id)
+            # Получаем slug (строку) из связанного объекта Category
+            category_slug = component.product.category.slug
+
+            # Проверяем, есть ли поле с таким именем в форме (form.cpu, form.gpu и т.д.)
+            if hasattr(form, category_slug):
+                field = getattr(form, category_slug)
+                # Устанавливаем ID продукта как выбранное значение (в виде строки)
+                field.data = str(component.product_id)
 
 
     if form.validate_on_submit():
@@ -588,19 +593,19 @@ def admin_edit_readypc(id):
 
         # Добавляем новые комплектующие
         categories = ['cpu','gpu','motherboard','ram','psu','cooler','storage','pc_case']
-        for cat in categories:
+        for cat_slug in categories:
             # Получает значение выбранного продукта из поля формы (например, form.cpu.data) и преобразует его в число. 
             # Если значение пустое, присваивает None.
             # Как и в форме, getattr это способ получить поле формы по его имени (например, form.cpu вместо getattr(form, 'cpu')).
-            product_id = int(getattr(form, cat).data) 
-            new_component = ProductInReadyPC(
-                ready_pc_id=ready_pc.id,
-                amount = 1, 
-                product_id = product_id
-            )
-            db.session.add(new_component)
-        # Обновляем название
-        ready_pc.name = form.name.data
+            product_id = getattr(form, cat_slug).data # Получаем ID продукта из поля формы
+
+            if product_id:
+                new_component = ProductInReadyPC(
+                    ready_pc_id=ready_pc.id,
+                    amount = 1, 
+                    product_id = product_id
+                )
+                db.session.add(new_component)
 
         db.session.commit()
         flash('Сборка изменена успешно!','success')

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, SubmitField, IntegerField
 from wtforms.validators import DataRequired
-from app.models.product import Product
+from app.models.product import Product, Category
 
 class EditReadyPC(FlaskForm):
     name = StringField('Название сборки', validators=[DataRequired()])
@@ -23,9 +23,18 @@ class EditReadyPC(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(EditReadyPC, self).__init__(*args, **kwargs)
         
-        categories = ['cpu','gpu','motherboard','ram','psu','cooler','storage','pc_case']
-        for cat in categories:
-            # Динамически получаем поле формы по имени (например, self.cpu)
-            field = getattr(self, cat)
+        # Список системных имен (slug) категорий
+        categories_slugs = ['cpu','gpu','motherboard','ram','psu','cooler','storage','pc_case']
+
+        for cat_slug in categories_slugs:
+            # 1. Формируем запрос с явным соединением таблиц
+            products_in_category = Product.query.join(Category).filter(
+                # 2. Фильтруем по полю 'slug' в таблице 'Category'
+                Category.slug == cat_slug
+            ).all()
+
+            # 3. Находим соответствующее поле формы (например, self.cpu)
+            field = getattr(self, cat_slug)
+
             # Заполняем его варианты выбора всеми продуктами из нужной категории
-            field.choices = [(str(p.id), p.name) for p in Product.query.filter_by(category=cat).all()]
+            field.choices = [(str(p.id), p.name) for p in products_in_category]

@@ -1,28 +1,118 @@
 {% extends 'admin/base.html' %}
 
-
 {% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="build-header mb-5">
+        <h1 class="build-title">{{ ready_pc_detail.name }}</h1>
+        
+        <!-- Status Badge -->
+        <div class="status-wrapper">
+            {% if ready_pc_detail.is_ready() %}
+                <span class="status-badge status-ready">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    Сборка готова
+                </span>
+            {% else %}
+                <span class="status-badge status-incomplete">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    Сборка не готова
+                </span>
+            {% endif %}
+        </div>
+    </div>
 
-<h1 style="text-align: center;">Готовая сборка {{ ready_pc_detail.name }}</h1>
+    <div class="row g-4">
+        <!-- Components List -->
+        <div class="col-lg-8">
+            <div class="components-card">
+                <div class="card-header-custom">
+                    <h2 class="section-title">
+                        <i class="bi bi-pc-display-horizontal me-2"></i>
+                        Компоненты сборки
+                    </h2>
+                </div>
+                
+                <div class="components-list">
+                    {% for component in ready_pc_detail.products_in_readypc.all() %}
+                        <div class="component-item">
+                            <div class="component-content">
+                                <div class="component-icon">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <div class="component-info">
+                                    <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product_id) }}" 
+                                       target="_blank" 
+                                       class="component-link">
+                                        {{ component.product.name }}
+                                    </a>
+                                    <div class="component-meta">
+                                        <span class="quantity-badge">
+                                            <i class="bi bi-box me-1"></i>
+                                            Количество: {{ component.amount }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="component-action">
+                                <i class="bi bi-arrow-right-circle"></i>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-{% for component in ready_pc_detail.products_in_readypc.all()  %}
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Missing Components Card -->
+            {% if not ready_pc_detail.is_ready() %}
+                <div class="alert-card">
+                    <div class="alert-header">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <h3 class="alert-title">Недостающие компоненты</h3>
+                    </div>
+                    <div class="alert-body">
+                        <p class="alert-description">Для завершения сборки необходимо добавить:</p>
+                        <ul class="missing-list">
+                            {% for category in ready_pc_detail.get_absent_categories().values() %}
+                                <li class="missing-item">
+                                    <i class="bi bi-dash-circle me-2"></i>
+                                    {{ category }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <div class="success-card">
+                    <div class="success-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <h3 class="success-title">Сборка завершена!</h3>
+                    <p class="success-description">Все необходимые компоненты добавлены</p>
+                </div>
+            {% endif %}
 
-    <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product_id) }}" target="_blank">{{component.product.name}}</a>
-    {{ component.amount }}
-    <hr>
-
-{% endfor %}
-
-{% if ready_pc_detail.is_ready() %}
-    <p>Сборка готова</p>
-{% else %}
-    <p>Сборка не готова</p>
-    <p>Не хватает:</p>
-    {% for category in ready_pc_detail.get_absent_categories().values() %} 
-        <div>{{ category }}</div>
-    {% endfor %}
-{% endif %}
-
-
-
+            <!-- Summary Card -->
+            <div class="summary-card mt-4">
+                <h3 class="summary-title">Информация</h3>
+                <div class="summary-item">
+                    <span class="summary-label">Всего компонентов:</span>
+                    <span class="summary-value">{{ ready_pc_detail.products_in_readypc.count() }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Статус:</span>
+                    <span class="summary-value">
+                        {% if ready_pc_detail.is_ready() %}
+                            <span class="text-success fw-bold">✓ Готова</span>
+                        {% else %}
+                            <span class="text-warning fw-bold">⚠ Не готова</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

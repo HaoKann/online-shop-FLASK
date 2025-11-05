@@ -1,56 +1,90 @@
 {% extends 'base.html' %}
-{% from 'bootstrap5/pagination.html' import render_pagination %} {# Import pagination helper #}
+{% from 'bootstrap5/pagination.html' import render_pagination %}
 
 {% block content %}
-<div class="container py-5">
-    <h1 class="text-center mb-5">Готовые сборки</h1>
+<div class="ready-pc-catalog">
+    {# Hero Section #}
+    <div class="catalog-hero">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title mb-3">Готовые сборки</h1>
+                <p class="hero-subtitle">Профессионально подобранные конфигурации для любых задач</p>
+            </div>
+        </div>
+    </div>
 
-    {% if all_ready_pc.items %}
-        {# Use Bootstrap's responsive grid system #}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for ready_pc in all_ready_pc.items %} {# Make sure to iterate over .items for pagination #}
-                <div class="col">
-                    {# Use Bootstrap's standard card component #}
-                    <div class="card h-100 shadow-sm product-card-catalog"> {# Reuse product card style #}
-                        <a href="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}" class="text-decoration-none text-white">
-                            {# Card Image Container #}
-                            <div class="product-image-container">
-                                <img src="{{ ready_pc.get_build_image() }}" class="card-img-top product-image-catalog" alt="{{ ready_pc.name }}">
-                            </div>
-                            {# Card Body #}
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title product-title-catalog">{{ ready_pc.name }}</h5>
-                                {# Simplified Specs List #}
-                                <ul class="list-unstyled text-muted small mt-2 mb-3">
-                                    <li><i class="bi bi-cpu-fill me-2"></i>{{ ready_pc.get_cpu() }}</li>
-                                    <li><i class="bi bi-gpu-card me-2"></i>{{ ready_pc.get_gpu() }}</li>
-                                    <li><i class="bi bi-memory me-2"></i>{{ ready_pc.get_ram() }}</li>
-                                </ul>
-                                {# Price - Push to bottom #}
-                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold fs-5 product-price-catalog">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>
-                                    {# Add to Cart Button #}
-                                    <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST">
-                                        {{ csrf_token() }} {# Use the built-in csrf_token function #}
-                                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-cart-plus"></i></button>
-                                    </form>
+    <div class="container py-5">
+        {% if all_ready_pc.items %}
+            {# Products Grid #}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                {% for ready_pc in all_ready_pc.items %}
+                    <div class="col">
+                        <div class="pc-card">
+                            {# Image Section #}
+                            <a href="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}" class="pc-card-link">
+                                <div class="pc-card-image-wrapper">
+                                    <img src="{{ ready_pc.get_build_image() }}" class="pc-card-image" alt="{{ ready_pc.name }}">
+                                    <div class="pc-card-overlay">
+                                        <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            {# Content Section #}
+                            <div class="pc-card-body">
+                                <a href="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}" class="pc-card-link">
+                                    <h5 class="pc-card-title">{{ ready_pc.name }}</h5>
+                                </a>
+                                
+                                {# Specs List #}
+                                <div class="pc-specs">
+                                    <div class="spec-item">
+                                        <i class="bi bi-cpu-fill spec-icon"></i>
+                                        <span class="spec-text">{{ ready_pc.get_cpu() }}</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <i class="bi bi-gpu-card spec-icon"></i>
+                                        <span class="spec-text">{{ ready_pc.get_gpu() }}</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <i class="bi bi-memory spec-icon"></i>
+                                        <span class="spec-text">{{ ready_pc.get_ram() }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </a>
+                            
+                            {# Footer Section #}
+                            <div class="pc-card-footer">
+                                <div class="price-wrapper">
+                                    <span class="price-label">Цена</span>
+                                    <span class="price-value">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>
+                                </div>
+                                
+                                <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST">
+                                    {{ csrf_token() }}
+                                    <button type="submit" class="btn-add-to-cart">
+                                        <i class="bi bi-cart-plus me-2"></i>
+                                        В корзину
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
 
-        {# Pagination (using Bootstrap helper) #}
-        <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
-             {{ render_pagination(all_ready_pc, endpoint='ready_pc.ready_pc') }}
-        </nav>
+            {# Pagination #}
+            <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
+                {{ render_pagination(all_ready_pc, endpoint='ready_pc.ready_pc') }}
+            </nav>
 
-    {% else %}
-        <div class="text-center py-5">
-            <p class="h4 text-muted">Готовых сборок пока нет.</p>
-        </div>
-    {% endif %}
+        {% else %}
+            <div class="empty-state text-center py-5">
+                <i class="bi bi-inbox empty-icon"></i>
+                <h3 class="empty-title">Готовых сборок пока нет</h3>
+                <p class="empty-text">Скоро здесь появятся новые конфигурации</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

@@ -31,7 +31,7 @@
                     <ul class="list-group list-group-flush">
                         {% for component in ready_pc.products_in_readypc.all() %}
                             <li class="list-group-item d-flex justify-content-between">
-                                <span class="spec-name">{{ component.product.get_category_name() }}</span>
+                                <span class="spec-name">{{ component.product.category.name` }}</span>
                                 <span class="spec-value">{{ component.product.name }}</span>
                             </li>
                         {% endfor %}
