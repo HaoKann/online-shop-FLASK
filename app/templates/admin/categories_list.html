@@ -1,41 +1,84 @@
 {% extends 'admin/base.html' %}
+{% from 'bootstrap5/pagination.html' import render_pagination %}
 
 {% block content %}
-<div class="container">
-    <div class="page-header">
-        <h1>Управление категориями</h1>
-    </div>
+<div class="admin-ready-pc-page">
+    <div class="container py-4">
+        
+        <div class="page-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1 class="page-title">
+                        <i class="bi bi-tags-fill me-3"></i>
+                        Управление категориями
+                    </h1>
+                    <p class="page-subtitle">Настройка шаблонов характеристик для категорий товаров</p>
+                </div>
+                </div>
+        </div>
 
-    <div class="admin-card">
-        <p class="text-muted">
-            Здесь вы можете управлять шаблонами характеристик для каждой категории товаров. 
-            Например, для категории "Видеокарта" можно задать обязательные характеристики "Объем видеопамяти" и "Тип памяти".
-        </p>
-    </div>
+        <div class="search-section">
+            <form class="search-form" role="search" action="#" method="GET">
+                <div class="search-input-wrapper">
+                    <i class="bi bi-search search-icon"></i>
+                    <input class="search-input" 
+                           name="q" 
+                           placeholder="Поиск по названию категории..." 
+                           aria-label="Search">
+                </div>
+                <button class="btn-search" type="submit">
+                    <i class="bi bi-search me-2"></i>
+                    Поиск
+                </button>
+            </form>
+        </div>
 
-    <div class="mt-4">
-        <table class="admin-table w-100">
-            <thead>
-                <tr>
-                    <th>Название категории</th>
-                    <th>Системное имя (slug)</th>
-                    <th class="text-end">Управление</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in categories %}
-                    <tr>
-                        <td><strong>{{ category.name }}</strong></td>
-                        <td><code>{{ category.slug }}</code></td>
-                        <td class="text-end">
-                            <a href="{{ url_for('admin.manage_category_characteristics', category_id=category.id) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-pencil-square me-2"></i>Настроить характеристики
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if categories %}
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="th-name">Название категории</th>
+                                <th class="th-category">Системное имя (slug)</th>
+                                <th class="th-actions">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                                <tr class="table-row">
+                                    <td class="td-name">
+                                        <span class="name-link">
+                                            <i class="bi bi-tag-fill me-2"></i>
+                                            {{ category.name }}
+                                        </span>
+                                    </td>
+                                    <td class="td-category">
+                                        <span class="category-tag">{{ category.slug }}</span>
+                                    </td>
+                                    <td class="td-actions">
+                                        <div class="action-buttons">
+                                            <a href="{{ url_for('admin.manage_category_characteristics', category_id=category.id) }}" 
+                                               class="btn-action btn-edit" 
+                                               title="Настроить шаблон">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><i class="bi bi-inbox"></i></div>
+                <h3 class="empty-title">Категории не найдены</h3>
+                <p class="empty-text">В базе данных пока нет ни одной категории.</p>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

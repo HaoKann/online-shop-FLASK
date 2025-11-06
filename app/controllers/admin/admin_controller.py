@@ -17,6 +17,7 @@ from app.models.faq import FAQ
 from app.models.user import User
 from app.models.product import Category, CategoryCharacteristic
 from app.forms.admin.add_product_form import CategoryCharacteristicForm
+from app.forms.empty_form import EmptyForm
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -627,8 +628,12 @@ def admin_delete_readypc(id):
 
 @admin_bp.route('/admin/faqs')
 def list_faqs():
+    if not current_user.is_admin:
+        abort(403)
+
     faqs = FAQ.query.all()
-    return render_template('admin/faq_list.html', faqs=faqs, active_page='faq')
+    form = EmptyForm()
+    return render_template('admin/faq_list.html', faqs=faqs, active_page='faq', form=form)
 
 @admin_bp.route('/admin/faqs/add', methods=['GET','POST'])
 def add_faq():

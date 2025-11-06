@@ -1,7 +1,7 @@
 
 from flask import render_template, request, Blueprint
 from app.models.product import ReadyPC
-
+from app.forms.empty_form import EmptyForm
 ready_pc_bp = Blueprint('ready_pc', __name__)
 
 @ready_pc_bp.route('/ready_pc')
@@ -11,7 +11,10 @@ def ready_pc():
     page = request.args.get('page', 1, type=int)
     #  2. Вместо .all() используем .paginate().
     all_ready_pc = ReadyPC.query.order_by(ReadyPC.price.asc()).paginate(page=page, per_page=9, error_out=False)
-    return render_template('main_screen/ready_pc.html', all_ready_pc=all_ready_pc)
+
+    csrf_form = EmptyForm()
+
+    return render_template('main_screen/ready_pc.html', all_ready_pc=all_ready_pc, csrf_form=csrf_form)
 
 
 @ready_pc_bp.route('/ready_pc/<int:build_id>')

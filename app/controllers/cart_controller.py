@@ -34,7 +34,7 @@ def add_products(product_id):
     flash(f'Товар {product.name} добавлен в корзину', 'success')
     return redirect(request.referrer or '/')
 
-@cart_bp.route('/cart/add_ready_pc/<int:ready_pc_id>')
+@cart_bp.route('/cart/add_ready_pc/<int:ready_pc_id>', methods=['GET','POST'])
 @login_required
 def add_ready_pc_to_cart(ready_pc_id):
     """

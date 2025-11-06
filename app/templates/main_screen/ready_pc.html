@@ -61,7 +61,8 @@
                                 </div>
                                 
                                 <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST">
-                                    {{ csrf_token() }}
+                                    {{ csrf_form.hidden_tag() }}
+
                                     <button type="submit" class="btn-add-to-cart">
                                         <i class="bi bi-cart-plus me-2"></i>
                                         В корзину
