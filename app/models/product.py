@@ -141,6 +141,16 @@ class ReadyPC(db.Model):
 
     def is_ready(self):
         return len(self.get_absent_categories()) == 0
+    
+    def get_build_image(self):
+        # Проходим по всем товарам в этой сборке
+        for component in self.products_in_readypc:
+            if component.product.category.slug == 'pc_case':
+                return component.product.get_first_photo()
+            
+        return url_for('static', filename='img/default.webp')
+    
+
 
 
 class ProductInReadyPC(db.Model):

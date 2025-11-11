@@ -573,8 +573,12 @@ def admin_edit_readypc(id):
     # При отправке формы вручную устанавливаем значения для SelectField,
     # так как они могут быть не установлены автоматически, если модель и форма сложны
     if request.method == 'GET':
+        # Заполняем форму текущими значениями из сборки
+        form.name.data = ready_pc.name
+        form.price.data = ready_pc.price
+
         for component in ready_pc.products_in_readypc.all():
-            # Получаем slug (строку) из связанного объекта Category
+            # Получаем системное имя (slug) из связанного объекта Category
             category_slug = component.product.category.slug
 
             # Проверяем, есть ли поле с таким именем в форме (form.cpu, form.gpu и т.д.)

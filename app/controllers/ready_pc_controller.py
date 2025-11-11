@@ -22,4 +22,6 @@ def ready_pc_details(build_id):
     # Находим сборку по ID, если не найдена - выдаем ошибку 404
     ready_pc = ReadyPC.query.get_or_404(build_id)
 
-    return render_template('main_screen/ready_pc_details.html', ready_pc=ready_pc)
+    form = EmptyForm()
+
+    return render_template('main_screen/ready_pc_details.html', ready_pc=ready_pc, form=form)

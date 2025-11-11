@@ -1,44 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-5 product-detail-page">
-    <div class="row g-5">
-        <div class="col-lg-6">
-            <div class="main-image-container">
-                <img src="{{ ready_pc.get_build_image() }}" alt="{{ ready_pc.name }}">
-            </div>
+<div class="product-page-container">
+    
+    {# --- Левая колонка: Галерея --- #}
+    <div class="product-page-gallery">
+        <div class="product-page-main-image">
+            {# Используем новую функцию для получения фото корпуса #}
+            <img src="{{ ready_pc.get_build_image() }}" id="mainProductImage" alt="{{ ready_pc.name }}">
+        </div>
+        {# Для готовой сборки галерея не нужна, поэтому .product-page-thumbnails мы убираем #}
+    </div>
+
+    {# --- Правая колонка: Информация --- #}
+    <div class="product-page-info">
+        <span class="product-page-category">Готовая сборка</span>
+        <h1 class="product-page-title">{{ ready_pc.name }}</h1>
+
+        {# Блок с ценой #}
+        <div class="product-page-price-block">
+            <span class="current-price">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>
         </div>
 
-        <div class="col-lg-6">
-            <div class="product-info-details">
-                <div class="product-category-badge">Готовая сборка</div>
-                <h1 class="product-main-title">{{ ready_pc.name }}</h1>
+        {# Блок с кнопками "В корзину" и "В избранное" #}
+        <div class="product-page-actions">
+            <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST" class="d-grid flex-grow-1">
+                {{ form.hidden_tag() }} {# Убедитесь, что form передается из view-функции #}
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-cart-plus-fill"></i> Добавить в корзину
+                </button>
+            </form>
+            {# Можно также добавить кнопку "В избранное" для сборок, если у вас есть такой функционал #}
+        </div>
 
-                <div class="price-container my-4">
-                    <span class="current-price">
-                        {{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸
-                    </span>
-                </div>
-                
-                <div class="actions-block d-flex align-items-center gap-3 mb-4">
-                    <a href="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" class="btn btn-primary btn-lg flex-grow-1">
-                        <i class="bi bi-cart-plus-fill"></i> Добавить в корзину
-                    </a>
-                </div>
-
-                <div class="specifications-block">
-                    <h5 class="mb-3">Комплектующие</h5>
-                    <ul class="list-group list-group-flush">
-                        {% for component in ready_pc.products_in_readypc.all() %}
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span class="spec-name">{{ component.product.category.name }}</span>
-                                <span class="spec-value">{{ component.product.name }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+        {# Блок с характеристиками (комплектующими) #}
+        <div class="product-page-specs">
+            <h5 class="specs-title">Комплектующие</h5>
+            
+            <ul class="specs-list">
+                {% for component in ready_pc.products_in_readypc.all() %}
+                    <li>
+                        <span>{{ component.product.category.name }}</span>
+                        {# Делаем название компонента ссылкой на его страницу #}
+                        <strong>
+                            <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product.id) }}" class="text-white text-decoration-none">
+                                {{ component.product.name }}
+                            </a>
+                        </strong>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
+
 {% endblock %}
