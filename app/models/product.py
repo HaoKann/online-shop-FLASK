@@ -72,8 +72,13 @@ class ReadyPC(db.Model):
 
     def get_component(self, category_name):
         """Универсальный метод для поиска компонента по категории."""
-        for component in self.products_in_readypc:
-            if component.product.category == category_name:
+
+        # 1. Добавляем .all(), так как связь lazy='dynamic'
+        for component in self.products_in_readypc.all():
+
+            # 2. Сравниваем 'category_name' (напр., 'cpu') 
+            #    с системным именем 'slug' (component.product.category.slug)
+            if component.product.category.slug == category_name:
                 return component.product
         return None
 

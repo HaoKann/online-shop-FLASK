@@ -19,7 +19,7 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 {% for ready_pc in all_ready_pc.items %}
                     <div class="col">
-                        <div class="pc-card">
+                        <div class="pc-card h-100 d-flex flex-column">
                             {# Image Section #}
                             <a href="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}" class="pc-card-link">
                                 <div class="pc-card-image-wrapper">
@@ -54,7 +54,7 @@
                             </div>
                             
                             {# Footer Section #}
-                            <div class="pc-card-footer">
+                            <div class="pc-card-footer mt-auto">
                                 <div class="price-wrapper">
                                     <span class="price-label">Цена</span>
                                     <span class="price-value">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>

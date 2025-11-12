@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from app.models.product import Product
 from app.models.user import FavouriteProduct
 from app.models.cart import ProductInCart
+from app.forms.empty_form import EmptyForm
 
 favourites_bp = Blueprint('favourites', __name__)
 
@@ -11,7 +12,10 @@ favourites_bp = Blueprint('favourites', __name__)
 @login_required
 def favourites():
     favourite_products = FavouriteProduct.query.join(Product).filter(FavouriteProduct.user_id == current_user.id, Product.is_active == True).all()
-    return render_template('user/favourites.html', sub_title='Избранное', favourite_products=favourite_products)
+    
+    csrf_form = EmptyForm()
+    
+    return render_template('user/favourites.html', sub_title='Избранное', favourite_products=favourite_products, csrf_form=csrf_form)
 
 
 @favourites_bp.route('/favourites/add_product/<int:product_id>', methods=['GET','POST'])

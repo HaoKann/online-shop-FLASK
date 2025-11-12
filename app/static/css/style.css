@@ -822,10 +822,10 @@ footer a:hover {
 /* Стили для зачеркнутого текста с классом text-muted */
 .text-muted.text-decoration-line-through {
     text-decoration: line-through;
-    text-decoration-color: var(--accent); /* Линия в цвет акцента */
+    text-decoration-color: #dc3545;
     text-decoration-thickness: 2px; /* Толщина линии */
-    color: #cccccc; /* Светло-серый цвет для контраста на тёмном фоне */
-    margin-right: 0.5rem; /* Сохраняем отступ */
+    color: #888 !important;
+    margin-right: 0.5rem;
 }
 
 /* Общий стиль для text-muted, чтобы он был виден на тёмном фоне */
@@ -2023,6 +2023,7 @@ input:focus, textarea:focus, select:focus {
     height: 100%;
     display: flex;
     flex-direction: column;
+    min-height: 500px;
 }
 
 .pc-card:hover {
@@ -2035,7 +2036,7 @@ input:focus, textarea:focus, select:focus {
     position: relative;
     padding-top: 75%;
     overflow: hidden;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: #ffffff;
 }
 
 .pc-card-image {
@@ -2044,7 +2045,7 @@ input:focus, textarea:focus, select:focus {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.4s ease;
 }
 
@@ -2156,7 +2157,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .price-label {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: #718096;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -2164,7 +2165,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .price-value {
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 800;
     color: #1a202c;
     background: linear-gradient(135deg, #600018 0%, #8b0024 100%);
@@ -2811,7 +2812,7 @@ input:focus, textarea:focus, select:focus {
 
 .price-value {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 2rem;
     color: #600018;
 }
 

@@ -1,65 +1,96 @@
 {% extends 'base.html' %}
+{% from 'bootstrap5/pagination.html' import render_pagination %}
 
 {% block content %}
-<div class="container py-5">
-    <h2 class="text-center mb-5">{{ sub_title }}</h2>
+<div class="ready-pc-catalog">
+    {# Hero Section: Используем 'sub_title', которую вы передаёте из контроллера #}
+    <div class="catalog-hero">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title mb-3">{{ sub_title }}</h1>
+            </div>
+        </div>
+    </div>
 
-    {% if products.items %}
-        <div class="product-grid">
-            {% for product in products.items %}
-                <div class="product-card-catalog">
-                    <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="product-card-link">
-                        
-                        <div class="product-image-container">
-                            {% if product.discount %}
-                                <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                                    -{{ product.discount }}%
-                                </span>
-                            {% endif %}
-                            <img src="{{ product.get_first_photo() }}" alt="{{ product.name }}" class="product-image-catalog">
-                        </div>
-
-                        <div class="product-content-catalog">
-                            <h4 class="product-title-catalog">{{ product.name }}</h4>
+    <div class="container py-5">
+        {% if products.items %}
+            {# Products Grid: Используем новую сетку #}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                {% for product in products.items %}
+                    <div class="col">
+                        <div class="pc-card"> {# Новый класс карточки #}
                             
-                            <div class="price-container mt-2">
-                                {% if product.discount %}
-                                    <span class="text-muted text-decoration-line-through me-2">
-                                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
-                                    </span>
-                                    <span class="product-price-catalog">
-                                        {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
-                                    </span>
-                                {% else %}
-                                    <span class="product-price-catalog">
-                                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
-                                    </span>
-                                {% endif %}
+                            {# Блок 1: Кликабельная часть (Изображение и Название) #}
+                            <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
+                                <div class="pc-card-image-wrapper">
+                                    {% if product.discount %}
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
+                                            -{{ product.discount }}%
+                                        </span>
+                                    {% endif %}
+                                    <img src="{{ product.get_first_photo() }}" class="pc-card-image" alt="{{ product.name }}">
+                                    <div class="pc-card-overlay">
+                                        <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                                    </div>
+                                </div>
+                                <div class="pc-card-body">
+                                    <h5 class="pc-card-title">{{ product.name }}</h5>
+                                </div>
+                            </a>
+                            
+                            {# Блок 2: Футер (Цена и Кнопки) #}
+                            <div class="pc-card-footer">
+                                <div class="price-wrapper">
+                                    {# Логика отображения скидки #}
+                                    {% if product.discount %}
+                                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 1.2rem; display: block;">
+                                            {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                        </span>
+                                        <span class="price-value" style="color: #28a745;">
+                                            {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
+                                        </span>
+                                    {% else %}
+                                        <span class="price-label">Цена</span>
+                                        <span class="price-value">
+                                            {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                
+                                {# Две кнопки: "В избранное" и "В корзину" #}
+                                <div class="d-flex gap-2">
+                                    <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
+                                        {{ csrf_form.hidden_tag() }}
+                                        <button type="submit" class="btn-add-to-cart" title="В избранное" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
+                                        {{ csrf_form.hidden_tag() }}
+                                        <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                                            <i class="bi bi-cart-plus-fill me-2"></i> В корзину
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </a>
-                    
-                    <div class="product-actions-catalog">
-                        <div class="favourite-actions">
-                            <a href="{{ url_for('cart.add_products', product_id=product.id) }}" class="btn btn-success" title="Добавить в корзину">
-                                <i class="bi bi-cart-plus-fill"></i>
-                            </a>
-                            <a href="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" class="btn btn-danger" title="Добавить в избранное">
-                                <i class="bi bi-heart-fill"></i>
-                            </a>
-                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
 
-        <nav aria-label="Page navigation" class="mt-5">
-           </nav>
+            {# Пагинация #}
+            <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
+                {# Используем переменную 'endpoint', которую вы передаёте из контроллера #}
+                {{ render_pagination(products, endpoint=endpoint) }}
+            </nav>
 
-    {% else %}
-        <div class="text-center py-5">
-            <p class="h4 text-muted">В этой категории пока нет товаров.</p>
-        </div>
-    {% endif %}
+        {% else %}
+            <div class="empty-state text-center py-5">
+                <i class="bi bi-inbox empty-icon"></i>
+                <h3 class="empty-title">Товары не найдены</h3>
+                <p class="empty-text">В этой категории пока нет товаров.</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
