@@ -161,6 +161,13 @@ main .container {
     border-color: var(--accent);
 }
 
+/* --- Изменение hover-эффекта для светлых контурных кнопок --- */
+.btn-outline-light:hover {
+    background-color: var(--accent, #600018); /* Ваш фирменный красный фон */
+    color: var(--text-light, #ffffff);        /* Белый текст */
+    border-color: var(--accent, #600018);     /* Красная рамка */
+}
+
 /* Футер */
 footer {
     flex-shrink: 0;
@@ -347,7 +354,7 @@ footer a:hover {
 .card .card-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-dark) !important;
+    color: white;
 }
 
 .card .card-text {
@@ -926,41 +933,46 @@ footer a:hover {
 /* --- Новый дизайн для страницы корзины --- */
 
 /* Карточка одного товара в корзине */
+/* Карточка одного товара в корзине */
 .cart-item-card {
     display: flex;
     align-items: center;
-    background-color: #1e1e1e; /* Темнее, чем основной фон */
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    border: 1px solid var(--border-dark);
     gap: 1rem;
+    padding: 1rem;
+    
+    /* Стили, взятые из .pc-card */
+    background: #1e1e1e; /* Темный фон */
+    border: 1px solid var(--border-dark, #333);
+    border-radius: 16px; /* Скругление */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    
+    margin-bottom: 1.5rem; /* Отступ между товарами */
 }
 
+/* Изображение товара */
 .cart-item-img {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     object-fit: contain;
-    background-color: #fff;
+    background-color: #ffffff; /* Белый фон для фото */
     border-radius: 8px;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Не сжиматься */
 }
 
+/* Детали (Название, цена за шт.) */
 .cart-item-details {
-    flex-grow: 1; /* Занимает все доступное место */
+    flex-grow: 1; /* Занимает всё свободное место */
 }
-
 .cart-item-title {
+    font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-light);
+    color: #ffffff;
     text-decoration: none;
-    display: block;
-    margin-bottom: 0.25rem;
+    transition: color 0.2s ease;
 }
 .cart-item-title:hover {
-    color: var(--primary);
+    color: var(--accent, #600018); /* Красный при наведении */
 }
-
 .cart-item-price-single {
     font-size: 0.9rem;
     color: #888;
@@ -970,38 +982,87 @@ footer a:hover {
 .cart-item-quantity {
     display: flex;
     align-items: center;
-    background-color: #2a2a2a;
+    background-color: #2a2a2a; /* Фон для кнопок +/- */
     border-radius: 8px;
     flex-shrink: 0;
+    overflow: hidden; /* Скрываем углы кнопок */
 }
+
+
 .cart-item-quantity .btn {
-    color: var(--text-light);
+    color: #ffffff;
+    border-radius: 0; /* Убираем скругление у кнопок */
 }
+.cart-item-quantity .btn:hover {
+    background-color: #333;
+}
+
+
 .quantity-value {
     padding: 0 1rem;
     font-weight: 500;
-    min-width: 40px;
-    text-align: center;
+    font-size: 1.1rem;
+    color: #ffffff;
 }
 
 .cart-item-total {
-    font-weight: 600;
-    font-size: 1.1rem;
-    min-width: 120px; /* Чтобы цены не прыгали при изменении */
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #ffffff;
+    min-width: 120px; /* Выравнивание */
     text-align: right;
-    color: var(--text-light);
 }
 
 /* Карточка с итогами заказа */
 .cart-summary-card {
-    background-color: #1e1e1e;
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-dark);
-    position: sticky; /* Делаем ее "липкой" при прокрутке */
-    top: 2rem;
+    background: #1e1e1e;
+    border: 1px solid var(--border-dark, #333);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    padding: 1.5rem 2rem;
+    position: sticky;
+    top: 2rem; /* "Прилипает" при прокрутке */
 }
 
+
+.cart-summary-card hr {
+    border-color: var(--border-dark, #333);
+}
+.cart-summary-card .btn-primary {
+    background-color: var(--accent, #600018);
+    border-color: var(--accent, #600018);
+}
+.cart-summary-card .btn-primary:hover {
+    background-color: var(--hover-accent, #800020);
+    border-color: var(--hover-accent, #800020);
+}
+
+/* Исправляем цвет текста в модальном окне */
+.modal-content {
+    background-color: #1e1e1e;
+    border: 1px solid var(--border-dark, #333);
+    color: #ffffff;
+}
+.modal-header {
+    border-bottom-color: var(--border-dark, #333);
+}
+.modal-footer {
+    border-top-color: var(--border-dark, #333);
+}
+/* Кнопка "Закрыть" в модальном окне */
+.modal-content .btn-close {
+    filter: invert(1) grayscale(100%) brightness(2);
+}
+
+/* Кнопка "Удалить" (крестик) */
+.cart-item-card .delete-btn {
+    flex-shrink: 0;
+    color: #888;
+    transition: color 0.2s ease;
+}
+.cart-item-card .delete-btn:hover {
+    color: var(--accent, #600018); /* Красный при наведении */
+}
 
 /* --- Стили для страницы оформления заказа --- */
 
@@ -3442,4 +3503,43 @@ input:focus, textarea:focus, select:focus {
         height: 36px;
         font-size: 1rem;
     }
+}
+
+
+/* --- Исправление цвета текста в полях ввода на тёмной теме --- */
+
+.card .form-control,
+.card .form-select {
+    color: #1e1e1e !important;           /* Тёмный текст для ввода */
+    background-color: #ffffff !important; /* Белый фон */
+}
+
+/* Исправление для выпадающих списков (опции) */
+.card .form-select option {
+    color: #1e1e1e;
+    background-color: #ffffff;
+}
+
+
+/* --- ИСПРАВЛЕНИЕ: Чёрный текст в полях форм на странице оформления заказа --- */
+.container .card .form-control,
+.container .card .form-select,
+.container .card input:not([type="submit"]):not(.btn),
+.container .card textarea,
+.container .card select {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+.container .card .form-select option {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+/* Сохраняем стиль для кнопки "Заказать" */
+.container .card .btn-primary,
+.container .card button[type="submit"] {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--text-light) !important;
 }

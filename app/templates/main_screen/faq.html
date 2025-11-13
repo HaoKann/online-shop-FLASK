@@ -1,34 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h1>{{ sub_title }}</h1>
-        <p class="lead text-muted">Здесь мы собрали ответы на самые популярные вопросы.</p>
+{# Используем тот же класс-обертку, что и в каталоге #}
+<div class="ready-pc-catalog">
+
+    {# --- 1. Секция "Hero" --- #}
+    {# Копируем стильный заголовок со страниц каталога #}
+    <div class="catalog-hero">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title mb-3">{{ sub_title }}</h1>
+                <p class="hero-subtitle">Здесь мы собрали ответы на самые популярные вопросы.</p>
+            </div>
+        </div>
     </div>
 
-    {% if grouped_faqs %}
-        {% for category, faqs_in_category in grouped_faqs.items() %}
-            <h3 class="faq-category-title">{{ category }}</h3>
-            <div class="accordion faq-accordion mb-4" id="accordion-{{ loop.index }}">
-                {% for faq in faqs_in_category %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-{{ faq.id }}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ faq.id }}">
-                                {{ faq.question }}
-                            </button>
-                        </h2>
-                        <div id="collapse-{{ faq.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ loop.index }}">
-                            <div class="accordion-body">
-                                {{ faq.answer | safe }}
+    {# --- 2. Секция с аккордеоном --- #}
+    <div class="container py-5">
+        {% if grouped_faqs %}
+            {% for category, faqs_in_category in grouped_faqs.items() %}
+                
+                {# Заголовок категории (он уже стилизован в вашем .css) #}
+                <h3 class="faq-category-title">{{ category }}</h3>
+                
+                {# Сам аккордеон (ваш код здесь уже был правильным) #}
+                <div class="accordion faq-accordion mb-4" id="accordion-{{ loop.index }}">
+                    {% for faq in faqs_in_category %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-{{ faq.id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ faq.id }}">
+                                    {{ faq.question }}
+                                </button>
+                            </h2>
+                            <div id="collapse-{{ faq.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ loop.index }}">
+                                <div class="accordion-body">
+                                    {{ faq.answer | safe }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            {# Улучшенный блок "Ничего не найдено" #}
+            <div class="empty-state text-center py-5">
+                <i class="bi bi-question-circle empty-icon"></i>
+                <h3 class="empty-title">Раздел находится в стадии наполнения</h3>
+                <p class="empty-text">Вопросы и ответы скоро появятся здесь.</p>
             </div>
-        {% endfor %}
-    {% else %}
-        <p class="text-center text-muted">Раздел находится в стадии наполнения. Вопросы скоро появятся здесь.</p>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

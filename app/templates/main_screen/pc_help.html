@@ -1,207 +1,212 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <section class="py-5 ">
+{# Используем тот же класс-обертку, что и в каталоге #}
+<div class="ready-pc-catalog">
+
+    {# --- 1. Секция "Hero" --- #}
+    <div class="catalog-hero">
         <div class="container">
-            <h1 class="text-center mb-4" style="color: white; font-weight: 700;">Помощь в выборе комплектующих</h1>
-            <p class="text-center text-muted mb-5">Найдите идеальные компоненты для вашего ПК с нашими рекомендациями</p>
+            <div class="hero-content text-center">
+                <h1 class="hero-title mb-3">Помощь в выборе комплектующих</h1>
+                <p class="hero-subtitle">Найдите идеальные компоненты для вашего ПК с нашими рекомендациями</p>
+            </div>
+        </div>
+    </div>
 
-            <div class="accordion" id="accordionExample">
-                <!-- Видеокарта -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            <i class="bi bi-gpu-card" style="margin-right: 10px;"></i> <strong>Как выбрать видеокарту (GPU)?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Видеокарта</strong> — это компонент компьютера, отвечающий за обработку и вывод изображения на экран. Она рендерит графику в играх, обрабатывает видео, помогает при работе с 3D, графическим дизайном и ускоряет вычисления в программах (например, монтаже или ИИ).</p>
-                            <p>Есть два типа видеокарт:</p>
-                            <ul class="list-unstyled">
-                                <li><strong>1. Встроенная (интегрированная)</strong> — находится в процессоре, подходит для базовых задач: браузер, видео, офис.</li>
-                                <li><strong>2. Дискретная (отдельная)</strong> — мощный отдельный компонент, нужен для игр, графики, монтажа и т.д.</li>
-                            </ul>
-                            <hr>
-                            <p><strong>Как подобрать видеокарту?</strong></p>
-                            <ol>
-                                <li><strong>Цель использования</strong>: Для интернета и фильмов мощная видеокарта не нужна. Для игр или монтажа — дискретная.</li>
-                                <li><strong>Разрешение экрана</strong>: Выше разрешение (Full HD, 4K) требует мощности для плавности.</li>
-                                <li><strong>Объем VRAM</strong>: 6–8 ГБ для Full HD, 12+ ГБ для 4K или тяжелых задач.</li>
-                                <li><strong>Совместимость</strong>: Проверка блока питания и размера корпуса.</li>
-                                <li><strong>Тесты</strong>: Смотрите FPS в обзорах.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.graphics_card') }}" class="btn btn-primary mt-3">Выбрать видеокарту</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Процессор -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            <i class="bi bi-cpu" style="margin-right: 10px;"></i> <strong>Как выбрать процессор (CPU)?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Процессор (CPU)</strong> — "мозг" компьютера, выполняющий все вычисления и команды.</p>
-                            <p>Основные характеристики: количество ядер, потоков, частота (ГГц) и архитектура.</p>
-                            <hr>
-                            <p><strong>Как подобрать процессор?</strong></p>
-                            <ol>
-                                <li><strong>Цель</strong>: Intel i3/Ryzen 3 для офиса, i5/Ryzen 5 для игр, i7/Ryzen 7 для монтажа.</li>
-                                <li><strong>Ядра и потоки</strong>: 4 ядра — минимум, 6–8 — для игр, 12+ — для профессиональных задач.</li>
-                                <li><strong>Частота</strong>: Выше ГГц — лучше для игр.</li>
-                                <li><strong>Совместимость</strong>: Подходит ли сокет (AM4, LGA1700).</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.processor') }}" class="btn btn-primary mt-3">Выбрать процессор</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Материнская плата -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            <i class="bi bi-motherboard" style="margin-right: 10px;"></i> <strong>Как выбрать материнскую плату?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Материнская плата</strong> — основа ПК, соединяющая все компоненты.</p>
-                            <hr>
-                            <p><strong>Как подобрать?</strong></p>
-                            <ol>
-                                <li><strong>Сокет</strong>: Совместим с процессором (LGA1700, AM4).</li>
-                                <li><strong>Форм-фактор</strong>: ATX для больших сборок, Mini-ITX для компактных.</li>
-                                <li><strong>Чипсет</strong>: Z690 для разгона, B/H для базовых задач.</li>
-                                <li><strong>Охлаждение</strong>: Поддержка вентиляторов и VRM.</li>
-                                <li><strong>Порты</strong>: USB, M.2, Wi-Fi.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.motherboard') }}" class="btn btn-primary mt-3">Выбрать материнскую плату</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Блок питания -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingFour">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            <i class="bi bi-plug" style="margin-right: 10px;"></i> <strong>Как выбрать блок питания?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Блок питания</strong> преобразует ток для работы ПК и стабилизирует напряжение.</p>
-                            <hr>
-                            <p><strong>Как подобрать?</strong></p>
-                            <ol>
-                                <li><strong>Мощность</strong>: 450–650 Вт для базовых ПК, 750+ Вт для мощных сборок.</li>
-                                <li><strong>КПД</strong>: 80 PLUS Gold/Bronze.</li>
-                                <li><strong>Разъемы</strong>: 24-pin, 8-pin CPU, 6+2-pin GPU.</li>
-                                <li><strong>Защита</strong>: От перегрузки и перегрева.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.power_supply_unit') }}" class="btn btn-primary mt-3">Выбрать блок питания</a> <!-- Исправлено на power_supply -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Оперативная память -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingFive">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                            <i class="bi bi-memory" style="margin-right: 10px;"></i> <strong>Как выбрать оперативную память (ОЗУ)?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Оперативная память (ОЗУ)</strong> — временное хранилище для текущих задач.</p>
-                            <hr>
-                            <p><strong>Как выбрать?</strong></p>
-                            <ol>
-                                <li><strong>Объем</strong>: 8 ГБ для офиса, 16 ГБ для игр, 32+ ГБ для монтажа.</li>
-                                <li><strong>Стандарт</strong>: DDR4 дешевле, DDR5 быстрее.</li>
-                                <li><strong>Частота</strong>: 2666–3600 МГц для DDR4, 4800+ МГц для DDR5.</li>
-                                <li><strong>Тайминги</strong>: Меньше CL — выше скорость.</li>
-                                <li><strong>Канальность</strong>: 2×8 ГБ лучше 1×16 ГБ.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.random_access_memory') }}" class="btn btn-primary mt-3">Выбрать ОЗУ</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Кулеры и системы охлаждения -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingSix">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                            <i class="bi bi-fan" style="margin-right: 10px;"></i> <strong>Как выбрать кулеры и системы охлаждения?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Кулеры и системы охлаждения</strong> отводят тепло от компонентов.</p>
-                            <hr>
-                            <p><strong>Как выбрать?</strong></p>
-                            <ol>
-                                <li><strong>TDP</strong>: Средний кулер для i5, СВО для i9.</li>
-                                <li><strong>Совместимость</strong>: Подходит ли сокет и корпус.</li>
-                                <li><strong>Шум</strong>: Выбирайте модели с низким уровнем дБ.</li>
-                                <li><strong>Бренд</strong>: Noctua, be quiet!, DeepCool.</li>
-                                <li><strong>RGB</strong>: По желанию для внешнего вида.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.cooling_system') }}" class="btn btn-primary mt-3">Выбрать кулер</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Жесткие диски и SSD -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingSeven">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                            <i class="bi bi-nvme" style="margin-right: 10px;"></i> <strong>Как выбрать жесткие диски и SSD?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseSeven" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Жёсткие диски (HDD) и SSD</strong> — устройства хранения данных.</p>
-                            <hr>
-                            <p><strong>Как выбрать?</strong></p>
-                            <ol>
-                                <li><strong>Цель</strong>: HDD для хранения, SSD для скорости.</li>
-                                <li><strong>Скорость</strong>: NVMe SSD для игр и видео.</li>
-                                <li><strong>Ёмкость</strong>: HDD для архивов, SSD для ОС.</li>
-                                <li><strong>Надёжность</strong>: SSD устойчивее к поломкам.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.storage') }}" class="btn btn-primary mt-3">Выбрать накопитель</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Корпус -->
-                <div class="accordion-item mb-3 shadow-sm">
-                    <h2 class="accordion-header" id="headingEight">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                            <i class="bi bi-pc" style="margin-right: 10px;"></i> <strong>Как выбрать корпус?</strong>
-                        </button>
-                    </h2>
-                    <div id="collapseEight" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p><strong>Корпус</strong> — оболочка для компонентов ПК.</p>
-                            <hr>
-                            <p><strong>Как выбрать?</strong></p>
-                            <ol>
-                                <li><strong>Форм-фактор</strong>: ATX для больших, Mini-ITX для компактных.</li>
-                                <li><strong>Охлаждение</strong>: Поддержка вентиляторов и СВО.</li>
-                                <li><strong>Порты</strong>: USB, аудио на передней панели.</li>
-                                <li><strong>Кабели</strong>: Удобство управления проводами.</li>
-                                <li><strong>Размер</strong>: Подходит ли для видеокарты.</li>
-                            </ol>
-                            <a href="{{ url_for('catalog.computer_case') }}" class="btn btn-primary mt-3">Выбрать корпус</a>
-                        </div>
+    {# --- 2. Секция с аккордеоном --- #}
+    <div class="container py-5">
+        
+        <div class="accordion faq-accordion" id="accordionExample">
+            
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        <i class="bi bi-gpu-card me-2"></i> <strong>Как выбрать видеокарту (GPU)?</strong>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Видеокарта</strong> — это компонент компьютера, отвечающий за обработку и вывод изображения на экран. Она рендерит графику в играх, обрабатывает видео, помогает при работе с 3D, графическим дизайном и ускоряет вычисления в программах (например, монтаже или ИИ).</p>
+                        <p>Есть два типа видеокарт:</p>
+                        <ul class="list-unstyled">
+                            <li><strong>1. Встроенная (интегрированная)</strong> — находится в процессоре, подходит для базовых задач: браузер, видео, офис.</li>
+                            <li><strong>2. Дискретная (отдельная)</strong> — мощный отдельный компонент, нужен для игр, графики, монтажа и т.д.</li>
+                        </ul>
+                        <hr>
+                        <p><strong>Как подобрать видеокарту?</strong></p>
+                        <ol>
+                            <li><strong>Цель использования</strong>: Для интернета и фильмов мощная видеокарта не нужна. Для игр или монтажа — дискретная.</li>
+                            <li><strong>Разрешение экрана</strong>: Выше разрешение (Full HD, 4K) требует мощности для плавности.</li>
+                            <li><strong>Объем VRAM</strong>: 6–8 ГБ для Full HD, 12+ ГБ для 4K или тяжелых задач.</li>
+                            <li><strong>Совместимость</strong>: Проверка блока питания и размера корпуса.</li>
+                            <li><strong>Тесты</strong>: Смотрите FPS в обзорах.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.graphics_card') }}" class="btn btn-primary mt-3">Выбрать видеокарту</a>
                     </div>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        <i class="bi bi-cpu me-2"></i> <strong>Как выбрать процессор (CPU)?</strong>
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Процессор (CPU)</strong> — "мозг" компьютера, выполняющий все вычисления и команды.</p>
+                        <p>Основные характеристики: количество ядер, потоков, частота (ГГц) и архитектура.</p>
+                        <hr>
+                        <p><strong>Как подобрать процессор?</strong></p>
+                        <ol>
+                            <li><strong>Цель</strong>: Intel i3/Ryzen 3 для офиса, i5/Ryzen 5 для игр, i7/Ryzen 7 для монтажа.</li>
+                            <li><strong>Ядра и потоки</strong>: 4 ядра — минимум, 6–8 — для игр, 12+ — для профессиональных задач.</li>
+                            <li><strong>Частота</strong>: Выше ГГц — лучше для игр.</li>
+                            <li><strong>Совместимость</strong>: Подходит ли сокет (AM4, LGA1700).</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.processor') }}" class="btn btn-primary mt-3">Выбрать процессор</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        <i class="bi bi-motherboard me-2"></i> <strong>Как выбрать материнскую плату?</strong>
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Материнская плата</strong> — основа ПК, соединяющая все компоненты.</p>
+                        <hr>
+                        <p><strong>Как подобрать?</strong></p>
+                        <ol>
+                            <li><strong>Сокет</strong>: Совместим с процессором (LGA1700, AM4).</li>
+                            <li><strong>Форм-фактор</strong>: ATX для больших сборок, Mini-ITX для компактных.</li>
+                            <li><strong>Чипсет</strong>: Z690 для разгона, B/H для базовых задач.</li>
+                            <li><strong>Охлаждение</strong>: Поддержка вентиляторов и VRM.</li>
+                            <li><strong>Порты</strong>: USB, M.2, Wi-Fi.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.motherboard') }}" class="btn btn-primary mt-3">Выбрать материнскую плату</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        <i class="bi bi-plug me-2"></i> <strong>Как выбрать блок питания?</strong>
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Блок питания</strong> преобразует ток для работы ПК и стабилизирует напряжение.</p>
+                        <hr>
+                        <p><strong>Как подобрать?</strong></p>
+                        <ol>
+                            <li><strong>Мощность</strong>: 450–650 Вт для базовых ПК, 750+ Вт для мощных сборок.</li>
+                            <li><strong>КПД</strong>: 80 PLUS Gold/Bronze.</li>
+                            <li><strong>Разъемы</strong>: 24-pin, 8-pin CPU, 6+2-pin GPU.</li>
+                            <li><strong>Защита</strong>: От перегрузки и перегрева.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.power_supply_unit') }}" class="btn btn-primary mt-3">Выбрать блок питания</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                        <i class="bi bi-memory me-2"></i> <strong>Как выбрать оперативную память (ОЗУ)?</strong>
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Оперативная память (ОЗУ)</strong> — временное хранилище для текущих задач.</p>
+                        <hr>
+                        <p><strong>Как выбрать?</strong></p>
+                        <ol>
+                            <li><strong>Объем</strong>: 8 ГБ для офиса, 16 ГБ для игр, 32+ ГБ для монтажа.</li>
+                            <li><strong>Стандарт</strong>: DDR4 дешевле, DDR5 быстрее.</li>
+                            <li><strong>Частота</strong>: 2666–3600 МГц для DDR4, 4800+ МГц для DDR5.</li>
+                            <li><strong>Тайминги</strong>: Меньше CL — выше скорость.</li>
+                            <li><strong>Канальность</strong>: 2×8 ГБ лучше 1×16 ГБ.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.random_access_memory') }}" class="btn btn-primary mt-3">Выбрать ОЗУ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                        <i class="bi bi-fan me-2"></i> <strong>Как выбрать кулеры и системы охлаждения?</strong>
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Кулеры и системы охлаждения</strong> отводят тепло от компонентов.</p>
+                        <hr>
+                        <p><strong>Как выбрать?</strong></p>
+                        <ol>
+                            <li><strong>TDP</strong>: Средний кулер для i5, СВО для i9.</li>
+                            <li><strong>Совместимость</strong>: Подходит ли сокет и корпус.</li>
+                            <li><strong>Шум</strong>: Выбирайте модели с низким уровнем дБ.</li>
+                            <li><strong>Бренд</strong>: Noctua, be quiet!, DeepCool.</li>
+                            <li><strong>RGB</strong>: По желанию для внешнего вида.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.cooling_system') }}" class="btn btn-primary mt-3">Выбрать кулер</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSeven">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven">
+                        <i class="bi bi-nvme me-2"></i> <strong>Как выбрать жесткие диски и SSD?</strong>
+                    </button>
+                </h2>
+                <div id="collapseSeven" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Жёсткие диски (HDD) и SSD</strong> — устройства хранения данных.</p>
+                        <hr>
+                        <p><strong>Как выбрать?</strong></p>
+                        <ol>
+                            <li><strong>Цель</strong>: HDD для хранения, SSD для скорости.</li>
+                            <li><strong>Скорость</strong>: NVMe SSD для игр и видео.</li>
+                            <li><strong>Ёмкость</strong>: HDD для архивов, SSD для ОС.</li>
+                            <li><strong>Надёжность</strong>: SSD устойчивее к поломкам.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.storage') }}" class="btn btn-primary mt-3">Выбрать накопитель</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEight">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight">
+                        <i class="bi bi-pc me-2"></i> <strong>Как выбрать корпус?</strong>
+                    </button>
+                </h2>
+                <div id="collapseEight" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Корпус</strong> — оболочка для компонентов ПК.</p>
+                        <hr>
+                        <p><strong>Как выбрать?</strong></p>
+                        <ol>
+                            <li><strong>Форм-фактор</strong>: ATX для больших, Mini-ITX для компактных.</li>
+                            <li><strong>Охлаждение</strong>: Поддержка вентиляторов и СВО.</li>
+                            <li><strong>Порты</strong>: USB, аудио на передней панели.</li>
+                            <li><strong>Кабели</strong>: Удобство управления проводами.</li>
+                            <li><strong>Размер</strong>: Подходит ли для видеокарты.</li>
+                        </ol>
+                        <a href="{{ url_for('catalog.computer_case') }}" class="btn btn-primary mt-3">Выбрать корпус</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</div>
 {% endblock %}
