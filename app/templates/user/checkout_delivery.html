@@ -1,31 +1,178 @@
 {% extends 'base.html' %}
-{% from 'bootstrap5/form.html' import render_form %}
-
-{% block styles %}
-{{ super() }}
-<style>
-    select, input, textarea {
-        color: black !important;
-    }
-    
-    option {
-        color: black !important;
-    }
-</style>
-{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="text-center mb-4">Оформление заказа</h1>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Укажите детали доставки</h5>
-                    {{ render_form(form) }}
+        <div class="col-lg-6 col-md-8">
+            
+            {# --- 1. Блок шагов (Stepper) --- #}
+            <div class="checkout-steps mb-5">
+                <div class="step completed">
+                    <div class="step-icon"><i class="bi bi-cart-check"></i></div>
+                    <span class="step-label">Корзина</span>
+                </div>
+                <div class="step-line completed"></div>
+                <div class="step active">
+                    <div class="step-icon"><i class="bi bi-truck"></i></div>
+                    <span class="step-label">Доставка</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-icon"><i class="bi bi-credit-card"></i></div>
+                    <span class="step-label">Оплата</span>
                 </div>
             </div>
+
+            {# --- 2. Карточка формы --- #}
+            <div class="card checkout-card shadow-lg">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="text-center mb-4">Детали доставки</h2>
+                    
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+
+                        {# Адрес #}
+                        <div class="mb-4">
+                            {{ form.address.label(class="form-label") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                                {{ form.address(class="form-control", placeholder="Улица, дом, квартира") }}
+                            </div>
+                            {% for error in form.address.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {# Способ доставки #}
+                        <div class="mb-4">
+                            {{ form.way_of_delivery.label(class="form-label") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+                                {{ form.way_of_delivery(class="form-select") }}
+                            </div>
+                        </div>
+
+                        {# Время доставки #}
+                        <div class="mb-4">
+                            {{ form.time_of_arrival.label(class="form-label") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-clock-fill"></i></span>
+                                {{ form.time_of_arrival(class="form-select") }}
+                            </div>
+                        </div>
+
+                        {# Кнопка #}
+                        <div class="d-grid mt-5">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+{# --- 3. Стили (Добавьте это в style.css для чистоты, или оставьте здесь) --- #}
+<style>
+    /* Стили для карточки оформления */
+    .checkout-card {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 16px;
+        color: #fff;
+    }
+
+    /* Стили для полей ввода на темном фоне */
+    .checkout-card .form-label {
+        color: #ccc;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .checkout-card .input-group-text {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: var(--accent, #600018);
+    }
+
+    .checkout-card .form-control,
+    .checkout-card .form-select {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #fff; /* Белый текст! */
+        padding: 0.75rem 1rem;
+    }
+
+    .checkout-card .form-control:focus,
+    .checkout-card .form-select:focus {
+        background-color: #333;
+        border-color: var(--accent, #600018);
+        color: #fff;
+        box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25);
+    }
+
+    /* Стили для Степпера (Шагов) */
+    .checkout-steps {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #6c757d;
+        position: relative;
+        z-index: 1;
+    }
+    .step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #2a2a2a;
+        border: 2px solid #444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+    }
+    .step-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .step-line {
+        flex-grow: 1;
+        height: 2px;
+        background-color: #444;
+        margin: 0 10px;
+        margin-bottom: 20px; /* Выравнивание с иконками */
+        max-width: 100px;
+    }
+
+    /* Активный шаг */
+    .step.active .step-icon {
+        background-color: var(--accent, #600018);
+        border-color: var(--accent, #600018);
+        color: #fff;
+        box-shadow: 0 0 10px rgba(96, 0, 24, 0.5);
+    }
+    .step.active .step-label {
+        color: #fff;
+    }
+
+    /* Завершенный шаг */
+    .step.completed .step-icon {
+        background-color: #198754; /* Зеленый */
+        border-color: #198754;
+        color: #fff;
+    }
+    .step.completed .step-label {
+        color: #198754;
+    }
+    .step-line.completed {
+        background-color: #198754;
+    }
+</style>
 {% endblock %}
