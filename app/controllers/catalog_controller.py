@@ -37,7 +37,7 @@ def graphics_card():
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
 
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title ='Видеокарты', products=gpu_products, endpoint='graphics_card',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title ='Видеокарты', products=gpu_products, endpoint='catalog.graphics_card',csrf_form=csrf_form)
 
 @catalog_bp.route('/cpu')
 def processor():
@@ -49,7 +49,7 @@ def processor():
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
     
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Процессоры', products=processor_products, endpoint='processor',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Процессоры', products=processor_products, endpoint='catalog.processor',csrf_form=csrf_form)
 
 @catalog_bp.route('/motherboard')
 def motherboard():
@@ -60,7 +60,7 @@ def motherboard():
    
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Материнские платы', products=motherboard_products,endpoint='motherboard',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Материнские платы', products=motherboard_products,endpoint='catalog.motherboard',csrf_form=csrf_form)
 
 @catalog_bp.route('/psu')
 def power_supply_unit():
@@ -71,7 +71,7 @@ def power_supply_unit():
     
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Блоки питания', products=psu_products,endpoint='power_supply_unit',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Блоки питания', products=psu_products,endpoint='catalog.power_supply_unit',csrf_form=csrf_form)
 
 @catalog_bp.route('/ram')
 def random_access_memory():
@@ -82,7 +82,7 @@ def random_access_memory():
     
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Оперативная память', products=ram_products,endpoint='random_access_memory',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Оперативная память', products=ram_products,endpoint='catalog.random_access_memory',csrf_form=csrf_form)
 
 @catalog_bp.route('/cooler')
 def cooling_system():
@@ -93,7 +93,7 @@ def cooling_system():
     
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Кулеры и системы охлаждения', products=cooler_products,endpoint='cooling_system',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Кулеры и системы охлаждения', products=cooler_products,endpoint='catalog.cooling_system',csrf_form=csrf_form)
 
 @catalog_bp.route('/storage')
 def storage():
@@ -104,7 +104,7 @@ def storage():
     
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Жесткие диски и твердотельные накопители', products=storage_products,endpoint='storage',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Жесткие диски и твердотельные накопители', products=storage_products,endpoint='catalog.storage',csrf_form=csrf_form)
 
 @catalog_bp.route('/pc_case')
 def computer_case():
@@ -115,7 +115,7 @@ def computer_case():
     
     csrf_form = EmptyForm()
     current_sort = request.args.get('sort', 'newest')
-    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Корпуса', products=case_products,endpoint='computer_case',csrf_form=csrf_form)
+    return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Корпуса', products=case_products,endpoint='catalog.computer_case',csrf_form=csrf_form)
 
 
 @catalog_bp.route('/product_details/<int:prod_id>')
