@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="ready-pc-catalog">
-    {# Hero Section: Используем 'sub_title', которую вы передаёте из контроллера #}
+    {# Hero Section #}
     <div class="catalog-hero">
         <div class="container">
             <div class="hero-content text-center">
@@ -12,33 +12,65 @@
         </div>
     </div>
 
-    {# --- Блок сортировки --- #}
-        <div class="d-flex justify-content-end mb-4">
-            <form method="GET" action="" class="d-flex align-items-center">
-                <label for="sort" class="me-2 text-muted">Сортировать:</label>
-                <select name="sort" id="sort" class="form-select form-select-sm" style="width: auto; background-color: #1e1e1e; color: #fff; border-color: #444;" onchange="this.form.submit()">
+    {# --- Улучшенный блок сортировки (Скопирован для единого стиля) --- #}
+    <div class="d-flex justify-content-end mb-4 container">
+        <form method="GET" action="" class="d-flex align-items-center sort-form">
+            
+            <i class="bi bi-sort-down me-2" style="font-size: 1.2rem; color: #888;"></i>
+            
+            <div class="position-relative">
+                <select name="sort" id="sort" class="form-select form-select-sm custom-sort-select" onchange="this.form.submit()">
                     <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Сначала новые</option>
-                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Сначала дешевые</option>
-                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Сначала дорогие</option>
+                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Дешевые ↑</option>
+                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Дорогие ↓</option>
                 </select>
-                
-                {# Сохраняем текущую страницу поиска, если она есть (опционально) #}
-                {% if request.args.get('q') %}
-                    <input type="hidden" name="q" value="{{ request.args.get('q') }}">
-                {% endif %}
-            </form>
-        </div>
-        {# --- Конец блока сортировки --- #}
+            </div>
+
+            {% if request.args.get('q') %}
+                <input type="hidden" name="q" value="{{ request.args.get('q') }}">
+            {% endif %}
+        </form>
+    </div>
+
+    {# CSS стили для сортировки (можно вынести в style.css, но пока оставим здесь) #}
+    <style>
+        .custom-sort-select {
+            background-color: #2a2a2a; 
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 8px; 
+            padding: 0.4rem 2rem 0.4rem 1rem; 
+            cursor: pointer;
+            font-size: 0.9rem;
+            appearance: none; 
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 10px 6px;
+            transition: all 0.2s ease;
+            min-width: 160px;
+        }
+        .custom-sort-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25);
+            border-color: #600018;
+        }
+        .custom-sort-select:hover {
+            background-color: #333;
+            border-color: #555;
+        }
+    </style>
+    {# --- Конец блока сортировки --- #}
+
 
     <div class="container py-5">
         {% if products.items %}
-            {# Products Grid: Используем новую сетку #}
+            {# Сетка товаров #}
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 {% for product in products.items %}
                     <div class="col">
-                        <div class="pc-card"> {# Новый класс карточки #}
+                        <div class="pc-card h-100 d-flex flex-column">
                             
-                            {# Блок 1: Кликабельная часть (Изображение и Название) #}
+                            {# Картинка и Название #}
                             <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
                                 <div class="pc-card-image-wrapper">
                                     {% if product.discount %}
@@ -56,12 +88,11 @@
                                 </div>
                             </a>
                             
-                            {# Блок 2: Футер (Цена и Кнопки) #}
-                            <div class="pc-card-footer">
+                            {# Футер (Цена и Кнопки) #}
+                            <div class="pc-card-footer mt-auto">
                                 <div class="price-wrapper">
-                                    {# Логика отображения скидки #}
                                     {% if product.discount %}
-                                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 1.2rem; display: block;">
+                                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
                                             {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
                                         </span>
                                         <span class="price-value" style="color: #28a745;">
@@ -75,7 +106,6 @@
                                     {% endif %}
                                 </div>
                                 
-                                {# Две кнопки: "В избранное" и "В корзину" #}
                                 <div class="d-flex gap-2">
                                     <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
                                         {{ csrf_form.hidden_tag() }}
@@ -91,6 +121,7 @@
                                     </form>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 {% endfor %}
@@ -98,7 +129,6 @@
 
             {# Пагинация #}
             <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
-                {# Используем переменную 'endpoint', которую вы передаёте из контроллера #}
                 {{ render_pagination(products, endpoint=endpoint) }}
             </nav>
 

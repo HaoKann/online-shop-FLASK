@@ -3,43 +3,77 @@
 
 {% block content %}
 <div class="ready-pc-catalog">
-    {# Hero Section (взят со страницы сборок, но заголовок изменён) #}
+    {# Hero Section: Используем 'sub_title', которую вы передаёте из контроллера #}
     <div class="catalog-hero">
-        <div class="container">
-            <div class="hero-content text-center">
-                <h1 class="hero-title mb-3">Каталог товаров</h1>
-                <p class="hero-subtitle">Лучшие комплектующие для вашего компьютера</p>
-            </div>
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="hero-title mb-3">Каталог</h1>
+            <p class="hero-subtitle">Лучшие комплектующие для вашего компьютера</p>
         </div>
     </div>
+</div>
 
-        {# --- Блок сортировки --- #}
-        <div class="d-flex justify-content-end mb-4">
-            <form method="GET" action="" class="d-flex align-items-center">
-                <label for="sort" class="me-2 text-muted">Сортировать:</label>
-                <select name="sort" id="sort" class="form-select form-select-sm" style="width: auto; background-color: #1e1e1e; color: #fff; border-color: #444;" onchange="this.form.submit()">
+    {# --- Улучшенный блок сортировки --- #}
+    <div class="d-flex justify-content-end mb-4 container">
+        <form method="GET" action="" class="d-flex align-items-center sort-form">
+            
+            {# Иконка сортировки #}
+            <i class="bi bi-sort-down me-2" style="font-size: 1.2rem; color: #888;"></i>
+            
+            <div class="position-relative">
+                <select name="sort" id="sort" class="form-select form-select-sm custom-sort-select" onchange="this.form.submit()">
                     <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Сначала новые</option>
-                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Сначала дешевые</option>
-                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Сначала дорогие</option>
+                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Дешевые ↑</option>
+                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Дорогие ↓</option>
                 </select>
-                
-                {# Сохраняем текущую страницу поиска, если она есть (опционально) #}
-                {% if request.args.get('q') %}
-                    <input type="hidden" name="q" value="{{ request.args.get('q') }}">
-                {% endif %}
-            </form>
-        </div>
-        {# --- Конец блока сортировки --- #}
+            </div>
 
+            {# Сохраняем текущий поисковый запрос, если он есть (опционально) #}
+            {% if request.args.get('q') %}
+                <input type="hidden" name="q" value="{{ request.args.get('q') }}">
+            {% endif %}
+        </form>
+    </div>
+
+    {# --- CSS стили (можно добавить в style.css) --- #}
+    <style>
+        .custom-sort-select {
+            background-color: #2a2a2a; /* Темный фон, чуть светлее основного */
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 8px; /* Скругленные углы */
+            padding: 0.4rem 2rem 0.4rem 1rem; /* Отступы для текста и стрелочки */
+            cursor: pointer;
+            font-size: 0.9rem;
+            appearance: none; /* Убираем стандартную стрелочку браузера */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 10px 6px;
+            transition: all 0.2s ease;
+            min-width: 160px;
+        }
+
+        .custom-sort-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25); /* Красная тень при фокусе */
+            border-color: #600018;
+        }
+
+        .custom-sort-select:hover {
+            background-color: #333; /* Подсветка при наведении */
+            border-color: #555;
+        }
+    </style>
+    {# --- Конец блока сортировки --- #}
 
     <div class="container py-5">
         {% if products.items %}
-            {# Products Grid (структура от сборок) #}
+            {# Products Grid: Используем новую сетку #}
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 {% for product in products.items %}
                     <div class="col">
                         <div class="pc-card h-100 d-flex flex-column">
-                            {# Image Section (данные из каталога) #}
+                            {# Блок 1: Кликабельная часть (Изображение и Название) #}
                             <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
                                 <div class="pc-card-image-wrapper">
                                     {% if product.discount %}
@@ -52,21 +86,12 @@
                                         <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
                                     </div>
                                 </div>
+                                <div class="pc-card-body">
+                                    <h5 class="pc-card-title">{{ product.name }}</h5>
+                                </div>
                             </a>
                             
-                            {# Content Section (данные из каталога) #}
-                            <div class="pc-card-body">
-                                <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
-                                    <h5 class="pc-card-title">{{ product.name }}</h5>
-                                </a>
-                                {# 
-                                  Здесь нет блока .pc-specs, так как в каталоге
-                                  мы показываем только название и цену.
-                                  Это и есть отличие "не точь-в-точь".
-                                #}
-                            </div>
-                            
-                            {# Footer Section (логика цены и кнопок из каталога) #}
+                            {# Блок 2: Футер (Цена и Кнопки) #}
                             <div class="pc-card-footer mt-auto">
                                 <div class="price-wrapper">
                                     {# Логика отображения скидки #}
@@ -106,7 +131,7 @@
                 {% endfor %}
             </div>
 
-            {# Pagination #}
+            {# Пагинация #}
             <nav aria-label="Page navigation" class="mt-5 d-flex justify-content-center">
                 {{ render_pagination(products, endpoint=endpoint) }}
             </nav>
@@ -115,7 +140,7 @@
             <div class="empty-state text-center py-5">
                 <i class="bi bi-inbox empty-icon"></i>
                 <h3 class="empty-title">Товары не найдены</h3>
-                <p class="empty-text">В каталоге пока нет товаров.</p>
+                <p class="empty-text">В этой категории пока нет товаров.</p>
             </div>
         {% endif %}
     </div>

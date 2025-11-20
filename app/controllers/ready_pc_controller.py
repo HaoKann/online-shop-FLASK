@@ -10,11 +10,21 @@ def ready_pc():
     #    Если номер не указан, по умолчанию будет 1.
     page = request.args.get('page', 1, type=int)
     #  2. Вместо .all() используем .paginate().
-    all_ready_pc = ReadyPC.query.order_by(ReadyPC.price.asc()).paginate(page=page, per_page=9, error_out=False)
+    query = ReadyPC.query
+    current_sort = request.args.get('sort', 'newest')
+
+    if current_sort == 'price_asc':
+        query = query.order_by(ReadyPC.price.asc())
+    elif current_sort == 'price_desc':
+        query = query.order_by(ReadyPC.price.desc())
+    else:
+        query = query.order_by(ReadyPC.id.desc())
+
+    all_ready_pc = query.paginate(page=page, per_page=9, error_out=False)
 
     csrf_form = EmptyForm()
 
-    return render_template('main_screen/ready_pc.html', all_ready_pc=all_ready_pc, csrf_form=csrf_form)
+    return render_template('main_screen/ready_pc.html', all_ready_pc=all_ready_pc, csrf_form=csrf_form, current_sort=current_sort)
 
 
 @ready_pc_bp.route('/ready_pc/<int:build_id>')
