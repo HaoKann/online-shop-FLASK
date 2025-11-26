@@ -1,0 +1,39 @@
+services:
+  # 1. Сервис Базы Данных
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: shop_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Чтобы можно было подключиться через DBeaver снаружи
+
+  # 2. Сервис Вашего Приложения
+  web:
+    build: .
+    restart: always
+    ports:
+      - "8000:5000"
+    environment:
+      # Самое важное: указываем путь к БД внутри сети Docker
+      # Формат: postgresql://user:password@SERVICE_NAME:5432/dbname
+      SQLALCHEMY_DATABASE_URI: postgresql://postgres:password@db:5432/shop_db
+      FLASK_APP: run.py
+      FLASK_DEBUG: 1
+      # Не забудьте про ключи Stripe и секретный ключ Flask!
+      # Лучше вынести их в .env файл, но для теста можно прописать тут
+      SECRET_KEY: "oidsngoisdngiodsnoipngsdfopgsfd"
+      STRIPE_PUBLISHABLE_KEY: "pk_test_51RlSB7CRyOe06kAPIN533V60LCzry50qpYyIdy60XKEipxXjLBNhoSW0IKhR99XOWA7upCjGujp59XsOdatUJMOa002vSbkJuv" 
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
+    depends_on:
+      - db
+    volumes:
+      # Маппинг папок, чтобы изменения кода на Windows сразу попадали в контейнер
+      - .:/app
+
+volumes:
+  postgres_data:
