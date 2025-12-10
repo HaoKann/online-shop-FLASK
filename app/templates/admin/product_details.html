@@ -11,131 +11,196 @@
     </div>
 
     <div class="row g-4">
+        
+        {# ЛЕВАЯ КОЛОНКА (8/12) #}
         <div class="col-lg-8">
-            <div class="admin-card">
-                <h5 class="admin-card-title">Основная информация</h5>
-                <dl class="row">
-                    <dt class="col-sm-3">ID</dt>
-                    <dd class="col-sm-9">{{ product.id }}</dd>
+            
+            {# --- БЛОК 1: ОСНОВНАЯ ИНФОРМАЦИЯ --- #}
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title"><i class="bi bi-info-circle me-2"></i> Общая информация</h5>
+                <dl class="admin-detail-list row">
+                    <dt class="col-sm-3 text-muted">ID / Статус</dt>
+                    <dd class="col-sm-9">
+                        <span class="id-tag me-2">#{{ product.id }}</span>
+                        {% if product.is_active %}
+                            <span class="badge bg-success">Активен</span>
+                        {% else %}
+                            <span class="badge bg-danger">В архиве</span>
+                        {% endif %}
+                    </dd>
                     
-                    <dt class="col-sm-3">Название</dt>
-                    <dd class="col-sm-9">{{ product.name }}</dd>
+                    <dt class="col-sm-3 text-muted">Название</dt>
+                    <dd class="col-sm-9 fw-bold">{{ product.name }}</dd>
 
-                    <dt class="col-sm-3">Категория</dt>
-                    <dd class="col-sm-9">{{ product.category.slug }}</dd>
+                    <dt class="col-sm-3 text-muted">Категория</dt>
+                    <dd class="col-sm-9">{{ product.category.name }} ({{ product.category.slug }})</dd>
 
-                    <dt class="col-sm-3">Цена</dt>
+                    <dt class="col-sm-3 text-muted">Базовая цена</dt>
                     <dd class="col-sm-9">{{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸</dd>
 
-                    <dt class="col-sm-3">Скидка</dt>
-                    <dd class="col-sm-9">{{ product.discount or 0 }}%</dd>
+                    <dt class="col-sm-3 text-muted">Скидка</dt>
+                    <dd class="col-sm-9 text-danger fw-bold">{{ product.discount or 0 }}%</dd>
+
+                    <dt class="col-sm-3 text-muted">Финальная цена</dt>
+                    <dd class="col-sm-9 text-success fw-bold fs-5">
+                        {{ "{:,.0f}".format(product.price * (1 - product.discount/100) if product.discount else product.price).replace(",", " ") }} ₸
+                    </dd>
                 </dl>
             </div>
 
-<div class="admin-card mt-4">
-    <h5 class="admin-card-title">Характеристики</h5>
+            {# --- БЛОК 2: ТЕКУЩИЕ ХАРАКТЕРИСТИКИ (с кнопками) --- #}
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title"><i class="bi bi-clipboard-data me-2"></i> Текущие характеристики</h5>
 
-    {% if product.characteristics.count() > 0 %}
-        <dl class="row">
-            {% for spec in product.characteristics %}
-                <dt class="col-sm-5">{{ spec.name }}</dt>
+                {% if product.characteristics.count() > 0 %}
+                    <dl class="admin-detail-list row">
+                        {% for spec in product.characteristics %}
+                            <dt class="col-sm-5 text-muted">{{ spec.name }}</dt>
+                            
+                            <dd class="col-sm-7 d-flex justify-content-between align-items-center spec-item-row">
+                                
+                                <span class="spec-value-text">{{ spec.value }} {{ spec.value_type if spec.value_type != 'text' else '' }}</span>
+                                
+                                <div class="spec-actions d-flex">
+                                    <a href="{{ url_for('admin.edit_characteristic', characteristic_id=spec.id) }}" class="action-icon action-edit me-2" title="Редактировать">
+                                        <i class="bi bi-pencil-fill"></i> 
+                                    </a>
 
-                <dd class="col-sm-7 d-flex justify-content-between align-items-center">
-    
-                <span>{{ spec.value }}</span>
-                
-                {# Оборачиваем обе кнопки в один div, чтобы они были вместе #}
-                <div class="d-flex">
-                    
-                    <a href="{{ url_for('admin.edit_characteristic', characteristic_id=spec.id) }}" class="action-icon action-edit me-2" title="Редактировать">
-                        <i class="bi bi-pencil-fill"></i> 
-                    </a>
-
-                    <form action="{{ url_for('admin.admin_delete_characteristic', characteristic_id=spec.id) }}" 
-                        method="POST" 
-                        onsubmit="return confirm('Вы уверены, что хотите удалить эту характеристику?');"
-                        class="ms-2">
-                        
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Удалить характеристику">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </form>
-
-                </div>
-
-            </dd>
-            {% endfor %}
-        </dl>
-    {% else %}
-        <p class="text-muted">Для этого товара характеристики ещё не добавлены.</p>
-    {% endif %}
-</div>
-
-            {# --- НАЧАЛО БЛОКА ОТОБРАЖЕНИЯ ФОТОГРАФИЙ --- #}
-<div class="admin-card mt-4">
-    <h5 class="admin-card-title">Фотографии</h5>
-    <div class="row g-3 mb-3"> 
-        {% if product.photos.count() > 0 %}
-            {% for photo in product.photos %}
-                <div class="col-4">
-                    <img src="{{ photo.get_photo() }}"
-                         alt="Фото продукта: {{ product.name }}"
-                         class="img-fluid rounded"
-                         style="max-height: 150px; object-fit: cover;">
-                    <!-- <small class="text-muted">{{ photo.description or 'Без описания' }}</small> -->
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-muted">Фотографий нет.</p>
-            <img src="{{ product.get_first_photo() }}" alt="Фото по умолчанию" class="img-fluid rounded" style="max-height: 150px; object-fit: cover;">
-        {% endif %}
-    </div>
-    {# --- ДОБАВЛЯЕМ ФОРМУ ЗАГРУЗКИ ФОТО СЮДА --- #}
-    <h6 class="admin-card-title mt-4 pt-3 border-top">Загрузить/Заменить фото</h6> {# Отделяем заголовок #}
-    <form method="POST" enctype="multipart/form-data">
-        {{ photo_form.hidden_tag() }}
-        {{ render_form(photo_form) }}
-    </form>
-</div>
-{# --- КОНЕЦ БЛОКА ОТОБРАЖЕНИЯ ФОТОГРАФИЙ --- #}
-
-
-{# --- НАЧАЛО НОВОГО БЛОКА ХАРАКТЕРИСТИК --- #}
-<div class="admin-form-card mt-4">
-    <h5 class="admin-card-title">Характеристики</h5>
-    <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
-        {{ characteristics_form.hidden_tag() }} {# Используем токен из этой формы #}
-
-        {# Проходим по ШАБЛОНУ обязательных характеристик #}
-        {% for spec_template in required_specs %}
-            <div class="mb-3">
-                <label for="spec_{{ spec_template.id }}" class="form-label">{{ spec_template.name }}</label>
-
-                {# Проверяем, какой тип у характеристики #}
-                {% if spec_template.value_type == 'integer' %}
-                    <input type="number"
-                           class="form-control"
-                           id="spec_{{ spec_template.id }}"
-                           name="spec_{{ spec_template.name }}"
-                           value="{{ spec_values.get(spec_template.name, '') }}">
+                                    <form action="{{ url_for('admin.admin_delete_characteristic', characteristic_id=spec.id) }}" 
+                                        method="POST" 
+                                        onsubmit="return confirm('Вы уверены, что хотите удалить характеристику {{ spec.name }}?');">
+                                        
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="action-icon action-delete" title="Удалить">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </dd>
+                        {% endfor %}
+                    </dl>
                 {% else %}
-                    <input type="text"
-                           class="form-control"
-                           id="spec_{{ spec_template.id }}"
-                           name="spec_{{ spec_template.name }}"
-                           value="{{ spec_values.get(spec_template.name, '') }}">
+                    <p class="text-muted">Для этого товара характеристики ещё не добавлены.</p>
                 {% endif %}
             </div>
-        {% endfor %}
 
-        {% if required_specs %}
-        <button type="submit" class="btn btn-primary mt-2">Сохранить характеристики</button>
-        {% else %}
-        <p class="text-muted">Для категории этого товара (<a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}">{{ product.category.name }}</a>) ещё не задан шаблон характеристик.</p>
-        {% endif %}
+            {# --- БЛОК 3: ФОТОГРАФИИ (с удалением) --- #}
+            <div class="admin-card mt-4">
+                <h5 class="admin-card-title"><i class="bi bi-camera me-2"></i> Фотографии</h5>
+                <div class="row g-3 mb-3 photo-grid-wrapper"> 
+                    {% if product.photos.count() > 0 %}
+                        {% for photo in product.photos %}
+                            <div class="col-3 photo-item">
+                                <img src="{{ photo.get_photo() }}"
+                                     alt="Фото продукта: {{ product.name }}"
+                                     class="img-fluid rounded photo-thumbnail">
+                                     
+                                <form action="{{ url_for('admin.admin_delete_photo', photo_id=photo.id) }}" method="POST"
+                                      onsubmit="return confirm('Вы уверены, что хотите удалить это фото?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="photo-delete-btn" title="Удалить фото">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12"><p class="text-muted">Фотографий нет.</p></div>
+                    {% endif %}
+                </div>
 
-    </form>
+                {# --- Форма загрузки фото --- #}
+                <h6 class="admin-card-title mt-4 pt-3 border-top"><i class="bi bi-upload me-2"></i> Загрузить фото</h6>
+                <form method="POST" enctype="multipart/form-data">
+                    {{ photo_form.hidden_tag() }}
+                    {{ render_form(photo_form) }}
+                </form>
+            </div>
+
+        </div>
+
+        {# ПРАВАЯ КОЛОНКА (4/12) #}
+        <div class="col-lg-4">
+            
+            {# --- БЛОК 4: ФОРМА ВВОДА/РЕДАКТИРОВАНИЯ ХАРАКТЕРИСТИК --- #}
+            <div class="admin-form-card mb-4">
+                <h5 class="admin-card-title"><i class="bi bi-pencil-square me-2"></i> Ввод характеристик</h5>
+                
+                <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
+                    
+                    {# Проверяем, есть ли шаблон характеристик для этой категории #}
+                    {% if required_specs %}
+                        {{ characteristics_form.hidden_tag() }} 
+
+                        {# Проходим по ШАБЛОНУ обязательных характеристик #}
+                        {% for spec_template in required_specs %}
+                            <div class="mb-3">
+                                <label for="spec_{{ spec_template.id }}" class="form-label">{{ spec_template.name }} ({{ spec_template.value_type }})</label>
+                                
+                                {% if spec_template.value_type == 'integer' %}
+                                    <input type="number"
+                                           class="form-control"
+                                           id="spec_{{ spec_template.id }}"
+                                           name="spec_{{ spec_template.name }}"
+                                           value="{{ spec_values.get(spec_template.name, '') }}">
+                                {% else %}
+                                    <input type="text"
+                                           class="form-control"
+                                           id="spec_{{ spec_template.id }}"
+                                           name="spec_{{ spec_template.name }}"
+                                           value="{{ spec_values.get(spec_template.name, '') }}">
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Сохранить</button>
+                    {% else %}
+                        <p class="text-muted">Для категории **{{ product.category.name }}** не задан шаблон характеристик.</p>
+                        <a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}" 
+                           class="btn btn-warning btn-sm w-100">
+                           <i class="bi bi-gear me-2"></i> Задать шаблон
+                        </a>
+                    {% endif %}
+
+                </form>
+            </div>
+            
+            {# --- БЛОК 5: ДЕЙСТВИЯ (Редактирование, Удаление, Архив) --- #}
+            <div class="admin-card">
+                <h5 class="admin-card-title"><i class="bi bi-tools me-2"></i> Действия</h5>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('admin.admin_edit_product', id=product.id) }}" class="btn btn-warning w-100">
+                        <i class="bi bi-pencil-square me-2"></i> Редактировать информацию
+                    </a>
+
+                    {% if product.is_active %}
+                        <form method="POST" action="{{ url_for('admin.admin_deactivate_products', id=product.id) }}" 
+                              onsubmit="return confirm('Перенести товар в АРХИВ (скрыть с сайта)?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="bi bi-archive me-2"></i> Переместить в архив
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('admin.toggle_product_status', id=product.id) }}" 
+                              onsubmit="return confirm('Вернуть товар из АРХИВА (сделать активным)?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-arrow-return-left me-2"></i> Активировать товар
+                            </button>
+                        </form>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('admin.admin_delete_product', id=product.id) }}" 
+                          onsubmit="return confirm('ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить товар?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-trash-fill me-2"></i> Удалить НАВСЕГДА
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{# --- КОНЕЦ НОВОГО БЛОКА ХАРАКТЕРИСТИК --- #}
 {% endblock %}

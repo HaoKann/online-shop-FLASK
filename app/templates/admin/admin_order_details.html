@@ -10,34 +10,87 @@
     </div>
 
     <div class="row g-4">
-        {# Левая колонка: теперь здесь ТОЛЬКО состав заказа #}
+        
+        {# --- ЛЕВАЯ КОЛОНКА (Состав и Общая информация) --- #}
         <div class="col-lg-8">
-            <div class="admin-card">
-                <h5 class="admin-card-title">Состав заказа</h5>
+            
+            {# 1. СОСТАВ ЗАКАЗА #}
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title"><i class="bi bi-box-seam me-2"></i> Состав заказа</h5>
                 <ul class="list-group list-group-flush">
                     {% for item in order.products_in_order %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <img src="{{ item.product.get_first_photo() }}" class="table-product-img me-3" alt="{{ item.product.name }}">
-                                <a href="{{ url_for('admin.admin_product', id=item.product.id) }}" class="text-white">{{ item.product.name }}</a>
+                        <li class="list-group-item d-flex justify-content-between align-items-center order-item-detail">
+                            <div class="d-flex align-items-center">
+                                {# Используем CSS-класс для изображений в деталях заказа #}
+                                <img src="{{ item.product.get_first_photo() }}" class="order-detail-img me-3" alt="{{ item.product.name }}">
+                                
+                                <div class="order-item-info">
+                                    <a href="{{ url_for('admin.admin_product', id=item.product.id) }}" class="text-white order-item-title">{{ item.product.name }}</a>
+                                    <div class="text-muted small">
+                                        {{ "{:,.0f}".format(item.product.price).replace(",", " ") }} ₸ / шт.
+                                    </div>
+                                </div>
                             </div>
-                            <span>{{ item.amount }} шт. x {{ "{:,.0f}".format(item.product.price).replace(",", " ") }} ₸</span>
+                            
+                            {# Количество и Сумма #}
+                            <span class="text-end">
+                                <span class="fw-bold">{{ item.amount }} шт.</span><br>
+                                <span class="order-item-total">{{ "{:,.0f}".format(item.amount * item.product.price).replace(",", " ") }} ₸</span>
+                            </span>
                         </li>
                     {% endfor %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
-                        <span>Итого:</span>
-                        <span>{{ "{:,.0f}".format(order.price).replace(",", " ") }} ₸</span>
+                    
+                    {# Итоговая сумма #}
+                    <li class="list-group-item d-flex justify-content-between align-items-center fw-bold fs-5 total-summary">
+                        <span>ИТОГО:</span>
+                        <span class="text-success">{{ "{:,.0f}".format(order.price).replace(",", " ") }} ₸</span>
                     </li>
                 </ul>
             </div>
-
-            {# БЛОК "ДАННЫЕ ПОКУПАТЕЛЯ" ОТСЮДА УБРАН #}
+            
+            {# 2. ДАТА и СИСТЕМНАЯ ИНФОРМАЦИЯ #}
+            <div class="admin-card">
+                <h5 class="admin-card-title"><i class="bi bi-clock me-2"></i> Общие данные</h5>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-muted">Дата создания:</dt>
+                    <dd class="col-sm-8">{{ order.date.strftime('%Y-%m-%d в %H:%M') }}</dd>
+                    
+                    <dt class="col-sm-4 text-muted">ID транзакции:</dt>
+                    <dd class="col-sm-8">{{ order.transaction_id or 'N/A' }}</dd>
+                    
+                    <dt class="col-sm-4 text-muted">Метод оплаты:</dt>
+                    <dd class="col-sm-8 text-warning">{{ order.payment_method or 'Не оплачен' }}</dd>
+                </dl>
+            </div>
+            
         </div>
 
-        {# Правая колонка: Доставка, ДАННЫЕ ПОКУПАТЕЛЯ и Управление #}
+        {# --- ПРАВАЯ КОЛОНКА (Статус, Доставка, Клиент, Управление) --- #}
         <div class="col-lg-4">
+
+            {# 1. СТАТУС ЗАКАЗА (САМЫЙ ВАЖНЫЙ БЛОК) #}
+            <div class="admin-card mb-4 status-card">
+                <h5 class="admin-card-title"><i class="bi bi-check2-circle me-2"></i> Текущий статус</h5>
+                
+                <div class="status-display text-center">
+                    {% if order.status == 'pending' %}
+                        <span class="badge bg-warning text-dark status-lg">Обрабатывается</span>
+                    {% elif order.status == 'shipped' %}
+                        <span class="badge bg-info status-lg">Отправлен</span>
+                    {% elif order.status == 'delivered' %}
+                        <span class="badge bg-success status-lg">Доставлен</span>
+                    {% elif order.status == 'canceled' %}
+                        <span class="badge bg-danger status-lg">Отменен</span>
+                    {% else %}
+                        <span class="badge bg-secondary status-lg">Неизвестно</span>
+                    {% endif %}
+                </div>
+                
+            </div>
+            
+            {# 2. ИНФОРМАЦИЯ О ДОСТАВКЕ #}
             <div class="admin-card mb-4">
-                <h5 class="admin-card-title">Информация о доставке</h5>
+                <h5 class="admin-card-title"><i class="bi bi-truck me-2"></i> Доставка</h5>
                 <dl class="row">
                     <dt class="col-sm-5">Адрес:</dt>
                     <dd class="col-sm-7">{{ order.delivery.address }}</dd>
@@ -48,9 +101,9 @@
                 </dl>
             </div>
 
-            {# ↓↓ БЛОК "ДАННЫЕ ПОКУПАТЕЛЯ" ТЕПЕРЬ ЗДЕСЬ ↓↓ #}
+            {# 3. ДАННЫЕ ПОКУПАТЕЛЯ #}
             <div class="admin-card mb-4">
-                <h5 class="admin-card-title">Данные покупателя</h5>
+                <h5 class="admin-card-title"><i class="bi bi-person-fill me-2"></i> Покупатель</h5>
                 <dl class="row">
                     <dt class="col-sm-4">Имя:</dt>
                     <dd class="col-sm-8">{{ order.user.name }}</dd>
@@ -61,8 +114,9 @@
                 </dl>
             </div>
 
+            {# 4. УПРАВЛЕНИЕ #}
             <div class="admin-card">
-                <h5 class="admin-card-title">Управление заказом</h5>
+                <h5 class="admin-card-title"><i class="bi bi-gear-fill me-2"></i> Действия</h5>
                 <a href="{{ url_for('admin.admin_edit_order', id=order.id) }}" class="btn btn-primary w-100">
                     <i class="bi bi-pencil-square me-2"></i> Редактировать заказ
                 </a>

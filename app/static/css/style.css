@@ -3653,3 +3653,235 @@ input:focus, textarea:focus, select:focus {
     font-size: 0.95rem;
     line-height: 1.6;
 }
+
+
+/* --- ГАРАНТИЯ ЦВЕТА ДЛЯ ЦИФР В АДМИНКЕ --- */
+/* Этот селектор очень специфичен и перебьет все остальные */
+.card .admin-stat-value {
+    /* Используем фирменный акцентный цвет (#600018) */
+    color: var(--accent) !important; 
+    
+}
+
+/* --- ИСПРАВЛЕНИЕ ДЛЯ ФОРМ ВНУТРИ АДМИН-ПАНЕЛИ --- */
+/* Используем admin-wrapper для максимальной специфичности */
+
+.admin-wrapper .form-control,
+.admin-wrapper .form-select,
+.admin-wrapper input[type="text"],
+.admin-wrapper input[type="number"],
+.admin-wrapper textarea {
+    /* Фон должен быть темный, чтобы соответствовать тёмной теме */
+    background-color: var(--input-background-color) !important; /* #3a3a3a */
+    /* Цвет текста должен быть светлым */
+    color: var(--input-text-color) !important; /* #ffffff */
+    /* Граница должна соответствовать тёмной теме */
+    border-color: var(--border-dark) !important;
+}
+
+/* Исправление для текста в выпадающих списках (select) */
+.admin-wrapper .form-select option {
+    background-color: #3a3a3a !important; 
+    color: #ffffff !important;
+}
+
+
+/* --- Стили для страницы Деталей Заказа в Админке --- */
+
+/* Изображение товара в списке заказа */
+.order-detail-img {
+    width: 60px; 
+    height: 60px;
+    object-fit: contain;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 5px;
+    flex-shrink: 0;
+}
+
+/* Общий стиль для элементов списка */
+.order-item-detail {
+    border-color: var(--border-dark) !important;
+    padding: 1rem 1.5rem;
+}
+
+/* Стиль для заголовка товара в списке */
+.order-item-title {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 1rem;
+    color: var(--text-light) !important;
+    text-decoration: none;
+}
+
+.order-item-title:hover {
+    color: var(--accent) !important;
+}
+
+/* Стиль для общей суммы (Итого) */
+.total-summary {
+    background-color: rgba(96, 0, 24, 0.1); /* Легкий фон акцентного цвета */
+    border-color: var(--accent) !important;
+    border-radius: 0 0 8px 8px; /* Скругление внизу */
+}
+
+/* Стиль для большого бейджа статуса */
+.status-display {
+    padding: 1.5rem 0;
+}
+.status-lg {
+    font-size: 1.25rem;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+}
+
+/* Стиль для списка dl (данные покупателя/доставки) */
+.admin-card dl {
+    font-size: 0.95rem;
+}
+.admin-card dl dt {
+    color: #888 !important; /* Серый цвет для меток */
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.admin-card dl dd {
+    color: var(--text-light) !important; /* Белый цвет для значений */
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+/* Корректировка кнопки "К списку заказов" */
+.page-header .btn-outline-light {
+    border-color: var(--border-dark);
+    color: var(--text-light);
+}
+.page-header .btn-outline-light:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ ДЕТАЛЕЙ ПРОДУКТА --- */
+
+/* Стиль для dl (списка определений) в админке */
+.admin-detail-list dt {
+    font-weight: 500;
+    color: #888 !important; /* Серый цвет для меток */
+    margin-bottom: 0.75rem;
+}
+
+.admin-detail-list dd {
+    color: var(--text-light) !important; /* Белый цвет для значений */
+    margin-bottom: 0.75rem;
+}
+
+.id-tag {
+    display: inline-block;
+    background-color: #333;
+    color: #aaa;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+/* --- СТИЛИ ДЛЯ СПИСКА ХАРАКТЕРИСТИК (с кнопками) --- */
+
+/* Строка характеристики */
+.spec-item-row {
+    border-bottom: 1px solid var(--border-dark);
+    padding: 0.5rem 0;
+}
+
+.spec-value-text {
+    font-weight: 600;
+    color: var(--text-light) !important;
+}
+
+/* Кнопки редактирования/удаления в списке характеристик */
+.spec-actions .action-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+    padding: 0;
+}
+
+.spec-actions form {
+    margin-left: 0.5rem !important; /* Убираем лишний отступ */
+}
+
+.spec-actions button.btn-outline-danger {
+    padding: 0.375rem 0.6rem; /* Делаем кнопку компактнее */
+}
+
+/* --- СТИЛИ ДЛЯ БЛОКА ФОТОГРАФИЙ --- */
+
+.photo-grid-wrapper {
+    margin: 0;
+}
+
+.photo-item {
+    position: relative;
+    /* Устанавливаем высоту для одинаковых карточек */
+    height: 150px; 
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 5px;
+    background-color: #fff;
+    transition: box-shadow 0.2s ease;
+}
+
+.photo-item:hover {
+    box-shadow: 0 0 10px rgba(96, 0, 24, 0.5);
+}
+
+.photo-thumbnail {
+    /* Стили из HTML перенесены, чтобы быть уверенными */
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.photo-delete-btn {
+    /* Настраиваем кнопку удаления */
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.photo-item:hover .photo-delete-btn {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* --- СТИЛИ ДЛЯ ФОРМЫ ХАРАКТЕРИСТИК --- */
+
+.admin-form-card .btn-primary {
+    /* Кнопка "Сохранить" в форме характеристик */
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+}
+.admin-form-card .btn-primary:hover {
+    background-color: #218838 !important;
+    border-color: #218838 !important;
+}
+
+/* Кнопки действий (Удалить, Архив) */
+.col-lg-4 form button.btn-danger,
+.col-lg-4 form button.btn-secondary,
+.col-lg-4 form button.btn-success {
+    /* Делаем так, чтобы кнопки внутри d-grid занимали всю ширину */
+    width: 100%; 
+}

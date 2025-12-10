@@ -156,6 +156,31 @@ def admin_product(id):
         spec_values=existing_spec_values
 )
 
+@admin_bp.route('/admin/photo/delete/<int:photo_id>', methods=['GET', 'POST'])
+@login_required
+def admin_delete_photo(photo_id):
+    """Удаляет фотографию и соответствующий файл с диска."""
+    photo = Photo.query.get_or_404(photo_id)
+    product_id = photo.product_id
+
+    # 1. Удаляем физический файл с диска
+    photo_path = os.path.join(
+        os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
+        photo.product.category.slug, str(photo.product.id), photo.photo_path
+    )
+    try:
+        if os.path.exists(photo_path):
+            os.remove(photo_path)
+    except Exception as e:
+        flash(f'Ошибка при удалении файла с диска: {e}', 'warning')
+
+    # 2. Удаляем запись из базы данных
+    db.session.delete(photo)
+    db.session.commit()
+
+    flash('Фотография успешно удалена.', 'success')
+    return redirect(url_for('admin.admin_product', id=product_id))
+
 
 @admin_bp.route('/admin/categories')
 @login_required
