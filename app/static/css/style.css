@@ -3885,3 +3885,44 @@ input:focus, textarea:focus, select:focus {
     /* Делаем так, чтобы кнопки внутри d-grid занимали всю ширину */
     width: 100%; 
 }
+
+/* --- СТИЛИ ДЛЯ СТРАНИЦЫ РЕДАКТИРОВАНИЯ --- */
+
+/* Используем общий класс admin-card для фона и рамок */
+
+/* Стили для формы, чтобы она выглядела как часть карточки */
+.edit-form-wrapper {
+    padding: 1rem 0 0 0; /* Добавляем отступы, если нужно */
+}
+
+/* Переопределение стилей кнопки сохранения, чтобы она выделялась */
+.edit-form-wrapper .btn-primary {
+    /* Используем зелёный цвет для действия "Сохранить" */
+    background-color: var(--bs-success, #28a745) !important;
+    border-color: var(--bs-success, #28a745) !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.edit-form-wrapper .btn-primary:hover {
+    background-color: #1e7e34 !important; /* Более тёмный зеленый при наведении */
+    border-color: #1c7430 !important;
+}
+
+/* Заголовок карточки, используемый в админке */
+.admin-card-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-dark, #333);
+    color: var(--text-light, #ffffff);
+    font-size: 1.5rem;
+}
+
+/* Убедитесь, что стили для полей ввода в админке работают (мы это уже обсуждали) */
+.admin-wrapper .form-control,
+.admin-wrapper .form-select {
+    background-color: var(--input-background-color) !important; 
+    color: var(--input-text-color) !important; 
+    border-color: var(--border-dark) !important;
+}

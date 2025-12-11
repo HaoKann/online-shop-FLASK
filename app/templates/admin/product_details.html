@@ -182,7 +182,7 @@
                             </button>
                         </form>
                     {% else %}
-                        <form method="POST" action="{{ url_for('admin.toggle_product_status', id=product.id) }}" 
+                        <form method="POST" action="{{ url_for('admin.admin_activate_product', id=product.id) }}" 
                               onsubmit="return confirm('Вернуть товар из АРХИВА (сделать активным)?');">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-success w-100">
@@ -195,7 +195,7 @@
                           onsubmit="return confirm('ВНИМАНИЕ! Вы уверены, что хотите НАВСЕГДА удалить товар?');">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button type="submit" class="btn btn-danger w-100">
-                            <i class="bi bi-trash-fill me-2"></i> Удалить НАВСЕГДА
+                            <i class="bi bi-trash-fill me-2"></i> Удалить 
                         </button>
                     </form>
                 </div>

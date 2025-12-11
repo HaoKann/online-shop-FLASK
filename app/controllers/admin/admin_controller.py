@@ -453,6 +453,29 @@ def admin_deactivate_products(id):
                            active_page='products'
                         )
 
+@admin_bp.route('/admin/activate_product/<int:id>', methods=['GET','POST'])
+@login_required
+def admin_activate_product(id):
+    """Активирует товар (делает is_active = True)."""
+    if not current_user.is_admin:
+        abort(403)
+
+    product_to_activate = Product.query.get_or_404(id)
+    form = ConfirmForm()
+
+    if form.validate_on_submit():
+        product_to_activate.is_active = True
+        db.session.commit()
+        flash(f'Товар "{product_to_activate.name}" был активирован и возвращен в каталог.', 'success')
+        return redirect(url_for('admin.admin_products_list'))
+    
+    # Можно использовать тот же шаблон, но с другим заголовком
+    return render_template('admin/admin_deactivate_product.html',
+                           form=form,
+                           sub_title=f'Вы точно хотите активировать продукт {product_to_activate.name}?',
+                           active_page='products'
+                        )
+
 
 @admin_bp.route('/admin/delete_product/<int:id>', methods=['GET','POST'])
 @login_required

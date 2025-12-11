@@ -5,7 +5,6 @@
 <div class="ready-pc-catalog">
 
     {# --- 1. Секция "Hero" --- #}
-    {# Копируем стильный заголовок со страниц каталога #}
     <div class="catalog-hero">
         <div class="container">
             <div class="hero-content text-center">
@@ -20,16 +19,17 @@
         {% if grouped_faqs %}
             {% for category, faqs_in_category in grouped_faqs.items() %}
                 
-                {# Заголовок категории (он уже стилизован в вашем .css) #}
+                {# Заголовок категории #}
                 <h3 class="faq-category-title">{{ category }}</h3>
                 
-                {# Сам аккордеон (ваш код здесь уже был правильным) #}
+                {# Сам аккордеон #}
                 <div class="accordion faq-accordion mb-4" id="accordion-{{ loop.index }}">
                     {% for faq in faqs_in_category %}
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading-{{ faq.id }}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ faq.id }}">
-                                    {{ faq.question }}
+                                    {# ДОБАВЛЯЕМ ИКОНКУ ВОПРОСА И BOLD #}
+                                    <i class="bi bi-question-circle me-2"></i> <strong>{{ faq.question }}</strong>
                                 </button>
                             </h2>
                             <div id="collapse-{{ faq.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ loop.index }}">
