@@ -10,6 +10,8 @@ class Product(db.Model):
     price = db.Column(db.Integer(), nullable=False)
     discount = db.Column(db.Integer(), default=0)
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
+    average_rating = db.Column(db.Float(), default=0.0) # Средний рейтинг
+    reviews_count = db.Column(db.Integer(), default=0) # Общее количество одобренных отзывов
 
     # db.ForeignKey - создает связь на стороне 'Много'
     # user_id = db.Column(db.Integer(), db.ForeignKey('users.id')) 

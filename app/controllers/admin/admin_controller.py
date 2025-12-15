@@ -18,6 +18,8 @@ from app.models.user import User
 from app.models.product import Category, CategoryCharacteristic
 from app.forms.admin.add_product_form import CategoryCharacteristicForm
 from app.forms.empty_form import EmptyForm
+from app.models.review import Review
+from app.forms.admin.review_form import ReviewForm
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
