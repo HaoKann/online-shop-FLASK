@@ -1,0 +1,63 @@
+{% extends 'admin/base.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block content %}
+<div class="container">
+    
+    <div class="page-header">
+        <h1>Редактирование отзыва #{{ review.id }}</h1>
+        <a href="{{ url_for('admin.admin_reviews_moderation') }}" class="btn btn-outline-light">
+            <i class="bi bi-arrow-left"></i> К модерации
+        </a>
+    </div>
+
+    <div class="row">
+        
+        {# Левая колонка: Форма редактирования #}
+        <div class="col-lg-7">
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title">
+                    <i class="bi bi-pencil me-2"></i> Изменить текст и оценку
+                </h5>
+                
+                <div class="edit-form-wrapper">
+                    {# Форма, которую мы создали (ReviewForm) #}
+                    {{ render_form(form, button_style='primary', button_size='lg') }}
+                </div>
+            </div>
+        </div>
+
+        {# Правая колонка: Детали отзыва #}
+        <div class="col-lg-5">
+            <div class="admin-card mb-4">
+                <h5 class="admin-card-title">
+                    <i class="bi bi-info-circle me-2"></i> Информация об отзыве
+                </h5>
+                <dl class="admin-detail-list row">
+                    <dt class="col-sm-5 text-muted">Продукт:</dt>
+                    <dd class="col-sm-7">
+                        <a href="{{ url_for('admin.admin_product', id=review.product_id) }}" class="text-white">
+                            {{ review.product.name | truncate(30) }}
+                        </a>
+                    </dd>
+                    
+                    <dt class="col-sm-5 text-muted">Пользователь:</dt>
+                    <dd class="col-sm-7">{{ review.user.name }}</dd>
+                    
+                    <dt class="col-sm-5 text-muted">Дата:</dt>
+                    <dd class="col-sm-7">{{ review.date_posted.strftime('%Y-%m-%d %H:%M') }}</dd>
+                    
+                    <dt class="col-sm-5 text-muted">Текущий статус:</dt>
+                    <dd class="col-sm-7">
+                        {% if review.is_approved %}
+                            <span class="badge bg-success">Одобрен</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">На модерации</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,7 @@
+from sqlalchemy import func
 from app import db
 from flask import url_for
+from app.models.review import Review
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -56,7 +58,30 @@ class Product(db.Model):
         }
         return category_map.get(self.category, self.category)
 
+    def update_rating(self):
+        """Пересчитывает средний рейтинг и количество одобренных отзывов для продукта."""
 
+        # Получаем только одобренные отзывы
+        approved_reviews = Review.query.filter_by(product_id=self.id, is_approved=True)
+        
+        # 1. Считаем количество одобренных отзывов
+        new_count = approved_reviews.count()
+
+        # 2. Считаем сумму рейтингов и среднее значение
+        if new_count > 0:
+            rating_sum = db.session.query(func.sum(Review.rating)).filter_by(product_id=self.id, is_approved=True)
+            new_average = rating_sum / new_count
+        else:
+            new_average = 0.0
+
+        # Обновляем поля в текущем объекте Product
+        self.average_rating = round(new_average, 2)
+        self.reviews_count = new_count
+
+        db.session.add(self)
+        db.session.commit()
+
+        return True
 
 class ReadyPC(db.Model):
     __tablename__='readypc'

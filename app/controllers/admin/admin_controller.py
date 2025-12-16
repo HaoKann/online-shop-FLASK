@@ -587,6 +587,9 @@ def admin_ready_pcs():
 @admin_bp.route('/admin/ready-pc/<int:id>', methods=['GET','POST'])
 @login_required
 def admin_ready_pc_detail(id):
+    if not current_user.is_admin:
+        abort(403)
+
     ready_pc_detail = ReadyPC.query.get_or_404(id)
 
     return render_template('admin/admin_ready_pc_details.html', ready_pc_detail=ready_pc_detail, active_page='ready_pcs')
@@ -595,6 +598,8 @@ def admin_ready_pc_detail(id):
 @admin_bp.route('/admin/add/ready-pc', methods=['GET','POST'])
 @login_required
 def admin_add_readypc():
+    if not current_user.is_admin:
+        abort(403)
 
     form = ReadyPCForm()
 
@@ -681,7 +686,9 @@ def admin_delete_readypc(id):
 
 
 @admin_bp.route('/admin/faqs')
+@login_required
 def list_faqs():
+
     if not current_user.is_admin:
         abort(403)
 
@@ -690,7 +697,11 @@ def list_faqs():
     return render_template('admin/faq_list.html', faqs=faqs, active_page='faq', form=form)
 
 @admin_bp.route('/admin/faqs/add', methods=['GET','POST'])
+@login_required
 def add_faq():
+    if not current_user.is_admin:
+        abort(403)
+
     form = FAQForm()
 
     if form.validate_on_submit():
@@ -706,7 +717,11 @@ def add_faq():
     return render_template('admin/faq_form.html', form=form, sub_title='Добавить новый вопрос', active_page='faq')
 
 @admin_bp.route('/admin/faqs/edit/<int:faq_id>', methods=['GET','POST'])
+@login_required
 def edit_faq(faq_id):
+    if not current_user.is_admin:
+        abort(403)
+
     faq = FAQ.query.get_or_404(faq_id)
     form = FAQForm(obj=faq) # Предзаполняем форму данными из баз
 
@@ -721,7 +736,11 @@ def edit_faq(faq_id):
 
 
 @admin_bp.route('/admin/faqs/delete/<int:faq_id>', methods=['GET','POST'])
+@login_required
 def delete_faq(faq_id):
+    if not current_user.is_admin:
+        abort(403)
+    
     faq = FAQ.query.get_or_404(faq_id)
     db.session.delete(faq)
     db.session.commit()
@@ -729,4 +748,62 @@ def delete_faq(faq_id):
     return redirect(url_for('admin.list_faqs'))
 
 
-   
+# Маршрут для просмотра всех отзывов (для модерации)
+@admin_bp.route('/admin/reviews', methods=['GET','POST'])
+@login_required
+def admin_reviews_moderation():
+    if not current_user.is_admin:
+        abort(403)
+
+    # Показываем сначала неодобренные, затем одобренные
+    reviews_to_moderate = Review.query.order_by(Review.is_approved.asc(), Review.date_posted.desc()).all()
+    return render_template('admin/reviews_moderation.html',
+                           reviws=reviews_to_moderate,
+                           active_page='reviews',
+                           sub_title='Модерация отзывов')
+
+# Маршрут для редактирования и одобрения конкретного отзыва
+@admin_bp.route('/admin/reviews/edit/<int:review_id>', methods=['GET','POST'])
+@login_required
+def admin_edit_reviews(review_id):
+    if not current_user.is_admin:
+        abort(403)
+
+    review = Review.query.get_or_404(review_id)
+    # Заполняем форму данными из объекта
+    form = ReviewForm(obj=review)
+
+    if form.validate_on_submit():
+        review.rating = form.rating.data
+        review.text = form.text.data
+        review.is_approved = form.is_approved.data
+
+        db.session.commit()
+
+        # Если отзыв одобрен, нужно пересчитать рейтинг продукта
+        if review.is_approved:
+            review.product.update_rating()
+
+        flash('Отзыв успешно обновлен и статус модерации сохранен', 'success')
+        return redirect(url_for('admin.admin_reviews_moderation'))
+    
+    return render_template('admin/edit_review.html',
+                           form=form,
+                           review=review,
+                           active_page='reviews',
+                           sub_title=f'Редактирование отзыва #{review_id}')
+
+@admin_bp.route('/admin/reviews/delete/<int:review_id>', methods=['GET','POST'])
+@login_required
+def admin_delete_review(review_id):
+    review = Review.query.get_or_404(review_id)
+    product = review.product # Сохраняем ссылку на продукт перед удалением
+
+    db.session.delete(review)
+    db.session.commit()
+
+    if review.is_approved:
+        review.update_rating()
+
+    flash('Отзыв успешно удален', 'success')
+    return redirect(url_for('admin.admin_reviews_moderation'))
