@@ -92,6 +92,9 @@ def create_app(config_class=Config):
     from .controllers.admin.admin_controller import admin_bp
     app.register_blueprint(admin_bp)
 
-    from app.models import cart, order, product, user, about, faq
+    from .controllers.review_controller import review_bp
+    app.register_blueprint(review_bp)
+
+    from app.models import cart, order, product, user, about, faq, review
 
     return app

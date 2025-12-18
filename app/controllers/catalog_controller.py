@@ -1,7 +1,11 @@
-from flask import render_template, request, Blueprint
+from app import db
+from flask import render_template, request, Blueprint, flash, redirect, url_for
+from flask_login import current_user
 from app.models.product import Product
 from app.models.product import Category
 from app.forms.empty_form import EmptyForm
+from app.forms.review_form import UserReviewForm
+from app.models.review import Review
 
 # 1. Создаем Blueprint
 catalog_bp = Blueprint('catalog', __name__)
@@ -118,11 +122,22 @@ def computer_case():
     return render_template('catalog/products_in_catalog.html', current_sort=current_sort, sub_title='Корпуса', products=case_products,endpoint='catalog.computer_case',csrf_form=csrf_form)
 
 
-@catalog_bp.route('/product_details/<int:prod_id>')
+@catalog_bp.route('/product_details/<int:prod_id>', methods=['GET','POST'])
 def show_prod_details(prod_id):
+    # Загружаем продукт (только активный)
     product = Product.query.filter(Product.id == prod_id, Product.is_active == True).first_or_404()
 
-    # Получаем ШАБЛОН обязательных характеристик
+    # 1. Инициализируем форму отзыва (передаем ID продукта в скрытое поле)
+    form = UserReviewForm(product_id=prod_id)
+
+    # 2. Получаем только одобренные отзывы для отображения
+    approved_reviews = Review.query.filter_by(
+        product_id=prod_id,
+        is_approved=True
+    ).order_by(Review.date_posted.desc()).all()
+
+
+    # 3. Логика характеристик
     required_specs_template = []
     if product.category:
         required_specs_template = product.category.required_characteristics.order_by('id').all()
@@ -130,7 +145,41 @@ def show_prod_details(prod_id):
     # Создаем словарь существующих, заполненных значений
     existing_spec_value = {spec.name: spec.value for spec in product.characteristics}
 
-    return render_template('catalog/product_details.html', product=product, required_specs=required_specs_template, spec_values=existing_spec_value)
+
+    # 4. Обработка POST-запроса (отправка отзыва)
+    if form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash('Пожалуйста, войдите в систему, чтобы оставить отзыв', 'warning')
+            return redirect(url_for('auth.login'))
+        
+        # Проверка на дубликат отзыва от одного пользователя
+        existing_review = Review.query.filter_by(user_id=current_user.id, product_id=prod_id).first()
+        if existing_review:
+            flash('Вы уже оставляли отзыв на этот товар', 'info')
+            return redirect(url_for('catalog.show_prod_details', prod_id=prod_id))
+        
+        # Создаем новый отзыв (is_approved=False по умолчанию)
+        new_review = Review(
+            rating=form.rating.data,
+            text=form.text.data,
+            user_id=current_user.id,
+            product_id=prod_id
+        )
+        db.session.add(new_review)
+        db.session.commit()
+
+        flash('Спасибо! Ваш отзыв отправлен на модерацию', 'success')
+        return redirect(url_for('catalog.show_prod_details', prod_id=prod_id))
+
+    return render_template('catalog/product_details.html', 
+                           product=product, 
+                            required_specs=required_specs_template, 
+                            spec_values=existing_spec_value,
+                            form=form,                      
+                            approved_reviews=approved_reviews,       # Передаем список отзывов
+                            reviews_count=product.reviews_count, # Используем поле агрегации из модели Product
+                            average_rating=product.average_rating
+                        )
 
 
 def apply_sorting(query):

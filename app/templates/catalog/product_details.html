@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="product-page-container">
+<div class="product-page-container mb-5">
+    {# --- Галерея (без изменений) --- #}
     <div class="product-page-gallery">
         <div class="product-page-main-image">
             <img src="{{ product.get_first_photo() }}" id="mainProductImage" alt="{{ product.name }}">
@@ -15,9 +16,20 @@
         </div>
     </div>
 
+    {# --- Инфо-блок --- #}
     <div class="product-page-info">
         <span class="product-page-category">{{ product.category.name }}</span>
-        <h1 class="product-page-title">{{ product.name }}</h1>
+        
+        {# Вывод рейтинга рядом с названием #}
+        <div class="d-flex align-items-center mb-2">
+            <h1 class="product-page-title mb-0 me-3">{{ product.name }}</h1>
+            {% if average_rating > 0 %}
+                <div class="text-warning">
+                    {{ average_rating | round(1) }} <i class="bi bi-star-fill"></i>
+                    <small class="text-muted ms-1">({{ reviews_count }})</small>
+                </div>
+            {% endif %}
+        </div>
 
         <div class="product-page-price-block">
             {% if product.discount %}
@@ -38,17 +50,13 @@
             </a>
         </div>
 
-        {# --- НАЧАЛО ИЗМЕНЕНИЙ --- #}
         <div class="product-page-specs">
             <h5 class="specs-title">Характеристики</h5>
-            
             {% if required_specs %}
                 <ul class="specs-list">
-                    {# Проходим по ШАБЛОНУ обязательных характеристик #}
                     {% for spec_template in required_specs %}
                         <li>
                             <span>{{ spec_template.name }}</span>
-                            {# Ищем значение в словаре. Если его нет - выводим прочерк #}
                             <strong>{{ spec_values.get(spec_template.name, '-') }}</strong>
                         </li>
                     {% endfor %}
@@ -57,11 +65,78 @@
                 <p class="text-muted">Для этого товара характеристики не указаны.</p>
             {% endif %}
         </div>
-        {# --- КОНЕЦ ИЗМЕНЕНИЙ --- #}
+    </div>
+</div>
+
+<hr class="border-secondary opacity-25">
+
+{# --- СЕКЦИЯ ОТЗЫВОВ --- #}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4"><i class="bi bi-chat-left-text me-2"></i> Отзывы покупателей</h2>
+
+            {# Форма добавления отзыва #}
+            <div class="card admin-card p-4 mb-5">
+                {% if current_user.is_authenticated %}
+                    <h5 class="card-title mb-3">Оставить отзыв</h5>
+                    <form method="POST" action="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label d-block text-light">Ваша оценка</label>
+                            <div class="rating-area">
+                                {% for i in range(5, 0, -1) %}
+                                    <input type="radio" id="star-{{ i }}" name="rating" value="{{ i }}" required>
+                                    <label for="star-{{ i }}" title="Оценка {{ i }}"></label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light">Текст отзыва</label>
+                            {{ form.text(class="form-control", rows="4") }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Отправить на модерацию</button>
+                    </form>
+                {% else %}
+                    <div class="text-center py-3">
+                        <p class="mb-3">Войдите, чтобы оставить отзыв</p>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">Войти</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Список отзывов #}
+            <div class="reviews-list">
+                {% if approved_reviews %}
+                    {% for review in approved_reviews %}
+                        <div class="review-item mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div>
+                                    <strong class="text-light d-block">{{ review.user.name }}</strong>
+                                    <div class="text-warning small">
+                                        {% for i in range(review.rating) %}<i class="bi bi-star-fill"></i>{% endfor %}
+                                        {% for i in range(5 - review.rating) %}<i class="bi bi-star text-muted"></i>{% endfor %}
+                                    </div>
+                                </div>
+                                <small class="text-muted">{{ review.date_posted.strftime('%d.%m.%Y') }}</small>
+                            </div>
+                            <p class="text-light-emphasis mb-0">{{ review.text }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-chat-dots fs-1 text-muted d-block mb-2"></i>
+                        <p class="text-muted">Пока нет отзывов. Станьте первым!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
-
 
 {% block scripts %}
 {{ super() }}
@@ -74,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
         thumb.addEventListener('click', function() {
             const fullImageSrc = this.querySelector('img').dataset.fullImage;
             mainImage.src = fullImageSrc;
-            
             thumbnails.forEach(item => item.classList.remove('active'));
             this.classList.add('active');
         });

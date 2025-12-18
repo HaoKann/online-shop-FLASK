@@ -796,6 +796,9 @@ def admin_edit_reviews(review_id):
 @admin_bp.route('/admin/reviews/delete/<int:review_id>', methods=['GET','POST'])
 @login_required
 def admin_delete_review(review_id):
+    if not current_user.is_admin:
+        abort(403)
+
     review = Review.query.get_or_404(review_id)
     product = review.product # Сохраняем ссылку на продукт перед удалением
 
@@ -807,3 +810,22 @@ def admin_delete_review(review_id):
 
     flash('Отзыв успешно удален', 'success')
     return redirect(url_for('admin.admin_reviews_moderation'))
+
+@admin_bp.route('/admin/reviews/approve/<int:review_id>', methods=['POST'])
+@login_required
+def approve_review(review_id):
+    if not current_user.is_admin:
+        abort(403)
+
+    review = Review.query.get_or_404(review_id)
+
+    # Меняем статус на "Одобрен"
+    review.is_approved = True
+    db.session.commit()
+
+    # ВАЖНО: Запускаем пересчет рейтинга у связанного продукта
+    review.product.update_rating()
+
+    flash(f'Отзыв #{review_id} одобрен. Рейтинг товара "{review_id.product.name}" обновлен.', 'success')
+    return redirect(url_for('admin.admin_reviews_moderation'))
+

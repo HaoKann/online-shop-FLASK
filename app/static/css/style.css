@@ -3926,3 +3926,35 @@ input:focus, textarea:focus, select:focus {
     color: var(--input-text-color) !important; 
     border-color: var(--border-dark) !important;
 }
+
+
+/* --- Стили для выбора звездного рейтинга --- */
+.rating-area {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating-area input {
+    display: none; /* Скрываем стандартные кружочки radio */
+}
+
+.rating-area label {
+    font-size: 2rem;
+    color: #444; /* Цвет пустых звезд */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* Эффект закрашивания при наведении и выборе */
+.rating-area label:hover,
+.rating-area label:hover ~ label,
+.rating-area input:checked ~ label {
+    color: #ffc107; /* Цвет золотых звезд */
+}
+
+/* Иконка звезды из Bootstrap Icons */
+.rating-area label::before {
+    content: "\f586"; /* Код иконки bi-star-fill */
+    font-family: "bootstrap-icons";
+}
