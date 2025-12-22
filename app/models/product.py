@@ -69,8 +69,8 @@ class Product(db.Model):
 
         # 2. Считаем сумму рейтингов и среднее значение
         if new_count > 0:
-            rating_sum = db.session.query(func.sum(Review.rating)).filter_by(product_id=self.id, is_approved=True)
-            new_average = rating_sum / new_count
+            rating_sum = db.session.query(func.sum(Review.rating)).filter_by(product_id=self.id, is_approved=True).scalar()
+            new_average = float(rating_sum) / new_count
         else:
             new_average = 0.0
 

@@ -172,13 +172,13 @@ def show_prod_details(prod_id):
         return redirect(url_for('catalog.show_prod_details', prod_id=prod_id))
 
     return render_template('catalog/product_details.html', 
-                           product=product, 
+                            product=product, 
                             required_specs=required_specs_template, 
                             spec_values=existing_spec_value,
                             form=form,                      
                             approved_reviews=approved_reviews,       # Передаем список отзывов
-                            reviews_count=product.reviews_count, # Используем поле агрегации из модели Product
-                            average_rating=product.average_rating
+                            reviews_count=product.reviews_count or 0, # Используем поле агрегации из модели Product
+                            average_rating=product.average_rating or 0
                         )
 
 

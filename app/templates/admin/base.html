@@ -44,6 +44,11 @@
                         <i class="bi bi-question-circle"></i> FAQ
                     </a>
                 </li>
+                <li class="nav-item {% if active_page == 'review' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('admin.admin_reviews_moderation') }}">
+                        <i class="bi bi-chat-left-dots me-2"></i> Отзывы
+                    </a>
+                </li>
                 <li class="nav-item {% if active_page == 'add_product' %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('admin.admin_add_product') }}">
                         <i class="bi bi-plus-circle"></i> Добавить продукт

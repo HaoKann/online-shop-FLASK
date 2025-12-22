@@ -758,14 +758,14 @@ def admin_reviews_moderation():
     # Показываем сначала неодобренные, затем одобренные
     reviews_to_moderate = Review.query.order_by(Review.is_approved.asc(), Review.date_posted.desc()).all()
     return render_template('admin/reviews_moderation.html',
-                           reviws=reviews_to_moderate,
+                           reviews=reviews_to_moderate,
                            active_page='reviews',
                            sub_title='Модерация отзывов')
 
 # Маршрут для редактирования и одобрения конкретного отзыва
 @admin_bp.route('/admin/reviews/edit/<int:review_id>', methods=['GET','POST'])
 @login_required
-def admin_edit_reviews(review_id):
+def admin_edit_review(review_id):
     if not current_user.is_admin:
         abort(403)
 
@@ -826,6 +826,6 @@ def approve_review(review_id):
     # ВАЖНО: Запускаем пересчет рейтинга у связанного продукта
     review.product.update_rating()
 
-    flash(f'Отзыв #{review_id} одобрен. Рейтинг товара "{review_id.product.name}" обновлен.', 'success')
+    flash(f'Отзыв #{review_id} одобрен. Рейтинг товара "{review.product.name}" обновлен.', 'success')
     return redirect(url_for('admin.admin_reviews_moderation'))
 

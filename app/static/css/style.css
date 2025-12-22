@@ -3958,3 +3958,28 @@ input:focus, textarea:focus, select:focus {
     content: "\f586"; /* Код иконки bi-star-fill */
     font-family: "bootstrap-icons";
 }
+
+.product-card-rating {
+    display: flex;
+    align-items: center;
+    min-height: 18px; /* Резервируем место, чтобы карточки не "прыгали" по высоте */
+}
+
+.product-card-rating .bi-star-fill {
+    color: #ffc107 !important; /* Насыщенный золотой цвет */
+}
+
+.product-card-rating .text-muted {
+    opacity: 0.6;
+}
+
+/* Стили для карточки, чтобы название не прижималось к звездам */
+.pc-card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Ограничиваем название двумя строками */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.6rem; /* Фиксированная высота для заголовка */
+    margin-bottom: 0.25rem !important;
+}
