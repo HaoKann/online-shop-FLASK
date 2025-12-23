@@ -84,7 +84,34 @@
                                     </div>
                                 </div>
                                 <div class="pc-card-body">
-                                    <h5 class="pc-card-title">{{ product.name }}</h5>
+                                    <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
+                                    
+                                    {# --- ДОБАВЛЕННЫЙ БЛОК РЕЙТИНГА --- #}
+                                    <div class="product-card-rating mb-2">
+                                        {% set avg_rating = product.average_rating if product.average_rating is not none else 0 %}
+                                        {% if avg_rating > 0 %}
+                                            <div class="stars text-warning" style="font-size: 0.85rem;">
+                                                {# Закрашенные звезды #}
+                                                {% for i in range(avg_rating | int) %}
+                                                    <i class="bi bi-star-fill"></i>
+                                                {% endfor %}
+                                                
+                                                {# Пустые звезды до 5 #}
+                                                {% for i in range(5 - (avg_rating | int)) %}
+                                                    <i class="bi bi-star text-muted"></i>
+                                                {% endfor %}
+                                                
+                                                <span class="rating-count" style="font-size: 0.75rem;">
+                                                    ({{ product.reviews_count | default(0) }})
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="stars text-muted" style="font-size: 0.75rem;">
+                                                <i class="bi bi-star me-1"></i> <span>Нет отзывов</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {# ------------------------------- #}
                                 </div>
                             </a>
                             

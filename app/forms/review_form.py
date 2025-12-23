@@ -23,4 +23,4 @@ class UserReviewForm(FlaskForm):
 
     # Скрытое поле для ID продукта (Обязательно для передачи контекста)
     product_id = HiddenField(validators=[DataRequired()])
-    submit = SubmitField('Отправить отзыв на модерацию')
+    submit = SubmitField('Отправить отзыв')

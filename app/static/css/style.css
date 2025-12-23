@@ -2144,8 +2144,10 @@ input:focus, textarea:focus, select:focus {
 
 /* Card Body */
 .pc-card-body {
-    padding: 1.5rem;
-    flex: 1;
+    padding: 1rem 1.25rem !important;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff !important; /* Гарантируем белый фон */
 }
 
 .pc-card-link {
@@ -2154,13 +2156,14 @@ input:focus, textarea:focus, select:focus {
 }
 
 .pc-card-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 1rem;
-    line-height: 1.3;
-    transition: color 0.2s ease;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: #1a202c !important; /* Глубокий темный цвет */
+    margin-bottom: 0.5rem !important;
+    min-height: 3rem; /* Увеличили высоту для 2-х строк */
+    line-height: 1.4;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -3932,7 +3935,7 @@ input:focus, textarea:focus, select:focus {
 .rating-area {
     display: flex;
     flex-direction: row-reverse;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Измените на flex-start, если нужно выравнивание по левому краю */
 }
 
 .rating-area input {
@@ -3940,29 +3943,51 @@ input:focus, textarea:focus, select:focus {
 }
 
 .rating-area label {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: #444; /* Цвет пустых звезд */
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
+    padding: 0 2px;
 }
 
-/* Эффект закрашивания при наведении и выборе */
-.rating-area label:hover,
-.rating-area label:hover ~ label,
-.rating-area input:checked ~ label {
-    color: #ffc107; /* Цвет золотых звезд */
-}
-
-/* Иконка звезды из Bootstrap Icons */
+/* Базовая иконка пустой звезды (всегда видна) */
 .rating-area label::before {
-    content: "\f586"; /* Код иконки bi-star-fill */
+    content: "\f588"; /* Код иконки bi-star (контурная звезда) */
     font-family: "bootstrap-icons";
+}
+
+/* Цвет для уже выбранных звезд и звезд при наведении мы уже настроили ниже */
+
+/* Динамическое заполнение ПРИ НАВЕДЕНИИ (hover) */
+/* Подсвечиваем саму звезду и все ПРЕДЫДУЩИЕ (которые в коде идут после нее) */
+.rating-area label:hover,
+.rating-area label:hover ~ label {
+    color: #ffc107 !important;
+}
+/* Меняем иконку на заполненную при наведении */
+.rating-area label:hover::before,
+.rating-area label:hover ~ label::before {
+    content: "\f586" !important;; /* bi-star-fill */
+}
+
+/* Состояние ВЫБРАННОЙ звезды (checked) */
+.rating-area input:checked ~ label {
+    color: #ffc107 !important;
+}
+.rating-area input:checked ~ label::before {
+    content: "\f586" !important;; /* bi-star-fill */
+}
+
+/* Эффект увеличения при наведении для UX */
+.rating-area label:hover {
+    transform: scale(1.1);
 }
 
 .product-card-rating {
     display: flex;
     align-items: center;
-    min-height: 18px; /* Резервируем место, чтобы карточки не "прыгали" по высоте */
+    gap: 5px;
+    margin-bottom: 0.5rem;
 }
 
 .product-card-rating .bi-star-fill {
@@ -3971,6 +3996,16 @@ input:focus, textarea:focus, select:focus {
 
 .product-card-rating .text-muted {
     opacity: 0.6;
+}
+
+.rating-count {
+    color: #718096 !important; /* Серый цвет, заметный на белом */
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+}
+
+.stars i {
+    font-size: 0.9rem;
 }
 
 /* Стили для карточки, чтобы название не прижималось к звездам */
@@ -3982,4 +4017,26 @@ input:focus, textarea:focus, select:focus {
     overflow: hidden;
     height: 2.6rem; /* Фиксированная высота для заголовка */
     margin-bottom: 0.25rem !important;
+}
+
+.admin-card textarea::placeholder {
+    color: #000000 !important;
+    opacity: 0.8 !important; /* Немного приглушаем, чтобы не спорил с основным текстом */
+}
+
+.admin-card textarea:focus::placeholder {
+    opacity: 0.5;
+}
+
+
+/* Делаем сам текст отзыва чисто белым */
+.review-item p {
+    color: #ffffff !important;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Также подсветим дату, если ее плохо видно */
+.review-item .text-muted {
+    color: #aaaaaa !important;
 }
