@@ -34,4 +34,8 @@ def ready_pc_details(build_id):
 
     form = EmptyForm()
 
-    return render_template('main_screen/ready_pc_details.html', ready_pc=ready_pc, form=form)
+    return render_template('main_screen/ready_pc_details.html', 
+                           ready_pc=ready_pc, 
+                           form=form, 
+                           average_rating=ready_pc.average_rating or 0, 
+                           reviews_count=ready_pc.reviews_count or 0)

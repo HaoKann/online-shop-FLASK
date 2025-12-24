@@ -1,47 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="product-page-container">
+<div class="product-page-container mb-5">
     
     {# --- Левая колонка: Галерея --- #}
     <div class="product-page-gallery">
         <div class="product-page-main-image">
-            {# Используем новую функцию для получения фото корпуса #}
             <img src="{{ ready_pc.get_build_image() }}" id="mainProductImage" alt="{{ ready_pc.name }}">
         </div>
-        {# Для готовой сборки галерея не нужна, поэтому .product-page-thumbnails мы убираем #}
     </div>
 
     {# --- Правая колонка: Информация --- #}
     <div class="product-page-info">
         <span class="product-page-category">Готовая сборка</span>
-        <h1 class="product-page-title">{{ ready_pc.name }}</h1>
+        
+        {# --- Блок названия и рейтинга --- #}
+        {# --- Блок названия и рейтинга --- #}
+        <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
+            <h1 class="product-page-title mb-0">{{ ready_pc.name }}</h1>
+            
+            {# Исправленная проверка на None #}
+            {% if ready_pc.average_rating and ready_pc.average_rating > 0 %}
+                <div class="stars-container d-flex align-items-center">
+                    <div class="text-warning d-flex align-items-center" style="white-space: nowrap; font-size: 1.1rem;">
+                        <span class="fw-bold me-1">{{ ready_pc.average_rating | round(1) }}</span>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <span class="rating-count ms-2">({{ ready_pc.reviews_count | default(0) }})</span>
+                </div>
+            {% endif %}
+        </div>
 
         {# Блок с ценой #}
         <div class="product-page-price-block">
             <span class="current-price">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>
         </div>
 
-        {# Блок с кнопками "В корзину" и "В избранное" #}
+        {# Блок с кнопками #}
         <div class="product-page-actions">
             <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST" class="d-grid flex-grow-1">
-                {{ form.hidden_tag() }} {# Убедитесь, что form передается из view-функции #}
+                {{ form.hidden_tag() }} 
                 <button type="submit" class="btn btn-primary btn-lg">
                     <i class="bi bi-cart-plus-fill"></i> Добавить в корзину
                 </button>
             </form>
-            {# Можно также добавить кнопку "В избранное" для сборок, если у вас есть такой функционал #}
+            <a href="{{ url_for('favourites.add_to_favourites', ready_pc_id=ready_pc.id) }}" class="btn btn-icon" title="В избранное">
+                <i class="bi bi-heart"></i>
+            </a>
         </div>
 
-        {# Блок с характеристиками (комплектующими) #}
+        {# Блок с характеристиками #}
         <div class="product-page-specs">
             <h5 class="specs-title">Комплектующие</h5>
-            
             <ul class="specs-list">
                 {% for component in ready_pc.products_in_readypc.all() %}
                     <li>
                         <span>{{ component.product.category.name }}</span>
-                        {# Делаем название компонента ссылкой на его страницу #}
                         <strong>
                             <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product.id) }}" class="text-white text-decoration-none">
                                 {{ component.product.name }}
@@ -54,4 +68,72 @@
     </div>
 </div>
 
+<hr class="border-secondary opacity-25">
+
+{# --- СЕКЦИЯ ОТЗЫВОВ --- #}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-4"><i class="bi bi-chat-left-text me-2"></i> Отзывы о сборке</h2>
+
+            {# Форма добавления отзыва #}
+            <div class="card admin-card p-4 mb-5">
+                {% if current_user.is_authenticated %}
+                    <h5 class="card-title mb-3">Оставить отзыв</h5>
+                    <form method="POST" action="{{ url_for('catalog.ready_pc_details', pc_id=ready_pc.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label d-block text-light">Ваша оценка</label>
+                            <div class="rating-area">
+                                {% for i in range(5, 0, -1) %}
+                                    <input type="radio" id="star-{{ i }}" name="rating" value="{{ i }}" required>
+                                    <label for="star-{{ i }}" title="Оценка {{ i }}"></label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light">Текст отзыва</label>
+                            {{ form.text(class="form-control", rows="4", placeholder="Поделитесь впечатлениями о работе этой сборки...") }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                    </form>
+                {% else %}
+                    <div class="text-center py-3">
+                        <p class="mb-3">Войдите, чтобы поделиться мнением</p>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">Войти</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Список отзывов #}
+            <div class="reviews-list">
+                {% if approved_reviews %}
+                    {% for review in approved_reviews %}
+                        <div class="review-item mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div>
+                                    <strong class="text-light d-block">{{ review.user.name }}</strong>
+                                    <div class="text-warning small">
+                                        {% for i in range(review.rating) %}<i class="bi bi-star-fill"></i>{% endfor %}
+                                        {% for i in range(5 - review.rating) %}<i class="bi bi-star text-muted"></i>{% endfor %}
+                                    </div>
+                                </div>
+                                <small class="text-muted">{{ review.date_posted.strftime('%d.%m.%Y') }}</small>
+                            </div>
+                            <p class="mt-2 text-white mb-0">{{ review.text }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-chat-dots fs-1 text-muted d-block mb-2"></i>
+                        <p class="text-muted">Для этой сборки отзывов пока нет. Будьте первым!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

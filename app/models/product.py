@@ -91,11 +91,33 @@ class ReadyPC(db.Model):
     category = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Integer(), nullable=False, default=0)  
     amount = db.Column(db.Integer(), nullable=False, default=1)
+    average_rating = db.Column(db.Float(), default=0.0)
+    reviews_count = db.Column(db.Integer(), default=0)
 
     products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan' )
-
+    reviews = db.relationship('Review', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan')
 
      # --- НАЧАЛО НОВЫХ МЕТОДОВ ---
+
+    def update_rating(self):
+        approved_reviews = self.reviews.filter_by(is_approved=True)
+        new_count = approved_reviews.count()
+
+        if new_count > 0:
+            rating_sum = db.session.query(db.func.sum(Review.rating)).filter(
+                Review.ready_pc_id == self.id,
+                Review.is_approved == True
+            ).scalar()
+            new_average = float(rating_sum) / new_count
+        else:
+            new_average = 0.0
+        
+        self.average_rating = round(new_average, 2)
+        self.reviews_count = new_count
+        db.session.commit()
+
+
+
 
     def get_component(self, category_name):
         """Универсальный метод для поиска компонента по категории."""
