@@ -15,7 +15,6 @@
         <span class="product-page-category">Готовая сборка</span>
         
         {# --- Блок названия и рейтинга --- #}
-        {# --- Блок названия и рейтинга --- #}
         <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
             <h1 class="product-page-title mb-0">{{ ready_pc.name }}</h1>
             
@@ -80,7 +79,7 @@
             <div class="card admin-card p-4 mb-5">
                 {% if current_user.is_authenticated %}
                     <h5 class="card-title mb-3">Оставить отзыв</h5>
-                    <form method="POST" action="{{ url_for('catalog.ready_pc_details', pc_id=ready_pc.id) }}">
+                    <form method="POST" action="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}">
                         {{ form.hidden_tag() }}
                         
                         <div class="mb-3">
