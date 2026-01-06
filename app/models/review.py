@@ -15,7 +15,7 @@ class Review(db.Model):
 
     # --- Связи (Внешние ключи) ---
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=True)
     ready_pc_id = db.Column(db.Integer, db.ForeignKey('readypc.id'), nullable=True)
 
     # --- Отношения (Relationship) ---

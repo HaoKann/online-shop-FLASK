@@ -756,11 +756,12 @@ def admin_reviews_moderation():
         abort(403)
 
     # Показываем сначала неодобренные, затем одобренные
-    reviews_to_moderate = Review.query.order_by(Review.is_approved.asc(), Review.date_posted.desc()).all()
+    reviews_to_moderate = Review.query.outerjoin(Product).outerjoin(ReadyPC).order_by(Review.date_posted.desc()).all()
     return render_template('admin/reviews_moderation.html',
                            reviews=reviews_to_moderate,
                            active_page='reviews',
                            sub_title='Модерация отзывов')
+
 
 # Маршрут для редактирования и одобрения конкретного отзыва
 @admin_bp.route('/admin/reviews/edit/<int:review_id>', methods=['GET','POST'])
@@ -793,6 +794,7 @@ def admin_edit_review(review_id):
                            active_page='reviews',
                            sub_title=f'Редактирование отзыва #{review_id}')
 
+
 @admin_bp.route('/admin/reviews/delete/<int:review_id>', methods=['GET','POST'])
 @login_required
 def admin_delete_review(review_id):
@@ -810,6 +812,7 @@ def admin_delete_review(review_id):
 
     flash('Отзыв успешно удален', 'success')
     return redirect(url_for('admin.admin_reviews_moderation'))
+
 
 @admin_bp.route('/admin/reviews/approve/<int:review_id>', methods=['POST'])
 @login_required

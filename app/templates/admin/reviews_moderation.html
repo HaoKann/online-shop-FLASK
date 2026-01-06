@@ -27,8 +27,27 @@
                     <tr class="align-middle">
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="{{ review.product.get_first_photo() }}" class="rounded me-2" style="width: 40px; height: 40px; object-fit: contain; background: #fff;">
-                                <span class="small fw-bold">{{ review.product.name | truncate(30) }}</span>
+                                {# 1. Проверяем, к чему привязан отзыв, чтобы выбрать правильное фото #}
+                                {% if review.product %}
+                                    <img src="{{ review.product.get_first_photo() }}" class="rounded me-2" style="width: 40px; height: 40px; object-fit: contain; background: #fff;">
+                                {% elif review.ready_pc %}
+                                    <img src="{{ review.ready_pc.get_build_image() }}" class="rounded me-2" style="width: 40px; height: 40px; object-fit: contain; background: #fff;">
+                                {% else %}
+                                    <div class="rounded me-2 bg-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="bi bi-question text-white"></i>
+                                    </div>
+                                {% endif %}
+
+                                <div class="d-flex flex-column">
+                                    {# 2. Выводим метку типа объекта для удобства админа #}
+                                    {% if review.product %}
+                                        <span class="badge bg-info text-dark extra-small mb-1" style="font-size: 0.7rem; width: fit-content;">Товар</span>
+                                        <span class="small fw-bold">{{ review.product.name | truncate(30) }}</span>
+                                    {% elif review.ready_pc %}
+                                        <span class="badge bg-purple text-white extra-small mb-1" style="font-size: 0.7rem; width: fit-content; background-color: #6f42c1;">Сборка</span>
+                                        <span class="small fw-bold">{{ review.ready_pc.name | truncate(30) }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </td>
                         <td><span class="small text-light">{{ review.user.name }}</span></td>
@@ -51,22 +70,26 @@
                         </td>
                         <td class="text-end">
                             <div class="d-flex justify-content-end gap-2">
-                                {# Кнопка одобрения (только если не одобрен) #}
+                                {# Кнопка одобрения показывается ТОЛЬКО если отзыв еще не одобрен #}
                                 {% if not review.is_approved %}
-                                <form action="{{ url_for('admin.approve_review', review_id=review.id) }}" method="POST">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <button type="submit" class="action-icon action-view" title="Одобрить">
-                                        <i class="bi bi-check-lg"></i>
-                                    </button>
-                                </form>
+                                    <form action="{{ url_for('admin.approve_review', review_id=review.id) }}" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="action-icon action-view" title="Одобрить" style="background-color: rgba(25, 135, 84, 0.2); color: #198754;">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    {# Если одобрен, можно вывести заблокированную иконку или просто ничего не выводить #}
+                                    <div class="action-icon text-muted" title="Уже одобрен" style="cursor: default; opacity: 0.5;">
+                                        <i class="bi bi-patch-check-fill"></i>
+                                    </div>
                                 {% endif %}
 
-                                {# Редактирование #}
+                                {# Редактирование и удаление остаются всегда #}
                                 <a href="{{ url_for('admin.admin_edit_review', review_id=review.id) }}" class="action-icon action-edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                {# Удаление #}
                                 <form action="{{ url_for('admin.admin_delete_review', review_id=review.id) }}" method="POST" onsubmit="return confirm('Удалить отзыв навсегда?');">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <button type="submit" class="action-icon action-delete">

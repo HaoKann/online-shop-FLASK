@@ -39,10 +39,14 @@ def ready_pc_details(build_id):
     # Используем форму отзывов вместо EmptyForm
     form = UserReviewForm()
 
-    if form.validate_on_submit():
+    if request.method == 'POST':
+        rating_val = request.form.get('rating')
+
+
+    if form.text.data and rating_val:
         new_review = Review(
             text = form.text.data,
-            rating = request.form.get('rating'), # Получаем рейтинг из радио-кнопок
+            rating = int(rating_val),
             user_id = current_user.id,
             ready_pc_id = ready_pc.id,
             is_approved = False # Отправляем на модерацию
@@ -51,6 +55,11 @@ def ready_pc_details(build_id):
         db.session.commit()
         flash('Спасибо! Ваш отзыв отправлен на модерацию', 'success')
         return redirect(url_for('ready_pc.ready_pc_details', build_id=build_id))
+    else:
+        if not rating_val:
+            flash('Пожалуйста, выберите оценку (звезды)', 'danger')
+        if not form.text.data:
+            flash('Напишите текст отзыва','danger')
     
     # Получаем только одобренные отзывы для этой сборки
     approved_reviews = ready_pc.reviews.filter_by(is_approved=True).order_by(Review.date_posted.desc()).all()
