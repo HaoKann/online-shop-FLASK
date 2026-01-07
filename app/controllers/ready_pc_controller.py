@@ -43,25 +43,26 @@ def ready_pc_details(build_id):
         rating_val = request.form.get('rating')
 
 
-    if form.text.data and rating_val:
-        new_review = Review(
-            text = form.text.data,
-            rating = int(rating_val),
-            user_id = current_user.id,
-            ready_pc_id = ready_pc.id,
-            is_approved = False # Отправляем на модерацию
-        )
-        db.session.add(new_review)
-        db.session.commit()
-        flash('Спасибо! Ваш отзыв отправлен на модерацию', 'success')
-        return redirect(url_for('ready_pc.ready_pc_details', build_id=build_id))
-    else:
-        if not rating_val:
-            flash('Пожалуйста, выберите оценку (звезды)', 'danger')
-        if not form.text.data:
-            flash('Напишите текст отзыва','danger')
+        if form.text.data and rating_val:
+            new_review = Review(
+                text = form.text.data,
+                rating = int(rating_val),
+                user_id = current_user.id,
+                ready_pc_id = ready_pc.id,
+                is_approved = False # Отправляем на модерацию
+            )
+            db.session.add(new_review)
+            db.session.commit()
+            flash('Спасибо! Ваш отзыв отправлен на модерацию', 'success')
+            return redirect(url_for('ready_pc.ready_pc_details', build_id=build_id))
+        else:
+            if not rating_val:
+                flash('Пожалуйста, выберите оценку (звезды)', 'danger')
+            if not form.text.data:
+                flash('Напишите текст отзыва','danger')
     
     # Получаем только одобренные отзывы для этой сборки
+    # Этот блок выполняется всегда (и для GET, и если POST не прошел)
     approved_reviews = ready_pc.reviews.filter_by(is_approved=True).order_by(Review.date_posted.desc()).all()
 
     return render_template('main_screen/ready_pc_details.html', 

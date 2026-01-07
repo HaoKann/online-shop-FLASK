@@ -36,9 +36,24 @@
                 <dl class="admin-detail-list row">
                     <dt class="col-sm-5 text-muted">Продукт:</dt>
                     <dd class="col-sm-7">
-                        <a href="{{ url_for('admin.admin_product', id=review.product_id) }}" class="text-white">
-                            {{ review.product.name | truncate(30) }}
-                        </a>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Объект отзыва:</label>
+                            {% if review.product %}
+                                <div class="d-flex align-items-center p-2 rounded bg-dark border border-secondary border-opacity-25">
+                                    <img src="{{ review.product.get_first_photo() }}" class="rounded me-2" style="width: 30px; height: 30px; object-fit: contain;">
+                                    <a href="{{ url_for('admin.admin_edit_product', id=review.product_id) }}" class="text-white text-decoration-none small fw-bold">
+                                        {{ review.product.name }}
+                                    </a>
+                                </div>
+                            {% elif review.ready_pc %}
+                                <div class="d-flex align-items-center p-2 rounded bg-dark border border-secondary border-opacity-25">
+                                    <img src="{{ review.ready_pc.get_build_image() }}" class="rounded me-2" style="width: 30px; height: 30px; object-fit: contain;">
+                                    <span class="text-purple small fw-bold me-2">[Сборка]</span>
+                                    <span class="text-white small fw-bold">{{ review.ready_pc.name }}</span>
+                                    {# Если есть ссылка на редактирование сборки, добавьте её ниже #}
+                                </div>
+                            {% endif %}
+                        </div>
                     </dd>
                     
                     <dt class="col-sm-5 text-muted">Пользователь:</dt>

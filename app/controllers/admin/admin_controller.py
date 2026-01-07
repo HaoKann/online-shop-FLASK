@@ -775,15 +775,27 @@ def admin_edit_review(review_id):
     form = ReviewForm(obj=review)
 
     if form.validate_on_submit():
-        review.rating = form.rating.data
-        review.text = form.text.data
-        review.is_approved = form.is_approved.data
+        form.populate_obj(review)
 
+        # --- ИСПРАВЛЕНИЕ ОШИБКИ ТИПОВ ---
+        # Если из формы пришла пустая строка, превращаем её в None (NULL в БД)
+        if review.product_id == '':
+            review.product_id = None
+        
+        if review.ready_pc_id == '':
+            review.ready_pc_id = None
+
+        # 1. Сначала сохраняем изменения самого отзыва (текст, оценку)
         db.session.commit()
 
-        # Если отзыв одобрен, нужно пересчитать рейтинг продукта
-        if review.is_approved:
+        # 2. Теперь пересчитываем рейтинг родителя (товара ИЛИ сборки)
+        if review.product:
             review.product.update_rating()
+        elif review.ready_pc:
+            review.ready_pc.update_rating()
+        
+        # 3. Фиксируем обновленный рейтинг в базе
+        db.session.commit()
 
         flash('Отзыв успешно обновлен и статус модерации сохранен', 'success')
         return redirect(url_for('admin.admin_reviews_moderation'))
@@ -803,14 +815,23 @@ def admin_delete_review(review_id):
 
     review = Review.query.get_or_404(review_id)
     product = review.product # Сохраняем ссылку на продукт перед удалением
+    ready_pc = review.ready_pc
 
     db.session.delete(review)
     db.session.commit()
 
-    if review.is_approved:
-        review.update_rating()
+    if product:
+        product.update_rating()
+        object_name = product.name
+    elif ready_pc:
+        ready_pc.update_rating()
+        object_name = ready_pc.name
+    else:
+        object_name = 'Неизвестный объект'
+    
+    db.session.commit()
 
-    flash('Отзыв успешно удален', 'success')
+    flash(f'Отзыв для "{object_name}" успешно удален', 'success')
     return redirect(url_for('admin.admin_reviews_moderation'))
 
 
@@ -821,14 +842,22 @@ def approve_review(review_id):
         abort(403)
 
     review = Review.query.get_or_404(review_id)
-
     # Меняем статус на "Одобрен"
     review.is_approved = True
+    
+    # Определяем имя объекта для сообщения и обновляем рейтинг
+    if review.product:
+        object_name = review.product.name
+        review.product.update_rating()
+    elif review.ready_pc:
+        object_name = review.ready_pc.name
+        review.ready_pc.update_rating()
+    else:
+        object_name = f"ID {review_id}"
+
     db.session.commit()
 
-    # ВАЖНО: Запускаем пересчет рейтинга у связанного продукта
-    review.product.update_rating()
+    flash(f'Отзыв #{review_id} одобрен. Рейтинг товара "{object_name}" обновлен.', 'success')
 
-    flash(f'Отзыв #{review_id} одобрен. Рейтинг товара "{review.product.name}" обновлен.', 'success')
     return redirect(url_for('admin.admin_reviews_moderation'))
 
