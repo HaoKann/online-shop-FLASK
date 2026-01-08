@@ -5,6 +5,7 @@ from app.models.product import ReadyPC
 from app.forms.empty_form import EmptyForm
 from app.models.review import Review
 from app.forms.review_form import UserReviewForm
+from app.utils.telegram_sender import send_telegram_message
 
 ready_pc_bp = Blueprint('ready_pc', __name__)
 
@@ -53,6 +54,20 @@ def ready_pc_details(build_id):
             )
             db.session.add(new_review)
             db.session.commit()
+
+            try:
+                msg_text = (
+                    f"🔔 <b>Новый отзыв на сборку!</b>\n\n"
+                    f"🖥 <b>Сборка:</b> {ready_pc.name}\n"
+                    f"👤 <b>Пользователь:</b> {current_user.name}\n"
+                    f"⭐️ <b>Оценка:</b> {rating_val}/5\n"
+                    f"💬 <b>Текст:</b> {form.text.data}\n\n"
+                    f"<i>Зайдите в админку для модерации.</i>"
+                )
+                send_telegram_message(msg_text)
+            except Exception as e:
+                print(f"Ошибка отправки уведомления: {e}")
+
             flash('Спасибо! Ваш отзыв отправлен на модерацию', 'success')
             return redirect(url_for('ready_pc.ready_pc_details', build_id=build_id))
         else:
