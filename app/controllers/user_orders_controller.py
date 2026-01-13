@@ -6,6 +6,7 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 from app.forms.order_form import UserOrderForm
 from app.forms.empty_form import EmptyForm
+from app.utils.telegram_sender import send_telegram_message
 
 user_order_bp = Blueprint('user_order', __name__)
 
@@ -47,7 +48,7 @@ def user_order_details(order_id):
     user_order = Order.query.filter_by(id=order_id, user_id=current_user.id).first_or_404()
     return render_template('user/order_details.html', user_order=user_order)
 
-@user_order_bp.route('/chechout', methods=['GET','POST'])
+@user_order_bp.route('/checkout', methods=['GET','POST'])
 @login_required
 def checkout():
     form = UserOrderForm()
@@ -80,6 +81,9 @@ def order_success():
         # --- НОВЫЙ БЛОК: Создаём доставку ---
         # 2. Получаем информацию о доставке из сессии
         delivery_info = session.get('delivery_info')
+        # ВАЖНО: Инициализируем переменную ДО проверки условия, чтобы код не упал
+        delivery_text_for_msg = "Не указана (самовывоз или цифровой товар)"
+
         if delivery_info:
             new_delivery = Delivery(
                 address = delivery_info.get('address'),
@@ -88,10 +92,19 @@ def order_success():
                 order_id = new_order.id
             )
             db.session.add(new_delivery)
+            
+            # Формируем текст только если есть доставка
+            delivery_text_for_msg = (
+                f"Тип: {delivery_info.get('way_of_delivery')}\n"
+                f"Адрес: {delivery_info.get('address')}\n"
+                f"Время: {delivery_info.get('time_of_arrival')}"
+            )
         
 
-        # 3. Перемещаем товары из корзины в заказ
+        # 3. Перемещаем товары и готовим список для Телеграма
         cart_items = current_user.cart.products_in_cart.all()
+        items_list_text = ""
+
         for item in cart_items:
            # СОЗДАЕМ НОВУЮ ЗАПИСЬ о товаре в заказе
             order_item = ProductInOrder(
@@ -100,7 +113,11 @@ def order_success():
                 amount = item.amount
             )
             db.session.add(order_item)
-        
+
+            # Добавляем товар в список для сообщения
+            # item.product.name доступен благодаря relationship в модели Cart/Product
+            items_list_text += f"- {item.product.name} ({item.amount} шт.)\n"
+
         # --- НОВЫЙ БЛОК: Очищаем корзину ---
         # 4. Теперь удаляем скопированные товары из корзины
         for item in cart_items:
@@ -111,6 +128,21 @@ def order_success():
 
         # 6. Сохраняем все изменения (новый заказ, его состав и пустую корзину)
         db.session.commit()
+
+        # --- ОТПРАВКА В TELEGRAM ---
+        try:
+            msg_text = (
+                f"💰 <b>НОВЫЙ ЗАКАЗ ОПЛАЧЕН!</b> (ID: {new_order.id})\n\n"
+                f"👤 <b>Клиент:</b> {current_user.name}\n"
+                f"📧 <b>Email:</b> {current_user.email}\n\n"
+                f"🚚 <b>Доставка:</b>\n{delivery_text_for_msg}\n\n"
+                f"📦 <b>Товары:</b>\n{items_list_text}\n"
+                f"💵 <b>Сумма:</b> {new_order.price:,.0f} ₸".replace(",", " ")
+            )
+            send_telegram_message(msg_text)
+        except Exception as e_tg:
+            print(f"Ошибка отправки в Telegram: {e_tg}")
+
         flash('Оплата прошла успешно! Ваш заказ оформлен.', 'success')
 
     except Exception as e:
@@ -133,7 +165,13 @@ def cancel_order(order_id):
     if order_to_cancel.status == 'pending':
         order_to_cancel.status = 'canceled'
         db.session.commit()
-        flash('Ваш заказ был отмененён', 'success')
+
+        try:
+            send_telegram_message(f"❌ <b>Заказ #{order_id} отменен пользователем.</b>")
+        except:
+            pass
+
+        flash('Ваш заказ был отменён', 'success')
     else:
         flash('Этот заказ уже нельзя отменить', 'danger')
 
