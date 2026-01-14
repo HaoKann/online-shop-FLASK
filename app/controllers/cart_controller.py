@@ -5,7 +5,6 @@ from app.models.cart import ProductInCart
 from flask_login import login_required, current_user
 from app.models.product import ReadyPC
 
-
 cart_bp = Blueprint('cart', __name__)
 
 @cart_bp.route('/cart')

@@ -38,8 +38,8 @@ services:
       # Не забудьте про ключи Stripe и секретный ключ Flask!
       # Лучше вынести их в .env файл, но для теста можно прописать тут
       SECRET_KEY: "oidsngoisdngiodsnoipngsdfopgsfd"
-      STRIPE_PUBLISHABLE_KEY: "pk_test_51RlSB7CRyOe06kAPIN533V60LCzry50qpYyIdy60XKEipxXjLBNhoSW0IKhR99XOWA7upCjGujp59XsOdatUJMOa002vSbkJuv" 
-      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY}"
+    env_file:
+      - .flaskenv
     depends_on:
       - db
     volumes:
