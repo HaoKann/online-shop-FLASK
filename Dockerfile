@@ -27,7 +27,7 @@ libpq-dev \
 COPY requirements.txt .
 
 # 5. Устанавливаем зависимости Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install gunicorn
 
 # 6. Копируем весь остальной код проекта в контейнер
 COPY . .
