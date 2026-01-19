@@ -38,4 +38,5 @@ EXPOSE 5000
 # 8. Команда для запуска приложения
 # Используем gunicorn для продакшн-запуска (надо будет добавить его в requirements)
 # Или пока что обычный python run.py для тестов
-CMD ["sh", "-c", "flask db upgrade && gunicorn -w 4 -b 0.0.0.0:10000 run:app"]
+# Добавляем python nuke_db.py в начало
+CMD ["sh", "-c", "python nuke_db.py && flask db upgrade && gunicorn -w 4 -b 0.0.0.0:10000 run:app"]
