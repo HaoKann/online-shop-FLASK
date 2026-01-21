@@ -1,71 +1,56 @@
 from app import create_app, db
-from app.models import Product, Category, User  # Импортируем ваши модели
 from sqlalchemy import text
 
 app = create_app()
 
 with app.app_context():
-    print("⏳ [1/3] Очистка базы данных...")
-    db.drop_all()
-    db.session.execute(text("DROP TABLE IF EXISTS alembic_version"))
-    db.session.commit()
-    print("✅ Старые данные удалены.")
+    # Импортируем классы напрямую из их файлов внутри папки models
+    try:
+        from app.models.product import Product
+        from app.models.product import Category # Если Category в файле product.py
+    except ImportError:
+        # Если Category в отдельном файле (проверь, есть ли category.py в списке ls)
+        try:
+            from app.models import Category
+        except:
+            # Если нет файла category.py, возможно она в product.py или другом
+            print("⚠️ Не удалось найти модель Category. Проверь имя файла!")
+            Category = None
 
-    print("⏳ [2/3] Создание таблиц...")
+    print("⏳ [1/2] Очистка и создание таблиц...")
+    db.drop_all()
     db.create_all()
     print("✅ Таблицы созданы.")
 
-    print("⏳ [3/3] Добавление товаров (Seeding)...")
-    
-    try:
-        # 1. Создаем Категории (без них товары не создать)
-        cat_laptops = Category(name="Ноутбуки", slug="laptops")
-        cat_phones = Category(name="Смартфоны", slug="smartphones")
-        
-        db.session.add_all([cat_laptops, cat_phones])
-        db.session.commit() # Сохраняем, чтобы получить ID категорий
+    if Product and Category:
+        print("⏳ [2/2] Добавление тестовых данных...")
+        try:
+            # Создаем категории
+            # ВНИМАНИЕ: Проверь, есть ли поле 'slug' в твоей модели Category
+            c1 = Category(name="Ноутбуки", slug="laptops")
+            c2 = Category(name="Смартфоны", slug="smartphones")
+            db.session.add_all([c1, c2])
+            db.session.commit()
 
-        # 2. Создаем Товары
-        products = [
-            Product(
+            # Создаем товары
+            p1 = Product(
                 name="Игровой ноутбук Razor",
                 price=1500,
-                discount=10,
-                category_id=cat_laptops.id,
-                description="Мощный ноутбук для игр",
-                image="laptop.jpg", # Убедитесь, что логика картинок позволяет строки
-                is_active=True,
-                stock=10
-            ),
-            Product(
+                category_id=c1.id,
+                is_active=True
+            )
+            p2 = Product(
                 name="iPhone 15 Pro",
                 price=1200,
-                discount=0,
-                category_id=cat_phones.id,
-                description="Новейший смартфон",
-                image="phone.jpg",
-                is_active=True,
-                stock=50
-            ),
-            Product(
-                name="MacBook Air M2",
-                price=1100,
-                discount=5,
-                category_id=cat_laptops.id,
-                description="Легкий и быстрый",
-                image="macbook.jpg",
-                is_active=True,
-                stock=15
+                category_id=c2.id,
+                is_active=True
             )
-        ]
+            
+            db.session.add_all([p1, p2])
+            db.session.commit()
+            print(f"✅ Успешно добавлено {db.session.query(Product).count()} товаров!")
+        except Exception as e:
+            print(f"❌ Ошибка при заполнении: {e}")
+            db.session.rollback()
 
-        db.session.add_all(products)
-        db.session.commit()
-        print(f"✅ Успешно добавлено {len(products)} товаров!")
-        
-    except Exception as e:
-        print(f"⚠️ Ошибка при добавлении данных: {e}")
-        # Если ошибка в полях, раскомментируйте строку ниже, чтобы увидеть детали в логах:
-        # raise e
-
-    print("🚀 Готово! Сервер может запускаться.")
+    print("🚀 Готово! Проверяй сайт.")
