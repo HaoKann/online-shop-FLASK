@@ -43,7 +43,9 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
     
     def get_avatar(self):
-        return 'avatars/' + str(self.id) + '/' + self.avatar
+        if self.avatar:
+            return f"avatars/{self.id}/{self.avatar}"
+        return "avatars/default_avatar.jpg"
     
 class FavouriteProduct(db.Model):
     __tablename__ = 'favourite_products'
