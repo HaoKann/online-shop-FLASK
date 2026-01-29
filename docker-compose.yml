@@ -21,7 +21,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432" # Чтобы можно было подключиться через DBeaver снаружи
+      - "5434:5432" # Чтобы можно было подключиться через DBeaver снаружи
 
   # 2. Сервис Вашего Приложения
   web:

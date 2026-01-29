@@ -1,6 +1,6 @@
 from app import db
 from flask import render_template, flash, redirect, url_for, request, abort, request, Blueprint, current_app
-from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm, PhotoForm
+from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
 from app.models.product import Product, Characteristic, Photo, ProductInReadyPC
@@ -68,7 +68,7 @@ def admin_product(id):
     edit_product_form.category_id.choices = [(c.id, c.name) for c in Category.query.order_by('name').all()]
 
     characteristics_form  = CharacteristicsForm(prefix='characteristics_form')
-    photo_form = PhotoForm(prefix='photo_form')
+    
     
 
     if edit_product_form.validate_on_submit() and edit_product_form.submit.data:
@@ -77,11 +77,46 @@ def admin_product(id):
         product.category_id = edit_product_form.category_id.data 
         product.price = edit_product_form.price.data    
         product.discount = edit_product_form.discount.data
+
+        # --- ОБРАБОТКА ФОТО (если загружено новое) ---
+        if edit_product_form.photo.data:
+            f = edit_product_form.photo.data
+
+            # А. Удаляем старое фото (чтобы не засорять диск)
+            old_photo = Photo.query.filter_by(prod_id=id).first()
+            if old_photo:
+                try:
+                    old_photo_path = os.path.join(
+                        current_app.instance_path.replace('instance', ''), 'app', 'static', 'products_photo',
+                        product.category.slug, str(product.id), old_photo.photo_path
+                    )
+                    if os.path.exists(old_photo_path):
+                        os.remove(old_photo_path)
+                except Exception as e:
+                    print(f"Ошибка удаления старого фото: {e}")
+                    
+                db.session.delete(old_photo)
+
+            # Б. Сохраняем новое фото
+            photo_path = os.path.join(
+                current_app.instance_path.replace('instance', ''), 'app', 'static', 'products_photo',
+                product.category.slug, str(product.id)
+            )
+            os.makedirs(photo_path, exist_ok=True)
+
+            file_ext = os.path.splitext(f.filename)[1]
+            new_filename = secure_filename(f"main{file_ext}")
+            f.save(os.path.join(photo_path, new_filename))
+
+            # В. Создаем запись о новом фото
+            new_photo_record = Photo(photo_path=new_filename, description=edit_product_form.description.data or product.name, prod_id=id)
+            db.session.add(new_photo_record)
+            
         db.session.commit()
-        flash('Товар успешно обновлен!', 'success')
+        flash('Фото успешно заменено', 'success')
         return redirect(url_for('admin.admin_product', id=id))
 
-
+    
      # --- ОБРАБОТКА ФОРМЫ ДОБАВЛЕНИЯ ХАРАКТЕРИСТИКИ ---
     if characteristics_form.validate_on_submit() and characteristics_form.submit_characteristics.data:
         name = characteristics_form.name.data
@@ -104,40 +139,6 @@ def admin_product(id):
             flash('Характеристика успешно добавлена!', 'success')
             return redirect(url_for('admin.admin_product', id=id))
         
-
-    if photo_form.validate_on_submit() and photo_form.submit_photo.data:
-        f = photo_form.photo.data
-        if f:
-        # 1. Удаляем старое фото, если оно есть
-            old_photo = Photo.query.filter_by(prod_id=id).first()
-            if old_photo:
-                old_photo_path = os.path.join(
-                    os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
-                    product.category.slug, str(product.id), old_photo.photo_path
-                )
-                try:
-                    os.remove(old_photo_path)
-                except FileNotFoundError:
-                    pass  # Если файла нет — просто пропускаем
-                db.session.delete(old_photo)
-                db.session.commit()
-
-        # 2. Сохраняем новое фото
-        photo_path = os.path.join(
-            os.path.dirname(current_app.instance_path), 'app', 'static', 'products_photo',
-            product.category.slug, str(product.id)
-        )
-        filename = secure_filename(f.filename)
-        os.makedirs(photo_path, exist_ok=True)
-        f.save(os.path.join(photo_path, filename))
-
-        # 3. Добавляем запись в БД
-        photo = Photo(photo_path=filename, description=photo_form.description.data, prod_id=id)
-        db.session.add(photo)
-        db.session.commit()
-        flash('Фото успешно заменено', 'success')
-        return redirect(url_for('admin.admin_product', id=id))
-    
        # --- ПОДГОТОВКА ДАННЫХ ДЛЯ ОТОБРАЖЕНИЯ СТРАНИЦЫ (GET-запрос) ---
     # Получаем ШАБЛОН обязательных характеристик для категории этого товара
     required_specs_template = []
@@ -151,7 +152,6 @@ def admin_product(id):
         'admin/product_details.html', 
         product=product, 
         characteristics_form=characteristics_form, 
-        photo_form=photo_form,
         edit_form=edit_product_form, # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
         active_page='products',
         required_specs=required_specs_template,
@@ -344,13 +344,13 @@ def admin_add_product():
         abort(403)
     
     form = AddProduct()
-    photo_form = PhotoForm()
+    
 
     # --- ИЗМЕНЕНИЕ: Заполняем выпадающий список категориями ---
     form.category_id.choices = [(c.id, c.name) for c in Category.query.order_by('name').all()]
 
     if form.validate_on_submit():
-        # 1. Создаем продукт
+        # 1. Сначала создаем и сохраняем продукт (чтобы получить его ID)
         product = Product(
             name=form.name.data,
             category_id=form.category_id.data,
@@ -361,36 +361,37 @@ def admin_add_product():
         db.session.commit()
         flash('Продукт успешно добавлен!', 'success')
 
-        # 2. Обработка фото (если оно было загружено)
-        if photo_form.submit_photo.data and photo_form.photo.data:
-            f = photo_form.photo.data
-            if f:
-                # Создаем папку для фото
-                photo_dir = os.path.join(
-                    os.path.dirname(current_app.instance_path),
-                    'app', 'static', 'products_photo',
-                    product.category.slug, str(product.id)
-                )
-                os.makedirs(photo_dir, exist_ok=True)
+        # 2. Обработка фото (берем данные из той же формы form)
+        if form.photo.data:
+            f = form.photo.data
+            
+           # Создаем путь: app/static/products_photo/slug/id/
+            photo_dir = os.path.join(
+                current_app.instance_path.replace('instance', ''),
+                'app', 'static', 'products_photo',
+                product.category.slug, str(product.id)
+            )
+            os.makedirs(photo_dir, exist_ok=True)
 
-                # Генерируем уникальное имя файла
-                file_ext = os.path.splitext(f.filename)[1]
-                filename = f"main{file_ext}"
-                secure_name = secure_filename(filename)
-                file_path = os.path.join(photo_dir, secure_name)
+            # Генерируем уникальное имя файла
+            file_ext = os.path.splitext(f.filename)[1]
+            filename = f"main{file_ext}"
+            secure_name = secure_filename(filename)
+            file_path = os.path.join(photo_dir, secure_name)
 
                 # Сохраняем файл
-                f.save(file_path)
+            f.save(file_path)
 
                 # Добавляем запись в БД
-                photo = Photo(
-                    photo_path=secure_name,
-                    description=photo_form.description.data,
-                    prod_id=product.id  # Используем ID созданного продукта
-                )
-                db.session.add(photo)
-                db.session.commit()
-                flash('Фото успешно добавлено', 'success')
+            photo = Photo(
+                photo_path=secure_name,
+                description=form.description.data,
+                prod_id=product.id  # Используем ID созданного продукта
+            )
+            db.session.add(photo)
+            db.session.commit()
+
+        flash('Фото успешно добавлено', 'success')
 
         # 3. Редирект
         category_routes = {
@@ -406,7 +407,7 @@ def admin_add_product():
         route_name = category_routes.get(product.category.slug, 'catalog.catalog')
         return redirect(url_for(route_name))
 
-    return render_template('admin/add_product.html', form=form, photo_form=photo_form, active_page='add_product', sub_title='Добавление нового продукта')
+    return render_template('admin/add_product.html', form=form, active_page='add_product', sub_title='Добавление нового продукта')
 
 
 

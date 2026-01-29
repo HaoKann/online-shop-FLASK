@@ -1,9 +1,8 @@
 {% extends 'admin/base.html' %}
-{% from 'bootstrap5/form.html' import render_form %}
 
 {% block content %}
 <div class="container">
-        <div class="text-center mb-4">
+    <div class="text-center mb-4">
         <h1>{{ sub_title or 'Управление формой' }}</h1>
     </div>
 
@@ -11,8 +10,65 @@
     <div class="row d-flex justify-content-center">
         {# Задаём ширину колонки (например, 8 из 12) #}
         <div class="col-lg-8">
-            <div class="admin-form-card">
-                {{ render_form(form, button_style='primary', button_size='lg') }}
+            <div class="admin-form-card p-4 shadow-sm rounded">
+                
+                {# ВАЖНО: Добавляем enctype="multipart/form-data" для загрузки файлов #}
+                <form method="POST" enctype="multipart/form-data">
+                    
+                    {# Обязательно: скрытый токен защиты (CSRF) #}
+                    {{ form.hidden_tag() }}
+
+                    {# --- Блок товара --- #}
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control", placeholder="Введите название товара") }}
+                        {# Вывод ошибок валидации, если есть #}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.category_id.label(class="form-label") }}
+                        {{ form.category_id(class="form-select") }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.price.label(class="form-label") }}
+                            {{ form.price(class="form-control", placeholder="10000") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.discount.label(class="form-label") }}
+                            {{ form.discount(class="form-control", placeholder="0") }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    {# --- Блок фото (теперь внутри той же формы) --- #}
+                    <h5 class="mb-3">Изображение товара</h5>
+                    
+                    <div class="mb-3">
+                        {{ form.photo.label(class="form-label") }}
+                        {# class="form-control" автоматически стилизует input type="file" в Bootstrap 5 #}
+                        {{ form.photo(class="form-control") }}
+                        {% for error in form.photo.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.photo_description.label(class="form-label") }}
+                        {{ form.photo_description(class="form-control", placeholder="Краткое описание для поисковиков (alt)") }}
+                    </div>
+
+                    {# Кнопка отправки #}
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
