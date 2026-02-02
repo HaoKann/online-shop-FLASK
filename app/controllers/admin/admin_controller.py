@@ -385,7 +385,7 @@ def admin_add_product():
                 # Добавляем запись в БД
             photo = Photo(
                 photo_path=secure_name,
-                description=form.description.data,
+                description=form.photo_description.data,
                 prod_id=product.id  # Используем ID созданного продукта
             )
             db.session.add(photo)

@@ -9,6 +9,6 @@ class EditProduct(FlaskForm):
     price = IntegerField('Новая цену ', validators=[DataRequired()])
     discount = IntegerField('Скидка(необязательно)', default=0)
     photo = FileField('Заменить фото товара: ', validators=[FileAllowed(['jpg','png','gif', 'jpeg'], 'Можно загружать только картинки!' )])
-    description = StringField('Описание картинки',validators=[DataRequired()])
+    photo_description = StringField('Описание картинки',validators=[DataRequired()])
     submit_photo = SubmitField('Добавить фото')
     submit = SubmitField('Изменить товар')

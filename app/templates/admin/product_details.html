@@ -1,113 +1,106 @@
 {% extends 'admin/base.html' %}
-{% from 'bootstrap5/form.html' import render_form %}
+
+
+
 
 {% block content %}
-<div class="container pb-5">
-    <div class="page-header mb-4">
-        <h1>Детали продукта: {{ product.name }}</h1>
-        <a href="{{ url_for('admin.admin_products_list') }}" class="btn btn-outline-light">
-            <i class="bi bi-arrow-left"></i> К списку продуктов
+<div class="container pb-5 text-light">
+    {# --- ШАПКА СТРАНИЦЫ --- #}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Детали продукта: {{ product.name }}</h1>
+        <a href="{{ url_for('admin.admin_products_list') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Назад
         </a>
     </div>
 
     <div class="row g-4">
         
-        {# ЛЕВАЯ КОЛОНКА (8/12) #}
+        {# === ЛЕВАЯ КОЛОНКА === #}
         <div class="col-lg-8">
             
-            {# --- БЛОК 1: ОСНОВНАЯ ИНФОРМАЦИЯ И РЕДАКТИРОВАНИЕ --- #}
+            {# --- БЛОК 1: ИНФОРМАЦИЯ И РЕДАКТИРОВАНИЕ --- #}
             <div class="admin-card mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="admin-card-title m-0"><i class="bi bi-info-circle me-2"></i> Информация о товаре</h5>
-                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#editFormCollapse" aria-expanded="false">
-                        <i class="bi bi-pencil-square"></i> Редактировать
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-info-circle me-2"></i>Общая информация</h5>
+                    <button class="btn btn-sm btn-outline-light border-secondary text-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#editFormCollapse">
+                        <i class="bi bi-pencil-square me-1"></i> Редактировать
                     </button>
                 </div>
-
-                {# Статичный просмотр (скрывается при редактировании, если хочешь, но пусть лучше будет видно всегда) #}
-                <dl class="admin-detail-list row">
-                    <dt class="col-sm-3 text-muted">ID / Статус</dt>
-                    <dd class="col-sm-9">
-                        <span class="id-tag me-2">#{{ product.id }}</span>
+                
+                <div class="row mb-2 small">
+                    <div class="col-md-3 text-secondary">Статус:</div>
+                    <div class="col-md-9">
                         {% if product.is_active %}
-                            <span class="badge bg-success">Активен</span>
+                            <span class="badge bg-success bg-opacity-75 small">Активен</span>
                         {% else %}
-                            <span class="badge bg-danger">В архиве</span>
+                            <span class="badge bg-danger bg-opacity-75 small">В архиве</span>
                         {% endif %}
-                    </dd>
-                    
-                    <dt class="col-sm-3 text-muted">Цена</dt>
-                    <dd class="col-sm-9">
-                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸ 
+                    </div>
+                </div>
+                <div class="row mb-2 small">
+                    <div class="col-md-3 text-secondary">Цена:</div>
+                    <div class="col-md-9 fw-bold">
+                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
                         {% if product.discount %}
-                            <span class="text-danger ms-2">(-{{ product.discount }}%)</span>
+                            <span class="text-danger ms-2 small">-{{ product.discount }}%</span>
                         {% endif %}
-                    </dd>
-                </dl>
+                    </div>
+                </div>
 
-                {# --- СКРЫТАЯ ФОРМА РЕДАКТИРОВАНИЯ (раскрывается по кнопке) --- #}
+                {# Форма редактирования (скрытая) #}
                 <div class="collapse mt-3" id="editFormCollapse">
-                    <div class="card card-body bg-light border-0">
-                        <form method="POST" enctype="multipart/form-data"> {{ edit_form.hidden_tag() }}
-                            
+                    <div class="p-3 rounded border border-secondary bg-dark bg-opacity-50">
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ edit_form.hidden_tag() }}
                             <div class="mb-3">
-                                {{ edit_form.name.label(class="form-label") }}
-                                {{ edit_form.name(class="form-control") }}
+                                <label class="form-label small text-secondary">Название</label>
+                                {{ edit_form.name(class="form-control form-control-sm bg-dark text-light border-secondary shadow-none") }}
                             </div>
-
-                            <div class="mb-3">
-                                {{ edit_form.category_id.label(class="form-label") }}
-                                {{ edit_form.category_id(class="form-select") }}
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    {{ edit_form.price.label(class="form-label") }}
-                                    {{ edit_form.price(class="form-control") }}
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small text-secondary">Цена</label>
+                                    {{ edit_form.price(class="form-control form-control-sm bg-dark text-light border-secondary shadow-none") }}
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    {{ edit_form.discount.label(class="form-label") }}
-                                    {{ edit_form.discount(class="form-control") }}
+                                <div class="col-6">
+                                    <label class="form-label small text-secondary">Скидка</label>
+                                    {{ edit_form.discount(class="form-control form-control-sm bg-dark text-light border-secondary shadow-none") }}
                                 </div>
                             </div>
-
-                            {# Поле для замены фото #}
-                            <div class="mb-3 p-3 bg-white rounded border">
-                                <label class="form-label fw-bold"><i class="bi bi-camera me-1"></i> Заменить главное фото</label>
-                                {{ edit_form.photo(class="form-control mb-2") }}
-                                {{ edit_form.photo_description(class="form-control form-control-sm", placeholder="Описание для alt") }}
-                                <div class="form-text text-muted">Загрузите новый файл, чтобы заменить текущее фото. Если оставить пустым, фото не изменится.</div>
+                            <div class="mb-3">
+                                <label class="form-label small text-secondary">Главное фото</label>
+                                {{ edit_form.photo(class="form-control form-control-sm bg-dark text-light border-secondary mb-2 shadow-none") }}
+                                {{ edit_form.photo_description(class="form-control form-control-sm bg-dark text-light border-secondary shadow-none", placeholder="Alt-текст") }}
                             </div>
-
-                            <div class="d-grid">
-                                {{ edit_form.submit(class="btn btn-primary") }}
-                            </div>
+                            <button class="btn btn-success btn-sm w-100 mt-2 shadow-none">Обновить данные</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            {# --- БЛОК 2: ТЕКУЩИЕ ХАРАКТЕРИСТИКИ --- #}
+            {# --- БЛОК 2: ТАБЛИЦА ХАРАКТЕРИСТИК (БЕЗ "STRING") --- #}
             <div class="admin-card mb-4">
-                <h5 class="admin-card-title"><i class="bi bi-clipboard-data me-2"></i> Характеристики</h5>
+                <div class="mb-3 pb-2 border-bottom border-secondary">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-list-stars me-2"></i>Характеристики</h5>
+                </div>
                 
                 {% if product.characteristics.count() > 0 %}
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <tbody>
+                        <table class="table table-dark table-hover mb-0 align-middle small" style="background-color: #1e1e1e; --bs-table-bg: #1e1e1e;">
+                            <tbody class="border-top-0">
                                 {% for spec in product.characteristics %}
-                                <tr>
-                                    <td class="text-muted w-50">{{ spec.name }}</td>
-                                    <td class="fw-bold">{{ spec.value }} {{ spec.value_type if spec.value_type != 'text' else '' }}</td>
-                                    <td class="text-end">
-                                        <form action="{{ url_for('admin.admin_delete_characteristic', characteristic_id=spec.id) }}" 
-                                              method="POST" 
-                                              class="d-inline-block"
-                                              onsubmit="return confirm('Удалить характеристику {{ spec.name }}?');">
+                                <tr class="border-secondary border-opacity-25">
+                                    <td class="text-secondary w-50 py-3">{{ spec.name }}</td>
+                                    <td class="fw-bold py-3">
+                                        {{ spec.value }} 
+                                        {# Показываем тип только если это реальные единицы измерения, а не технический тип БД #}
+                                        {% if spec.value_type not in ['string', 'text', 'integer', 'boolean'] %}
+                                            <span class="ms-1 fw-normal text-secondary">{{ spec.value_type }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end py-3">
+                                        <form action="{{ url_for('admin.admin_delete_characteristic', characteristic_id=spec.id) }}" method="POST">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                            <button type="submit" class="btn btn-link text-danger p-0 ms-2" title="Удалить">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            <button class="btn btn-link text-danger p-0 shadow-none"><i class="bi bi-trash"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -116,94 +109,102 @@
                         </table>
                     </div>
                 {% else %}
-                    <p class="text-muted text-center py-3">Характеристики не добавлены.</p>
+                    <div class="text-center py-5 text-secondary small">Характеристики пока не добавлены.</div>
                 {% endif %}
             </div>
 
-            {# --- БЛОК 3: ФОТОГРАФИИ (Галерея) --- #}
-            <div class="admin-card mt-4">
-                <h5 class="admin-card-title"><i class="bi bi-images me-2"></i> Галерея</h5>
-                <div class="row g-3 photo-grid-wrapper"> 
+            {# --- БЛОК 3: ГАЛЕРЕЯ --- #}
+            <div class="admin-card">
+                <div class="mb-3 pb-2 border-bottom border-secondary">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-images me-2"></i>Галерея изображений</h5>
+                </div>
+                <div class="row g-3">
                     {% if product.photos.count() > 0 %}
                         {% for photo in product.photos %}
-                            <div class="col-md-3 col-6 photo-item">
-                                <div class="position-relative group-action">
-                                    <img src="{{ photo.get_photo() }}" alt="{{ photo.description }}" class="img-fluid rounded border shadow-sm w-100 object-fit-cover" style="height: 150px;">
-                                    
-                                    <form action="{{ url_for('admin.admin_delete_photo', photo_id=photo.id) }}" method="POST"
-                                          class="position-absolute top-0 end-0 m-1"
-                                          onsubmit="return confirm('Удалить это фото?');">
+                            <div class="col-6 col-md-3">
+                                <div class="position-relative border border-secondary rounded overflow-hidden shadow-sm" style="background-color: #fff; height: 160px;">
+                                    <img src="{{ photo.get_photo() }}" class="w-100 h-100 object-fit-contain p-2" alt="Preview">
+                                    <form action="{{ url_for('admin.admin_delete_photo', photo_id=photo.id) }}" method="POST" class="position-absolute top-0 end-0 m-1">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                        <button type="submit" class="btn btn-sm btn-danger py-0 px-1 shadow-sm" title="Удалить">
-                                            <i class="bi bi-x"></i>
+                                        <button class="btn btn-danger btn-sm p-0 rounded-circle border-0 shadow-sm" style="width: 24px; height: 24px;">
+                                            <i class="bi bi-x small"></i>
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         {% endfor %}
                     {% else %}
-                        <div class="col-12"><p class="text-muted text-center py-3">Нет дополнительных фото.</p></div>
+                        <div class="col-12 text-center text-secondary py-3 small">Дополнительных фото нет.</div>
                     {% endif %}
                 </div>
             </div>
-
         </div>
 
-        {# ПРАВАЯ КОЛОНКА (4/12) #}
+        {# === ПРАВАЯ КОЛОНКА === #}
         <div class="col-lg-4">
             
-            {# --- БЛОК 4: ДОБАВЛЕНИЕ ХАРАКТЕРИСТИК (ШАБЛОН) --- #}
-            <div class="admin-form-card mb-4 shadow-sm border-0">
-                <div class="card-header bg-white border-bottom-0 pt-3">
-                    <h5 class="card-title h6 mb-0"><i class="bi bi-plus-circle me-2 text-primary"></i> Добавить характеристику</h5>
+            {# --- БЛОК 4: ФОРМА ДОБАВЛЕНИЯ ХАРАКТЕРИСТИК (УБРАН СИНИЙ ЦВЕТ) --- #}
+            <div class="admin-card mb-4 border-0">
+                <div class="mb-3 pb-2 border-bottom border-secondary">
+                    <h6 class="mb-0 fs-6"><i class="bi bi-plus-circle-dotted me-2 text-info"></i>Заполнить характеристики</h6>
                 </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
-                        {% if required_specs %}
-                            {{ characteristics_form.hidden_tag() }} 
-                            {% for spec_template in required_specs %}
-                                <div class="mb-2">
-                                    <label class="form-label small text-muted mb-1">{{ spec_template.name }}</label>
-                                    <input type="{{ 'number' if spec_template.value_type == 'integer' else 'text' }}"
-                                           class="form-control form-control-sm"
-                                           name="spec_{{ spec_template.name }}"
-                                           value="{{ spec_values.get(spec_template.name, '') }}"
-                                           placeholder="Введите значение...">
-                                </div>
-                            {% endfor %}
-                            <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Сохранить всё</button>
-                        {% else %}
-                            <div class="text-center py-3">
-                                <p class="small text-muted mb-2">Шаблон не задан.</p>
-                                <a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}" 
-                                   class="btn btn-outline-primary btn-sm">
-                                   Настроить шаблон
-                                </a>
+                
+                <form method="POST" action="{{ url_for('admin.save_product_characteristics', product_id=product.id) }}">
+                    {% if required_specs %}
+                        {{ characteristics_form.hidden_tag() }} 
+                        {% for spec_template in required_specs %}
+                            <div class="mb-3">
+                                <label class="small text-secondary mb-1 ms-1 d-block">{{ spec_template.name }}</label>
+                                <input type="{{ 'number' if spec_template.value_type == 'integer' else 'text' }}"
+                                       class="form-control form-control-sm bg-dark text-light border-secondary shadow-none py-2"
+                                       name="spec_{{ spec_template.name }}"
+                                       value="{{ spec_values.get(spec_template.name, '') }}"
+                                       placeholder="...">
                             </div>
-                        {% endif %}
-                    </form>
-                </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-outline-info btn-sm w-100 mt-2 py-2">
+                            <i class="bi bi-save me-1"></i> Сохранить характеристики
+                        </button>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="small text-secondary mb-3">Шаблон характеристик пуст.</p>
+                            <a href="{{ url_for('admin.manage_category_characteristics', category_id=product.category_id) }}" 
+                               class="btn btn-sm btn-outline-secondary w-100">
+                               Настроить шаблон
+                            </a>
+                        </div>
+                    {% endif %}
+                </form>
             </div>
             
-            {# --- БЛОК 5: УПРАВЛЕНИЕ СТАТУСОМ --- #}
+            {# --- БЛОК 5: УПРАВЛЕНИЕ --- #}
             <div class="admin-card">
-                <h5 class="admin-card-title h6"><i class="bi bi-toggle-on me-2"></i> Статус товара</h5>
-                <div class="d-grid gap-2 mt-3">
+                <div class="mb-3 border-bottom border-secondary pb-2">
+                    <h6 class="mb-0 fs-6">Действия</h6>
+                </div>
+                
+                <div class="d-grid gap-2">
                     {% if product.is_active %}
+                        <div class="text-success small text-center mb-1"><i class="bi bi-check2-circle me-1"></i>Товар в продаже</div>
                         <form method="POST" action="{{ url_for('admin.admin_deactivate_products', id=product.id) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button class="btn btn-outline-secondary btn-sm w-100">В архив</button>
+                            <button class="btn btn-sm btn-outline-secondary w-100">Скрыть (В архив)</button>
                         </form>
                     {% else %}
+                        <div class="text-warning small text-center mb-1"><i class="bi bi-slash-circle me-1"></i>Товар в архиве</div>
                         <form method="POST" action="{{ url_for('admin.admin_activate_product', id=product.id) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button class="btn btn-success btn-sm w-100">Активировать</button>
+                            <button class="btn btn-sm btn-outline-success w-100">Опубликовать</button>
                         </form>
                     {% endif %}
                     
-                    <form method="POST" action="{{ url_for('admin.admin_delete_product', id=product.id) }}" onsubmit="return confirm('Удалить НАВСЕГДА?');">
+                    <hr class="border-secondary my-3 opacity-25">
+                    
+                    <form method="POST" action="{{ url_for('admin.admin_delete_product', id=product.id) }}" onsubmit="return confirm('Удалить товар безвозвратно?');">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <button class="btn btn-outline-danger btn-sm w-100 mt-2">Удалить товар</button>
+                        <button class="btn btn-sm btn-outline-danger w-100">
+                            <i class="bi bi-trash3 me-1"></i> Удалить полностью
+                        </button>
                     </form>
                 </div>
             </div>
