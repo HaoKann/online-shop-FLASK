@@ -14,11 +14,11 @@ PerfectPC is a full-featured e-commerce web application built with Python and Fl
 
 ### Main Page
 ![Main Page](screenshots/main_page.png)
-*(Place a screenshot of your main page here)*
+
 
 ### Shopping Cart
 ![Shopping Cart](screenshots/cart_page.png)
-*(Place a screenshot of your cart here)*
+
 
 ---
 
