@@ -34,6 +34,7 @@ services:
       # Формат: postgresql://user:password@SERVICE_NAME:5432/dbname
       SQLALCHEMY_DATABASE_URI: postgresql://postgres:password@db:5432/online_shop_db
       FLASK_APP: run.py
+      PYTHONUNBUFFERED: 1
       FLASK_DEBUG: 1
       # Не забудьте про ключи Stripe и секретный ключ Flask!
       # Лучше вынести их в .env файл, но для теста можно прописать тут

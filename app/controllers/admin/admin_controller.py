@@ -1,10 +1,11 @@
 from app import db
+import os
+import uuid
 from flask import render_template, flash, redirect, url_for, request, abort, request, Blueprint, current_app
 from app.forms.admin.add_product_form import AddProduct, CharacteristicsForm
 from app.forms.confirm_form import ConfirmForm
 from app.forms.admin.edit_product_form import EditProduct
 from app.models.product import Product, Characteristic, Photo, ProductInReadyPC
-import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
 from app.models.order import Order, Delivery
@@ -20,6 +21,8 @@ from app.forms.admin.add_product_form import CategoryCharacteristicForm
 from app.forms.empty_form import EmptyForm
 from app.models.review import Review
 from app.forms.admin.review_form import ReviewForm
+from app.forms.admin.add_photo_form import AddPhotoForm
+
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -69,6 +72,7 @@ def admin_product(id):
 
     characteristics_form  = CharacteristicsForm(prefix='characteristics_form')
     
+    add_photo_form = AddPhotoForm()
     
 
     if edit_product_form.validate_on_submit() and edit_product_form.submit.data:
@@ -155,7 +159,8 @@ def admin_product(id):
         edit_form=edit_product_form, # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
         active_page='products',
         required_specs=required_specs_template,
-        spec_values=existing_spec_values
+        spec_values=existing_spec_values,
+        add_photo_form=add_photo_form
 )
 
 @admin_bp.route('/admin/photo/delete/<int:photo_id>', methods=['GET', 'POST'])
@@ -862,3 +867,45 @@ def approve_review(review_id):
 
     return redirect(url_for('admin.admin_reviews_moderation'))
 
+
+@admin_bp.route('/admin/products/<int:product_id>/add_photo', methods=['GET','POST'])
+@login_required
+def add_product_photo(product_id):
+    product = Product.query.get_or_404(product_id)
+    form = AddPhotoForm()
+
+    if form.validate_on_submit():
+        file = form.photo.data
+
+        # 1. Генерируем имя файла
+        filename = secure_filename(file.filename)
+        unique_filename = f"{uuid.uuid4()}_{filename}"
+
+        # 2. Определяем путь (используем категорию и ID товара, как при создании)
+        category_slug = product.category.slug if hasattr(product.category, 'slug') else 'default'
+        upload_folder = os.path.join('app', 'static', 'products_photo', category_slug, str(product.id))
+
+        # Создаем папку, если вдруг её нет
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+
+        # 3. Сохраняем файл
+        file_path = os.path.join(upload_folder, unique_filename)
+        file.save(file_path)
+
+        # 4. Записываем в БД
+       
+        new_photo = Photo(photo_path=unique_filename, prod_id=product.id)
+        db.session.add(new_photo)
+        db.session.commit()
+
+        flash('Фото успешно добавлено!', 'success')
+    else:
+        flash('Ошибка при загрузке фото', 'danger')
+
+    return redirect(url_for('admin.admin_product', id=product_id))
+
+
+
+
+    

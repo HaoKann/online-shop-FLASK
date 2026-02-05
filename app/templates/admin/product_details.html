@@ -115,19 +115,41 @@
 
             {# --- БЛОК 3: ГАЛЕРЕЯ --- #}
             <div class="admin-card">
-                <div class="mb-3 pb-2 border-bottom border-secondary">
-                    <h5 class="mb-0 fs-6"><i class="bi bi-images me-2"></i>Галерея изображений</h5>
+                <div class="mb-3 pb-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fs-6"><i class="bi bi-images me-2"></i>Галерея</h5>
+                    
+                    {# КНОПКА ОТКРЫТИЯ ЗАГРУЗКИ #}
+                    <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addPhotoCollapse">
+                        <i class="bi bi-plus-lg"></i> Добавить фото
+                    </button>
                 </div>
+
+                {# --- ВЫПАДАЮЩАЯ ФОРМА ЗАГРУЗКИ --- #}
+                <div class="collapse mb-3" id="addPhotoCollapse">
+                    <div class="card card-body bg-dark border border-secondary">
+                        <form method="POST" action="{{ url_for('admin.add_product_photo', product_id=product.id) }}" enctype="multipart/form-data">
+                            {{ add_photo_form.hidden_tag() }}
+                            <div class="input-group">
+                                {{ add_photo_form.photo(class="form-control bg-dark text-light border-secondary") }}
+                                {{ add_photo_form.submit(class="btn btn-success") }}
+                            </div>
+                            <div class="form-text text-muted small mt-1">Поддерживаются: jpg, png, webp.</div>
+                        </form>
+                    </div>
+                </div>
+                
                 <div class="row g-3">
                     {% if product.photos.count() > 0 %}
                         {% for photo in product.photos %}
                             <div class="col-6 col-md-3">
-                                <div class="position-relative border border-secondary rounded overflow-hidden shadow-sm" style="background-color: #fff; height: 160px;">
+                                <div class="photo-gallery-item border border-secondary rounded shadow-sm position-relative" style="background-color: #fff; height: 160px;">
                                     <img src="{{ photo.get_photo() }}" class="w-100 h-100 object-fit-contain p-2" alt="Preview">
-                                    <form action="{{ url_for('admin.admin_delete_photo', photo_id=photo.id) }}" method="POST" class="position-absolute top-0 end-0 m-1">
+                                    
+                                    <form action="{{ url_for('admin.admin_delete_photo', photo_id=photo.id) }}" method="POST" class="delete-photo-btn-wrapper">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                        <button class="btn btn-danger btn-sm p-0 rounded-circle border-0 shadow-sm" style="width: 24px; height: 24px;">
-                                            <i class="bi bi-x small"></i>
+                                        <button class="btn btn-danger p-0 rounded-circle shadow d-flex align-items-center justify-content-center" 
+                                                style="width: 30px; height: 30px;" title="Удалить фото">
+                                            <i class="bi bi-x fs-5"></i>
                                         </button>
                                     </form>
                                 </div>
