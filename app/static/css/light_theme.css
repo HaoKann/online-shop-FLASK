@@ -1,467 +1,316 @@
+/* =========================================
+   LIGHT THEME - FULL & FIXED (MERGED VERSION)
+   ========================================= */
+
+/* --- 0. ФИКС СТАБИЛЬНОСТИ --- */
+html {
+    overflow-y: scroll; /* Убирает дерганье ширины */
+}
+
 /* Основные стили светлой темы */
-body {
-    background-color: #ffffff; /* Белый фон */
-    color: #1e1e1e; /* Тёмно-серый текст для читаемости */
-    transition: all 0.3s ease; /* Плавные переходы */
+body, .body-bg {
+    background-color: #f4f6f8 !important; /* Чуть сероватый белый для приятности глаз */
+    color: #1e1e1e !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Навбар */
-.navbar {
-    background-color: #600018 !important; /* Красный акцент для навбара */
-    transition: all 0.3s ease;
+/* --- 1. НАВИГАЦИЯ (NAVBAR) --- */
+.custom-navbar {
+    background-color: #600018 !important; /* Твой красный цвет */
+    border-bottom: 1px solid #4a0012;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1050 !important;
+    
+    transition: background-color 0.3s ease;
 }
 
-.navbar .nav-item .nav-link {
-    color: #ffffff !important; /* Белый текст в навбаре */
-}
-
-.navbar .nav-item .nav-link:hover {
-    color: #ffcccc !important; /* Лёгкий розовый при наведении */
-}
-
-.navbar-brand {
-    color: #ffffff !important; /* Белый бренд */
-}
-
-/* Добавьте это в конец вашего CSS файла */
-.dark-card, .dark-card h1, .dark-card p, .dark-card span {
-    color: #ffffff !important; /* Устанавливаем белый цвет текста для тёмной карточки */
-}
-
-/* Исключения для навбара */
-.navbar h1, .navbar h2, .navbar h3, .navbar h4, .navbar h5, .navbar h6,
-.navbar p, .navbar div, .navbar span {
-    color: #ffffff !important; /* Белый текст в навбаре */
-}
-
-/* Футер */
-footer .nav {
-    color: #1e1e1e; /* Тёмный текст в футере */
-}
-
-footer .nav-link {
-    color: #ffffff !important; /* Тёмный текст ссылок */
-}
-
-footer .nav-link:hover {
-    color: #ffffff !important; /* Меняем на темный */
-    text-decoration: underline; /* Подчеркивание */
-}
-
-footer .copyright {
-    color: #ffffff !important; /* Тёмный копирайт */
-}
-
-/* Аккордеон */
-.accordion-item {
-    background-color: #f0f0f0; /* Светло-серый фон */
-    border-color: #e0e0e0; /* Лёгкая граница */
-}
-
-.accordion-body {
-    background-color: #ffffff; /* Белый фон тела */
-    color: #1e1e1e !important; /* Тёмный текст */
-}
-
-.accordion-body * {
-    color: #1e1e1e !important; /* Все элементы внутри тёмные */
-}
-
-.accordion-button {
-    background-color: #600018 !important; /* Красный акцент */
-    color: #ffffff !important; /* Белый текст */
-    transition: all 0.3s ease;
-}
-
-.accordion-button:hover,
-.accordion-button:not(.collapsed) {
-    background-color: #800020 !important; /* Темнее при наведении */
+.custom-navbar .navbar-brand {
     color: #ffffff !important;
+    font-weight: bold;
 }
 
-/* Выпадающее меню */
-.dropdown-menu {
-    background-color: #600018; /* Красный фон */
+.custom-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
-.dropdown-item {
-    color: #ffffff !important; /* Белый текст */
+.custom-navbar .nav-link:hover {
+    color: #ffcccc !important;
 }
 
-.dropdown-item:hover {
-    background-color: #800020 !important; /* Темнее при наведении */
-    color: #ffffff !important;
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.navbar-toggler-icon {
+    filter: invert(1); /* Белая иконка */
 }
 
 /* Форма поиска в навбаре */
-.navbar .d-flex {
-    margin-left: 15px;
+.custom-navbar .form-control {
+    background-color: #ffffff !important;
+    color: #1e1e1e !important;
+    border-color: transparent !important;
+}
+.custom-navbar .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.3) !important;
+}
+.custom-navbar .btn-outline-success {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+.custom-navbar .btn-outline-success:hover {
+    background-color: #ffffff !important;
+    color: #600018 !important;
 }
 
-
-
-.navbar .form-control {
-    color: #1e1e1e !important; /* Тёмный текст */
-    border-color: #e0e0e0 !important; /* Светлая граница */
-    background-color: #ffffff !important; /* Белый фон */
-    transition: all 0.3s ease;
+/* Дропдаун */
+.dropdown-menu {
+    background-color: #600018 !important;
 }
-
-.navbar .form-control:focus {
-    background-color: #f0f0f0 !important; /* Светло-серый при фокусе */
-    color: #600018 !important; /* Красный текст */
-    border-color: #600018 !important; /* Красная граница */
-    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Тень */
+.dropdown-item {
+    color: #ffffff !important;
 }
-
-.navbar .btn-outline-success {
-    color: #600018 !important; /* Красный текст кнопки */
-    border-color: #600018 !important; /* Красная граница */
-    background-color: #ffffff !important; /* Белый фон */
-    transition: all 0.3s ease;
-}
-
-.navbar .btn-outline-success:hover {
-    background-color: #600018 !important; /* Красный фон */
-    color: #ffffff !important; /* Белый текст */
-    border-color: #800020 !important; /* Темнее граница */
-}
-
-.navbar .form-control::placeholder {
-    color: #666666; /* Серый плейсхолдер */
-    opacity: 1;
-}
-
-.form-select {
-    background-color: #ffffff; /* Белый фон */
-    color: #1e1e1e !important; /* Тёмный текст */
-    border-color: #e0e0e0 !important; /* Светлая граница */
-    transition: all 0.3s ease;
-}
-
-.form-select:focus {
-    border-color: #600018 !important; /* Красная граница */
-    box-shadow: 0 0 5px rgba(96, 0, 24, 0.5); /* Тень */
-}
-
-/* Карточки */
-.card {
-    background-color: #ffffff; /* Белый фон */
-    color: #1e1e1e !important; /* Тёмный текст */
-}
-
-.card * {
-    color: #1e1e1e !important; /* Все элементы внутри */
-}
-
-.btn-primary,
-.btn-danger,
-.btn-success {
+.dropdown-item:hover {
+    background-color: #800020 !important;
     color: #ffffff !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+/* --- 2. ФУТЕР --- */
+.custom-footer {
+    background-color: #212529 !important; /* Темный футер для контраста */
+    border-top: 1px solid #343a40;
+    color: #f8f9fa !important;
+}
+.footer-link {
+    color: #ced4da !important;
+}
+.footer-link:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+.footer-text {
+    color: #adb5bd !important;
+}
+
+/* --- 3. ГЕРОЙ-СЕКЦИЯ --- */
+.hero-section {
+    background-color: #ffffff !important;
+    padding: 6rem 0 !important;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+}
+.hero-title, .hero-subtitle {
     color: #1e1e1e !important;
 }
-
-.btn-primary {
-    background-color: #600018 !important; /* Красный фон */
-    border-color: #600018 !important; /* Красная граница */
-    color: #ffffff !important; /* Белый текст */
+.hero-title span {
+    color: #600018 !important;
+}
+.hero-section .btn-outline-light {
+    color: #600018 !important;
+    border-color: #600018 !important;
+}
+.hero-section .btn-outline-light:hover {
+    background-color: #600018 !important;
+    color: #ffffff !important;
 }
 
-/* Переопределяем Bootstrap-классы */
-.text-white {
-    color: #1e1e1e !important; /* Переопределяем text-white для светлой темы */
-}
-
-/* Секция "Почему выбирают нас" */
+/* --- 4. СЕКЦИЯ "ПОЧЕМУ МЫ" (ИСПРАВЛЕНА СЕТКА) --- */
 .features-section {
-    background-color: #ffffff !important; /* Белый фон */
-    color: #1e1e1e !important; /* Тёмный текст */
-    padding: 60px 0 !important; /* Отступы */
+    background-color: #f4f6f8 !important;
+    padding: 60px 0 !important;
 }
 
-.features-section * {
-    background-color: transparent !important; /* Убираем тёмные фоны */
-}
-
-.features-section .container {
-    background-color: transparent !important;
-}
-
-.features-section h2,
-.features-section .section-title {
-    color: #1e1e1e !important; /* Темный заголовок */
+.features-section h2, .section-title {
+    color: #1e1e1e !important;
     text-align: center;
     margin-bottom: 40px;
     font-size: 2.5rem;
     font-weight: bold;
 }
 
+/* ВАЖНЫЙ ФИКС: Сетка Grid */
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .feature-card {
-    background-color: #f8f9fa !important; /* Светло-серый фон */
-    border: 1px solid #e9ecef !important;
-    border-radius: 10px;
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px;
     padding: 30px 20px;
     text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    
+    /* Flexbox для центровки содержимого */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-    box-shadow: 0 5px 20px rgba(96, 0, 24, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(96, 0, 24, 0.1);
     border-color: #600018 !important;
 }
 
-.feature-card .feature-icon,
-.feature-card i {
+.feature-icon, .feature-card i {
     background-color: #600018 !important;
     color: #ffffff !important;
     width: 70px;
     height: 70px;
     border-radius: 50%;
+    
+    /* Центровка иконки */
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
+    
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
 }
 
-.feature-card:hover .feature-icon,
-.feature-card:hover i {
-    background-color: #800020 !important; /* Темнее при наведении */
-    transform: scale(1.1); /* Увеличение */
+.feature-card:hover .feature-icon {
+    background-color: #800020 !important;
+    transform: scale(1.1);
 }
 
 .feature-card h3 {
-    color: #1e1e1e !important; /* Темный заголовок */
+    color: #1e1e1e !important;
     font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
 .feature-card p {
-    color: #666666 !important; /* Серый текст описания */
-    font-size: 1rem;
+    color: #666666 !important;
     margin: 0;
 }
 
-/* Исключения для белого текста */
-.navbar .text-white,
-.btn-primary .text-white,
-.bg-dark .text-white {
-    color: #ffffff !important;
-}
-
-/* Пагинация */
-.pagination {
-    --bs-pagination-color: #1e1e1e; /* Тёмный цвет */
-    --bs-pagination-active-bg: #600018; /* Красный фон активной */
-    --bs-pagination-active-border-color: #600018;
-    --bs-pagination-hover-color: #600018; /* Красный при наведении */
-    --bs-pagination-disabled-color: #666666; /* Серый для отключённых */
-}
-
-.page-link {
-    color: #1e1e1e !important; /* Тёмный текст */
-    background-color: #f8f9fa; /* Светлый фон */
-    border-color: #e0e0e0; /* Светлая граница */
-}
-
-.page-link:hover {
-    color: #600018 !important; /* Красный при наведении */
-    background-color: #e9ecef; /* Светлее фон */
-    border-color: #cccccc;
-}
-
-.page-item.active .page-link {
-    background-color: #600018 !important; /* Активная страница */
-    border-color: #600018 !important;
-    color: #ffffff !important;
-}
-
-.page-item.disabled .page-link {
-    color: #666666 !important; /* Серый для отключённых */
-    background-color: #f0f0f0;
-    border-color: #e0e0e0;
-}
-
-/* Герой-секция */
-.hero-section {
-    background-color: #f8f9fa !important; /* Светло-серый фон вместо чёрного */
-    padding: 6rem 0; /* Сохраняем отступы */
-    text-align: center;
-}
-
-.hero-section .hero-title,
-.hero-section .hero-subtitle {
-    color: #1e1e1e !important; /* Темный текст */
-}
-
-.hero-section .hero-title span {
-    color: #600018 !important; /* Красный акцент */
-}
-
-.hero-section .btn-outline-light {
-    color: #600018 !important; /* Красный текст */
-    border-color: #600018 !important; /* Красная граница */
-    background-color: transparent; /* Прозрачный фон */
-    font-weight: 600; /* Жирный шрифт */
-}
-
-.hero-section .btn-outline-light:hover {
-    color: #ffffff !important; /* Белый текст */
-    background-color: #600018 !important; /* Красный фон */
-    border-color: #600018 !important;
-}
-
-/* Шапка сайта */
-.navbar.sticky-top {
+/* --- 5. КНОПКИ --- */
+.btn-primary {
     background-color: #600018 !important;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+.btn-outline-secondary {
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    color: #ffffff !important;
 }
 
-/* Карточки товаров */
-.product-card-catalog {
+/* --- 6. КАРТОЧКИ И ПРОФИЛЬ (ТВОИ СТИЛИ) --- */
+.card {
     background-color: #ffffff !important;
-    border-color: #dee2e6 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
-}
-
-.product-card-catalog:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
-}
-
-.product-card-catalog .product-title-catalog {
     color: #1e1e1e !important;
+    border: 1px solid #dee2e6 !important;
 }
-
-.product-card-catalog .price-container .text-muted {
-    color: #6c757d !important;
-}
-
-.product-card-catalog .product-price-catalog {
-    color: #1e1e1e !important;
-}
-
-.price-container .product-price-catalog.discount-price {
-    color: #28a745 !important;
-}
-
-.favourite-actions .btn.btn-danger {
-    color: #600018 !important;
-    border-color: #600018 !important;
-}
-
-/* Корзина */
-.cart-item-card, .cart-summary-card {
+.card-header {
     background-color: #f8f9fa !important;
-    border-color: #dee2e6 !important;
-    color: #1e1e1e !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+.card * {
+    color: #1e1e1e; /* Наследуем темный цвет */
 }
 
-.cart-item-card *, .cart-summary-card * {
-    color: #1e1e1e !important;
-}
-
-.cart-item-card .cart-item-price-single {
-    color: #6c757d !important;
-}
-
-.cart-item-quantity {
-    background-color: #e9ecef !important;
-}
-
-#cart-grand-total.text-success {
-    color: #28a745 !important;
-}
-
-/* Страницы заказов */
-.admin-accordion .accordion-item {
-    background-color: #ffffff;
-    border-color: #dee2e6;
-}
-
-.admin-accordion .accordion-button {
-    background-color: #f8f9fa !important;
-    color: #1e1e1e !important;
-}
-
-.admin-accordion .accordion-button *,
-.admin-accordion .accordion-button:not(.collapsed) .text-muted {
-    color: #1e1e1e !important;
-}
-
-.admin-accordion .accordion-button:not(.collapsed) {
-    background-color: #600018 !important;
-    color: #ffffff !important;
-}
-
-.admin-accordion .accordion-button:not(.collapsed) * {
-    color: #ffffff !important;
-}
-
-.admin-accordion .accordion-body {
-    background-color: #ffffff;
-}
-
-.admin-accordion .list-group-item,
-.order-details-card,
-.delivery-summary-box {
-    color: #1e1e1e !important;
-    border-color: #dee2e6 !important;
-    background-color: #f8f9fa;
-}
-
-.order-details-card *,
-.delivery-summary-box * {
-    color: #1e1e1e !important;
-}
-
-.specs-list li {
-    border-color: #dee2e6 !important;
-}
-
-.specs-list li span:first-child {
-    color: #6c757d !important;
-}
-
-.order-details-card .card-header {
-    background-color: #f0f2f5;
-    border-bottom-color: #dee2e6;
-}
-
-
-/* --- Стили для карточки профиля в светлой теме --- */
-
+/* Твои стили для профиля */
 .profile-card-wrapper {
-    background-color: #1e1e1e; /* Светло-серый фон для карточки */
-    border: 1px solid #dee2e6; /* Светлая рамка */
+    background-color: #ffffff !important; /* Исправил на белый, чтобы было видно текст */
+    border: 1px solid #dee2e6 !important;
 }
-
-/* Делаем основной текст внутри карточки темным */
-.profile-card-wrapper h2,
+.profile-card-wrapper h2, 
 .profile-card-wrapper .info-value {
-    color: #ffffff !important;
+    color: #1e1e1e !important;
 }
-
 .profile-card-wrapper .text-muted,
 .profile-card-wrapper .info-label {
     color: #6c757d !important;
 }
 
-.btn-outline-secondary {
-    color: #6c757d;
-    border-color: #6c757d;
+/* --- 7. КОРЗИНА И ТОВАРЫ --- */
+.product-card-catalog {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+.product-card-catalog .product-title-catalog {
+    color: #1e1e1e !important;
+}
+.cart-item-card, .cart-summary-card {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+    color: #1e1e1e !important;
+}
+.cart-item-card *, .cart-summary-card * {
+    color: #1e1e1e !important;
+}
+
+/* --- 8. АДМИНКА (АККОРДЕОН) --- */
+.accordion-item {
+    background-color: #ffffff;
+    border-color: #dee2e6;
+}
+.accordion-button {
+    background-color: #f8f9fa !important;
+    color: #1e1e1e !important;
+}
+.accordion-button:not(.collapsed) {
+    background-color: #600018 !important;
+    color: #ffffff !important;
+}
+.accordion-body {
+    background-color: #ffffff !important;
+    color: #1e1e1e !important;
+}
+
+/* --- 9. ФОРМЫ --- */
+.form-control, .form-select {
+    background-color: #ffffff !important;
+    color: #1e1e1e !important;
+    border: 1px solid #ced4da !important;
+}
+.form-control:focus {
+    border-color: #600018 !important;
+    box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.15) !important;
+}
+
+/* --- 10. ПАГИНАЦИЯ (ТВОИ СТИЛИ) --- */
+.pagination {
+    --bs-pagination-color: #1e1e1e;
+    --bs-pagination-active-bg: #600018;
+    --bs-pagination-active-border-color: #600018;
+    --bs-pagination-hover-color: #600018;
+    --bs-pagination-disabled-color: #666666;
+}
+.page-link {
+    color: #1e1e1e !important;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+.page-item.active .page-link {
+    background-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+/* Переключатель темы */
+.theme-toggle-btn {
+    border-color: rgba(255,255,255,0.5) !important;
+    color: #ffffff !important; /* В красной шапке иконка должна быть белой */
 }
