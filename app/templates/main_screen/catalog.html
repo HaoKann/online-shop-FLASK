@@ -71,90 +71,95 @@
             {# Products Grid: Используем новую сетку #}
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 {% for product in products.items %}
-                    <div class="col">
-                        <div class="pc-card h-100 d-flex flex-column">
-                            {# Блок 1: Кликабельная часть (Изображение и Название) #}
-                            <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
-                                <div class="pc-card-image-wrapper">
-                                    {% if product.discount %}
-                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                                            -{{ product.discount }}%
-                                        </span>
-                                    {% endif %}
-                                    <img src="{{ product.get_first_photo() }}" class="pc-card-image" alt="{{ product.name }}">
-                                    <div class="pc-card-overlay">
-                                        <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
-                                    </div>
-                                </div>
-                                <div class="pc-card-body">
-                                    <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
-                                    
-                                    {# --- БЛОК РЕЙТИНГА В КАРТОЧКЕ --- #}
-                                    <div class="product-card-rating mb-2">
-                                        {% set avg_rating = product.average_rating if product.average_rating is not none else 0 %}
-                                        {% if avg_rating > 0 %}
-                                            <div class="stars text-warning" style="font-size: 0.85rem;">
-                                                {# Закрашенные звезды #}
-                                                {% for i in range(avg_rating | int) %}
-                                                    <i class="bi bi-star-fill"></i>
-                                                {% endfor %}
-                                                
-                                                {# Пустые звезды #}
-                                                {% for i in range(5 - (avg_rating | int)) %}
-                                                    <i class="bi bi-star text-muted"></i>
-                                                {% endfor %}
-                                                
-                                                <span class="text-muted ms-1" style="font-size: 0.75rem;">
-                                                    ({{ product.reviews_count | default(0) }})
-                                                </span>
-                                            </div>
-                                        {% else %}
-                                        <div class="stars" style="font-size: 0.75rem; color: #888;">
-                                            <i class="bi bi-star me-1"></i> <span>Нет отзывов</span>
-                                        </div>
-                                    {% endif %}
-                                    </div>
-                                    {# ------------------------------- #}
-                                </div>
-                                                            </a>
-                            
-                            {# Блок 2: Футер (Цена и Кнопки) #}
-                            <div class="pc-card-footer mt-auto">
-                                <div class="price-wrapper">
-                                    {# Логика отображения скидки #}
-                                    {% if product.discount %}
-                                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
-                                            {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
-                                        </span>
-                                        <span class="price-value" style="color: #28a745;">
-                                            {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
-                                        </span>
-                                    {% else %}
-                                        <span class="price-label">Цена</span>
-                                        <span class="price-value">
-                                            {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
-                                        </span>
-                                    {% endif %}
-                                </div>
-                                
-                                {# Две кнопки: "В избранное" и "В корзину" #}
-                                <div class="d-flex gap-2">
-                                    <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
-                                        {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart" title="В избранное" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
-                                            <i class="bi bi-heart-fill"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
-                                        {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
-                                            <i class="bi bi-cart-plus-fill me-2"></i> В корзину
-                                        </button>
-                                    </form>
-                                </div>
+                    {# --- ВСТАВИТЬ ВНУТРИ ЦИКЛА for product in products.items --- #}
+
+<div class="col">
+    <div class="pc-card h-100 d-flex flex-column">
+        {# Блок 1: Кликабельная часть (Изображение и Название) #}
+        <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
+            <div class="pc-card-image-wrapper">
+                {% if product.discount %}
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
+                        -{{ product.discount }}%
+                    </span>
+                {% endif %}
+                <img src="{{ product.get_first_photo() }}" class="pc-card-image" alt="{{ product.name }}">
+                <div class="pc-card-overlay">
+                    <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                </div>
+            </div>
+            
+            <div class="pc-card-body">
+                <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
+                
+                {# --- ИСПРАВЛЕННЫЙ БЛОК РЕЙТИНГА --- #}
+                <div class="product-card-rating mb-2">
+                    {% set avg_rating = product.average_rating if product.average_rating is not none else 0 %}
+                    
+                    <div class="d-flex align-items-center" style="font-size: 0.85rem;">
+                        {% if avg_rating > 0 %}
+                            <div class="stars text-warning me-2">
+                                {# Закрашенные звезды #}
+                                {% for i in range(avg_rating | int) %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% endfor %}
+                                {# Пустые звезды #}
+                                {% for i in range(5 - (avg_rating | int)) %}
+                                    <i class="bi bi-star text-secondary opacity-25"></i>
+                                {% endfor %}
                             </div>
-                        </div>
+                            {# Счетчик отзывов: Сделал цвет более явным (text-secondary вместо text-muted) и убрал прозрачность #}
+                            <span class="text-secondary fw-medium" style="font-size: 0.8rem;">
+                                ({{ product.reviews_count | default(0) }})
+                            </span>
+                        {% else %}
+                            {# Если нет отзывов #}
+                            <div class="text-secondary opacity-50" style="font-size: 0.8rem;">
+                                <i class="bi bi-star me-1"></i> Нет отзывов
+                            </div>
+                        {% endif %}
                     </div>
+                </div>
+                {# ----------------------------------- #}
+                
+            </div>
+        </a>
+        
+        {# Блок 2: Футер (Цена и Кнопки) #}
+        <div class="pc-card-footer mt-auto">
+            <div class="price-wrapper">
+                {% if product.discount %}
+                    <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
+                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                    </span>
+                    <span class="price-value" style="color: #28a745;">
+                        {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
+                    </span>
+                {% else %}
+                    <span class="price-label">Цена</span>
+                    <span class="price-value">
+                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                    </span>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex gap-2">
+                <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
+                    {{ csrf_form.hidden_tag() }}
+                    <button type="submit" class="btn-add-to-cart" title="В избранное" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                        <i class="bi bi-heart-fill"></i>
+                    </button>
+                </form>
+                <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
+                    {{ csrf_form.hidden_tag() }}
+                    <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                        <i class="bi bi-cart-plus-fill me-2"></i> В корзину
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
                 {% endfor %}
             </div>
 

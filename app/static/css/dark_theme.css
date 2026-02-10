@@ -205,14 +205,35 @@ a:hover {
     background-color: #2a2a2a !important;
     border: 1px solid #333 !important;
     color: #ffffff !important;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
+
 .card:hover {
     border-color: #555 !important;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
+
+/* ИСКЛЮЧАЕМ карточку формы отзыва из анимации */
+.admin-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: #444 !important;
+}
+
 .card-header, .card-footer {
     background-color: rgba(0,0,0,0.2) !important;
     border-color: #333 !important;
+}
+
+/* Отключаем анимацию для отдельных отзывов */
+.review-item {
+    transition: none !important;
+    transform: none !important;
+}
+
+.review-item:hover {
+    transform: none !important;
 }
 
 .form-control, .form-select {
@@ -323,3 +344,32 @@ a:hover {
     background-color: rgb(15, 15, 15) !important;
     color: #ddd !important;
 }
+
+
+.product-page-actions .btn-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #444444 !important;
+    color: #aaaaaa !important;
+    background-color: #2a2a2a !important;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.product-page-actions .btn-icon:hover {
+    border-color: var(--accent, #600018) !important;
+    background-color: var(--accent, #600018) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(96, 0, 24, 0.4);
+}
+
+.product-page-actions .btn-icon:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(96, 0, 24, 0.3);
+}
+

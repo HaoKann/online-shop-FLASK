@@ -18,7 +18,6 @@
         <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
             <h1 class="product-page-title mb-0">{{ ready_pc.name }}</h1>
             
-            {# Исправленная проверка на None #}
             {% if ready_pc.average_rating and ready_pc.average_rating > 0 %}
                 <div class="stars-container d-flex align-items-center">
                     <div class="text-warning d-flex align-items-center" style="white-space: nowrap; font-size: 1.1rem;">
@@ -48,22 +47,35 @@
             </a>
         </div>
 
-        {# Блок с характеристиками #}
-        <div class="product-page-specs">
-            <h5 class="specs-title">Комплектующие</h5>
-            <ul class="specs-list">
+        {# --- ИСПРАВЛЕННЫЙ БЛОК С ХАРАКТЕРИСТИКАМИ --- #}
+        <div class="product-page-specs mt-4">
+            <h5 class="specs-title mb-3 pb-2 border-bottom border-secondary border-opacity-25">Комплектующие</h5>
+            
+            <div class="specs-list d-flex flex-column">
                 {% for component in ready_pc.products_in_readypc.all() %}
-                    <li>
-                        <span>{{ component.product.category.name }}</span>
-                        <strong>
-                            <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product.id) }}" class="text-white text-decoration-none">
+                    <div class="row py-2 border-bottom border-secondary border-opacity-10 align-items-center">
+                        
+                        {# Левая колонка: Категория #}
+                        <div class="col-4">
+                            <span class="text-secondary small text-uppercase fw-semibold">
+                                {{ component.product.category.name }}
+                            </span>
+                        </div>
+                        
+                        {# Правая колонка: Название компонента #}
+                        <div class="col-8 text-end">
+                            {# Убрал text-white для поддержки светлой темы #}
+                            <a href="{{ url_for('catalog.show_prod_details', prod_id=component.product.id) }}" 
+                               class="text-decoration-none fw-bold text-break">
                                 {{ component.product.name }}
                             </a>
-                        </strong>
-                    </li>
+                        </div>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
+        {# --- КОНЕЦ ИСПРАВЛЕННОГО БЛОКА --- #}
+
     </div>
 </div>
 

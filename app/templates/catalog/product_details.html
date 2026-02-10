@@ -2,13 +2,10 @@
 
 {% block content %}
 <div class="product-page-container mb-5">
-    {# --- Галерея (без изменений) --- #}
+    {# --- Галерея --- #}
     <div class="product-page-gallery">
-
         <div id="productCarousel" class="carousel slide" data-bs-ride="false">
-            
             <div class="carousel-inner border rounded shadow-sm bg-white">
-
                 {% if product.photos.count() > 0 %}
                     {% for photo in product.photos %}
                         <div class="carousel-item {% if loop.first %}active{% endif %}">
@@ -28,7 +25,6 @@
                         </div>
                     </div>
                 {% endif %}
-
             </div>
 
             {% if product.photos.count() > 1 %}
@@ -36,47 +32,36 @@
                         data-bs-target="#productCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
                 </button>
-
                 <button class="carousel-control-next" type="button"
                         data-bs-target="#productCarousel" data-bs-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </button>
             {% endif %}
-
         </div>
-
 
         {% if product.photos.count() > 1 %}
             <div class="product-page-thumbnails d-flex gap-2 mt-3 overflow-auto pb-2">
-
                 {% for photo in product.photos %}
                     <div class="thumb-item {% if loop.first %}active{% endif %}"
                         data-bs-target="#productCarousel"
                         data-bs-slide-to="{{ loop.index0 }}"
                         style="width:80px; height:80px; min-width:80px; cursor:pointer;">
-
                         <img src="{{ photo.get_photo() }}"
                             class="w-100 h-100 object-fit-cover rounded"
                             alt="thumb">
-
                         <div class="thumb-overlay"></div>
                     </div>
                 {% endfor %}
-
             </div>
         {% endif %}
-
     </div>
-
 
     {# --- Инфо-блок --- #}
     <div class="product-page-info">
         <span class="product-page-category">{{ product.category.name }}</span>
         
-        {# Вывод рейтинга рядом с названием — ИСПРАВЛЕННЫЙ БЛОК #}
         <div class="d-flex align-items-center flex-wrap gap-3 mb-2">
             <h1 class="product-page-title mb-0">{{ product.name }}</h1>
-            
             {% if (average_rating | default(0)) > 0 %}
                 <div class="stars-container d-flex align-items-center">
                     <div class="text-warning d-flex align-items-center" style="white-space: nowrap; font-size: 1.1rem;">
@@ -107,21 +92,28 @@
             </a>
         </div>
 
+        {# --- БЛОК С ХАРАКТЕРИСТИКАМИ (ИСПРАВЛЕННЫЙ) --- #}
         <div class="product-page-specs mt-4">
-            <h5 class="specs-title mb-3  pb-2">Характеристики</h5>
+            <h5 class="specs-title mb-3 pb-2 border-bottom border-secondary border-opacity-25">Характеристики</h5>
+            
             {% if required_specs %}
-                <div class="specs-list">
+                <div class="specs-list d-flex flex-column">
                     {% for spec_template in required_specs %}
-                        {# Используем row для разделения Названия и Значения #}
-                        <div class="row mb-2">
-                            {# Левая колонка: Название (например, "Защита") #}
-                            <div class="col-sm-4 text-secondary">
-                                {{ spec_template.name }}
+                        <div class="row py-2 border-bottom border-secondary border-opacity-10 align-items-center">
+                            {# Левая колонка: Название (серое) #}
+                            <div class="col-sm-4">
+                                <span class="text-secondary small text-uppercase fw-semibold">
+                                    {{ spec_template.name }}
+                                </span>
                             </div>
                             
-                            {# Правая колонка: Значение (белый цвет) #}
-                            <div class="col-sm-8 text-light fw-medium">
-                                {{ spec_values.get(spec_template.name, '-') }}
+                            {# Правая колонка: Значение (Адаптивный цвет) #}
+                            <div class="col-sm-8 text-end">
+                                {# УБРАЛИ class="text-white", заменили на fw-bold #}
+                                {# Цвет теперь будет браться из body или родителя #}
+                                <span class="fw-bold text-break">
+                                    {{ spec_values.get(spec_template.name, '-') }}
+                                </span>
                             </div>
                         </div>
                     {% endfor %}
@@ -130,6 +122,7 @@
                 <p class="text-muted">Характеристики не указаны.</p>
             {% endif %}
         </div>
+        {# --- КОНЕЦ БЛОКА --- #}
     </div>
 </div>
 
@@ -147,9 +140,8 @@
                     <h5 class="card-title mb-3">Оставить отзыв</h5>
                     <form method="POST" action="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}">
                         {{ form.hidden_tag() }}
-                        
                         <div class="mb-3">
-                            <label class="form-label d-block text-light">Ваша оценка</label>
+                            <label class="form-label d-block">Ваша оценка</label>
                             <div class="rating-area">
                                 {% for i in range(5, 0, -1) %}
                                     <input type="radio" id="star-{{ i }}" name="rating" value="{{ i }}" required>
@@ -157,18 +149,16 @@
                                 {% endfor %}
                             </div>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label text-light">Текст отзыва</label>
+                            <label class="form-label">Текст отзыва</label>
                             {{ form.text(class="form-control", rows="4") }}
                         </div>
-
                         <button type="submit" class="btn btn-primary">Отправить на модерацию</button>
                     </form>
                 {% else %}
                     <div class="text-center py-3">
                         <p class="mb-3">Войдите, чтобы оставить отзыв</p>
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">Войти</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm" style="color: var(--accent); border-color: var(--accent);">Войти</a>
                     </div>
                 {% endif %}
             </div>
@@ -180,7 +170,7 @@
                         <div class="review-item mb-4 pb-4 border-bottom border-secondary border-opacity-25">
                             <div class="d-flex justify-content-between mb-2">
                                 <div>
-                                    <strong class="text-light d-block">{{ review.user.name }}</strong>
+                                    <strong class="d-block">{{ review.user.name }}</strong>
                                     <div class="text-warning small">
                                         {% for i in range(review.rating) %}<i class="bi bi-star-fill"></i>{% endfor %}
                                         {% for i in range(5 - review.rating) %}<i class="bi bi-star text-muted"></i>{% endfor %}
@@ -188,7 +178,7 @@
                                 </div>
                                 <small class="text-muted">{{ review.date_posted.strftime('%d.%m.%Y') }}</small>
                             </div>
-                            <p class="text-light-emphasis mb-0">{{ review.text }}</p>
+                            <p class="mb-0">{{ review.text }}</p>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -203,8 +193,6 @@
 </div>
 {% endblock %}
 
-
-
 {% block scripts %}
 {{ super() }}
 <script>
@@ -214,14 +202,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     carouselElement.addEventListener('slide.bs.carousel', function (event) {
         const nextIndex = event.to;
-
         thumbnails.forEach(thumb => thumb.classList.remove('active'));
-
         if (thumbnails[nextIndex]) {
             thumbnails[nextIndex].classList.add('active');
         }
     });
 });
-
 </script>
 {% endblock %}

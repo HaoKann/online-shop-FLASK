@@ -54,17 +54,15 @@ main .container {
 
 /* Навигация */
 .navbar {
-    background-color: var(--accent) !important;
     transition: all 0.3s ease;
 }
 
 .navbar .nav-item .nav-link {
-    color: var(--text-light) !important;
+    /* УБРАЛИ color: var(--text-light) !important */
+    font-weight: 500; /* Можно оставить настройки шрифта */
 }
 
-.navbar .nav-item .nav-link:hover {
-    color: #ffcccc !important;
-}
+
 
 .navbar-brand {
     color: var(--text-light) !important;
@@ -1623,11 +1621,9 @@ body.admin-body {
 
 .navbar.sticky-top {
     background: none !important;
-    /* ИЗМЕНЕНИЕ: Используем ваш красный цвет (RGB от #600018) с прозрачностью 70% */
-    background-color: rgba(96, 0, 24, 0.7) !important; 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Для светлой темы используем непрозрачный красный */
+    background-color: var(--accent) !important; /* #600018 без прозрачности */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     
     transition: padding 0.3s ease, background-color 0.3s ease;
     padding-top: 1rem;
@@ -1635,8 +1631,7 @@ body.admin-body {
 }
 
 .navbar.scrolled {
-    /* ИЗМЕНЕНИЕ: Делаем фон более плотным при скролле (90% непрозрачности) */
-    background-color: rgba(96, 0, 24, 0.9) !important; 
+    background-color: var(--accent) !important; 
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);

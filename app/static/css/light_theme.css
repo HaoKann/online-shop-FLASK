@@ -1,35 +1,36 @@
 /* =========================================
-   LIGHT THEME - FULL & FIXED (MERGED VERSION)
+   LIGHT THEME - FULL & FIXED (NO PINK NAVBAR)
    ========================================= */
 
 /* --- 0. ФИКС СТАБИЛЬНОСТИ --- */
 html {
-    overflow-y: scroll; /* Убирает дерганье ширины */
+    overflow-y: scroll;
 }
 
-/* Основные стили светлой темы */
 body, .body-bg {
-    background-color: #f4f6f8 !important; /* Чуть сероватый белый для приятности глаз */
+    background-color: #f4f6f8 !important;
     color: #1e1e1e !important;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* --- 1. НАВИГАЦИЯ (NAVBAR) --- */
+/* =========================================
+   1. NAVBAR
+   ========================================= */
+
 .custom-navbar {
-    background-color: #600018 !important; /* Твой красный цвет */
+    background-color: #600018 !important;
     border-bottom: 1px solid #4a0012;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    
+
     width: 100% !important;
     margin: 0 !important;
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-    
+    padding: 0.5rem 0 !important;
+
     position: sticky !important;
     top: 0 !important;
     z-index: 1050 !important;
-    
-    transition: background-color 0.3s ease;
+
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .custom-navbar .navbar-brand {
@@ -38,96 +39,123 @@ body, .body-bg {
 }
 
 .custom-navbar .nav-link {
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: rgba(255,255,255,0.9) !important;
+    transition: color 0.2s ease;
 }
 
-.custom-navbar .nav-link:hover {
-    color: #ffcccc !important;
+/* УБРАН РОЗОВЫЙ */
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+    color: #ffffff !important;
 }
 
 .navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.5);
-}
-.navbar-toggler-icon {
-    filter: invert(1); /* Белая иконка */
+    border-color: rgba(255,255,255,0.5);
 }
 
-/* Форма поиска в навбаре */
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+/* Поиск */
 .custom-navbar .form-control {
     background-color: #ffffff !important;
     color: #1e1e1e !important;
     border-color: transparent !important;
 }
+
 .custom-navbar .form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.3) !important;
 }
+
 .custom-navbar .btn-outline-success {
     color: #ffffff !important;
     border-color: #ffffff !important;
 }
+
 .custom-navbar .btn-outline-success:hover {
     background-color: #ffffff !important;
     color: #600018 !important;
 }
 
-/* Дропдаун */
+/* Dropdown */
 .dropdown-menu {
     background-color: #600018 !important;
 }
+
 .dropdown-item {
     color: #ffffff !important;
 }
+
 .dropdown-item:hover {
     background-color: #800020 !important;
     color: #ffffff !important;
 }
 
-/* --- 2. ФУТЕР --- */
+/* =========================================
+   2. FOOTER
+   ========================================= */
+
 .custom-footer {
-    background-color: #212529 !important; /* Темный футер для контраста */
+    background-color: #212529 !important;
     border-top: 1px solid #343a40;
     color: #f8f9fa !important;
 }
+
 .footer-link {
     color: #ced4da !important;
 }
+
 .footer-link:hover {
     color: #ffffff !important;
     text-decoration: underline;
 }
+
 .footer-text {
     color: #adb5bd !important;
 }
 
-/* --- 3. ГЕРОЙ-СЕКЦИЯ --- */
+/* =========================================
+   3. HERO SECTION
+   ========================================= */
+
 .hero-section {
     background-color: #ffffff !important;
     padding: 6rem 0 !important;
     text-align: center;
     border-bottom: 1px solid #e9ecef;
 }
-.hero-title, .hero-subtitle {
+
+.hero-title,
+.hero-subtitle {
     color: #1e1e1e !important;
 }
+
 .hero-title span {
     color: #600018 !important;
 }
+
 .hero-section .btn-outline-light {
     color: #600018 !important;
     border-color: #600018 !important;
 }
+
 .hero-section .btn-outline-light:hover {
     background-color: #600018 !important;
     color: #ffffff !important;
 }
 
-/* --- 4. СЕКЦИЯ "ПОЧЕМУ МЫ" (ИСПРАВЛЕНА СЕТКА) --- */
+/* =========================================
+   4. FEATURES SECTION
+   ========================================= */
+
 .features-section {
     background-color: #f4f6f8 !important;
     padding: 60px 0 !important;
 }
 
-.features-section h2, .section-title {
+.features-section h2,
+.section-title {
     color: #1e1e1e !important;
     text-align: center;
     margin-bottom: 40px;
@@ -135,7 +163,6 @@ body, .body-bg {
     font-weight: bold;
 }
 
-/* ВАЖНЫЙ ФИКС: Сетка Grid */
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -150,12 +177,11 @@ body, .body-bg {
     border-radius: 12px;
     padding: 30px 20px;
     text-align: center;
-    
-    /* Flexbox для центровки содержимого */
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     height: 100%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -167,18 +193,18 @@ body, .body-bg {
     border-color: #600018 !important;
 }
 
-.feature-icon, .feature-card i {
+.feature-icon,
+.feature-card i {
     background-color: #600018 !important;
     color: #ffffff !important;
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    
-    /* Центровка иконки */
+
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     margin-bottom: 20px;
     font-size: 1.8rem;
     transition: transform 0.3s ease;
@@ -201,97 +227,80 @@ body, .body-bg {
     margin: 0;
 }
 
-/* --- 5. КНОПКИ --- */
-.btn-primary {
-    background-color: #600018 !important;
-    border-color: #600018 !important;
-    color: #ffffff !important;
-}
-.btn-outline-secondary {
-    color: #6c757d !important;
-    border-color: #6c757d !important;
-}
-.btn-outline-secondary:hover {
-    background-color: #6c757d !important;
-    color: #ffffff !important;
-}
+/* =========================================
+   5. CARDS / PROFILE
+   ========================================= */
 
-/* --- 6. КАРТОЧКИ И ПРОФИЛЬ (ТВОИ СТИЛИ) --- */
 .card {
     background-color: #ffffff !important;
     color: #1e1e1e !important;
     border: 1px solid #dee2e6 !important;
 }
+
 .card-header {
     background-color: #f8f9fa !important;
     border-bottom: 1px solid #dee2e6 !important;
 }
+
 .card * {
-    color: #1e1e1e; /* Наследуем темный цвет */
+    color: #1e1e1e;
 }
 
-/* Твои стили для профиля */
 .profile-card-wrapper {
-    background-color: #ffffff !important; /* Исправил на белый, чтобы было видно текст */
+    background-color: #ffffff !important;
     border: 1px solid #dee2e6 !important;
 }
-.profile-card-wrapper h2, 
+
+.profile-card-wrapper h2,
 .profile-card-wrapper .info-value {
     color: #1e1e1e !important;
 }
+
 .profile-card-wrapper .text-muted,
 .profile-card-wrapper .info-label {
     color: #6c757d !important;
 }
 
-/* --- 7. КОРЗИНА И ТОВАРЫ --- */
-.product-card-catalog {
-    background-color: #ffffff !important;
-    border-color: #dee2e6 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
-}
-.product-card-catalog .product-title-catalog {
-    color: #1e1e1e !important;
-}
-.cart-item-card, .cart-summary-card {
-    background-color: #ffffff !important;
-    border-color: #dee2e6 !important;
-    color: #1e1e1e !important;
-}
-.cart-item-card *, .cart-summary-card * {
-    color: #1e1e1e !important;
-}
+/* =========================================
+   6. FORMS
+   ========================================= */
 
-/* --- 8. АДМИНКА (АККОРДЕОН) --- */
-.accordion-item {
-    background-color: #ffffff;
-    border-color: #dee2e6;
-}
-.accordion-button {
-    background-color: #f8f9fa !important;
-    color: #1e1e1e !important;
-}
-.accordion-button:not(.collapsed) {
-    background-color: #600018 !important;
-    color: #ffffff !important;
-}
-.accordion-body {
-    background-color: #ffffff !important;
-    color: #1e1e1e !important;
-}
-
-/* --- 9. ФОРМЫ --- */
-.form-control, .form-select {
+.form-control,
+.form-select {
     background-color: #ffffff !important;
     color: #1e1e1e !important;
     border: 1px solid #ced4da !important;
 }
+
 .form-control:focus {
     border-color: #600018 !important;
     box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.15) !important;
 }
 
-/* --- 10. ПАГИНАЦИЯ (ТВОИ СТИЛИ) --- */
+/* =========================================
+   7. BUTTONS
+   ========================================= */
+
+.btn-primary {
+    background-color: #600018 !important;
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    color: #ffffff !important;
+}
+
+/* =========================================
+   8. PAGINATION
+   ========================================= */
+
 .pagination {
     --bs-pagination-color: #1e1e1e;
     --bs-pagination-active-bg: #600018;
@@ -299,18 +308,131 @@ body, .body-bg {
     --bs-pagination-hover-color: #600018;
     --bs-pagination-disabled-color: #666666;
 }
+
 .page-link {
     color: #1e1e1e !important;
     background-color: #f8f9fa;
     border-color: #dee2e6;
 }
+
 .page-item.active .page-link {
     background-color: #600018 !important;
     color: #ffffff !important;
 }
 
-/* Переключатель темы */
+/* =========================================
+   9. THEME TOGGLE
+   ========================================= */
+
 .theme-toggle-btn {
     border-color: rgba(255,255,255,0.5) !important;
-    color: #ffffff !important; /* В красной шапке иконка должна быть белой */
+    color: #ffffff !important;
+}
+
+/* =========================================
+   10. PRODUCT PAGE - FAVORITE BUTTON
+   ========================================= */
+
+.product-page-actions .btn-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #dee2e6 !important;
+    color: #6c757d !important;
+    background-color: #ffffff !important;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.product-page-actions .btn-icon:hover {
+    border-color: #600018 !important;
+    background-color: #600018 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   11. REVIEWS SECTION
+   ========================================= */
+
+/* Звезды рейтинга */
+.rating-area label {
+    color: #dee2e6 !important;
+}
+
+.rating-area label:hover,
+.rating-area label:hover ~ label,
+.rating-area input:checked ~ label {
+    color: #ffc107 !important;
+}
+
+/* Отзывы */
+.review-item p {
+    color: #1e1e1e !important;
+}
+
+.review-item strong {
+    color: #1e1e1e !important;
+}
+
+.review-item .text-muted {
+    color: #6c757d !important;
+}
+
+/* Пустое состояние */
+.reviews-list .text-muted {
+    color: #6c757d !important;
+}
+
+/* Отключаем анимацию для отдельных отзывов */
+.review-item {
+    transition: none !important;
+    transform: none !important;
+}
+
+.review-item:hover {
+    transform: none !important;
+}
+
+/* =========================================
+   12. CARDS HOVER EFFECTS
+   ========================================= */
+
+.card, .admin-card {
+    background-color: #ffffff !important;
+    color: #1e1e1e !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    border-color: #adb5bd !important;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ИСКЛЮЧАЕМ карточку формы отзыва из анимации */
+.admin-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: #dee2e6 !important;
+}
+
+.admin-card .card-title,
+.admin-card h5 {
+    color: #1e1e1e !important;
+}
+
+.admin-card .form-label {
+    color: #1e1e1e !important;
+    font-weight: 500;
+}
+
+.card-header, .card-footer {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
 }
