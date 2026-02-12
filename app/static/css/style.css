@@ -311,10 +311,12 @@ footer a:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.card * {
-    color: var(--text-light) !important;
+/* Применяем белый текст ТОЛЬКО в темной теме */
+@media (prefers-color-scheme: dark) {
+    .card * {
+        color: var(--text-light) !important;
+    }
 }
-
 .btn {
     color: var(--text-light) !important;
 }

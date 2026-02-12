@@ -1,175 +1,63 @@
 /* =========================================
-   LIGHT THEME - FULL & FIXED (NO PINK NAVBAR)
+   LIGHT THEME - FINAL FIXED VERSION
    ========================================= */
 
-/* --- 0. ФИКС СТАБИЛЬНОСТИ --- */
-html {
-    overflow-y: scroll;
-}
+/* --- 0. БАЗОВЫЕ НАСТРОЙКИ --- */
+html { overflow-y: scroll; }
 
 body, .body-bg {
     background-color: #f4f6f8 !important;
-    color: #1e1e1e !important;
+    color: #212529 !important;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* =========================================
-   1. NAVBAR
-   ========================================= */
+a {
+    color: #600018;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+a:hover { color: #900025; }
 
+/* =========================================
+   1. NAVBAR (КРАСНАЯ ШАПКА)
+   ========================================= */
 .custom-navbar {
     background-color: #600018 !important;
     border-bottom: 1px solid #4a0012;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-
-    width: 100% !important;
-    margin: 0 !important;
+    width: 100% !important; margin: 0 !important;
     padding: 0.5rem 0 !important;
-
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 1050 !important;
-
+    position: sticky !important; top: 0 !important; z-index: 1050 !important;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.custom-navbar .navbar-brand {
-    color: #ffffff !important;
-    font-weight: bold;
-}
-
-.custom-navbar .nav-link {
-    color: rgba(255,255,255,0.9) !important;
-    transition: color 0.2s ease;
-}
-
-/* УБРАН РОЗОВЫЙ */
-.custom-navbar .nav-link:hover,
-.custom-navbar .nav-link.active {
-    color: #ffffff !important;
-}
-
-.navbar-toggler {
-    border-color: rgba(255,255,255,0.5);
-}
-
-.navbar-toggler-icon {
-    filter: invert(1);
-}
+.custom-navbar .navbar-brand { color: #ffffff !important; font-weight: bold; }
+.custom-navbar .nav-link { color: rgba(255, 255, 255, 0.9) !important; transition: color 0.2s ease; }
+.custom-navbar .nav-link:hover, .custom-navbar .nav-link.active { color: #ffffff !important; }
+.navbar-toggler { border-color: rgba(255,255,255,0.5); }
+.navbar-toggler-icon { filter: invert(1); }
 
 /* Поиск */
 .custom-navbar .form-control {
     background-color: #ffffff !important;
-    color: #1e1e1e !important;
-    border-color: transparent !important;
+    color: #000000 !important;
+    border: 1px solid #ced4da !important;
 }
+.custom-navbar .form-control::placeholder { color: #6c757d !important; opacity: 1; }
+.custom-navbar .form-control:focus { box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.2) !important; }
+.custom-navbar .btn-outline-success { color: #ffffff !important; border-color: #ffffff !important; }
+.custom-navbar .btn-outline-success:hover { background-color: #ffffff !important; color: #600018 !important; }
 
-.custom-navbar .form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.3) !important;
-}
-
-.custom-navbar .btn-outline-success {
-    color: #ffffff !important;
-    border-color: #ffffff !important;
-}
-
-.custom-navbar .btn-outline-success:hover {
-    background-color: #ffffff !important;
-    color: #600018 !important;
-}
-
-/* Dropdown */
-.dropdown-menu {
-    background-color: #600018 !important;
-}
-
-.dropdown-item {
-    color: #ffffff !important;
-}
-
-.dropdown-item:hover {
-    background-color: #800020 !important;
-    color: #ffffff !important;
-}
+.dropdown-menu { background-color: #ffffff !important; border: 1px solid #dee2e6; }
+.dropdown-item { color: #212529 !important; }
+.dropdown-item:hover { background-color: #f8f9fa !important; color: #600018 !important; }
 
 /* =========================================
-   2. FOOTER
+   2. СЕКЦИЯ "ПОЧЕМУ МЫ"
    ========================================= */
-
-.custom-footer {
-    background-color: #212529 !important;
-    border-top: 1px solid #343a40;
-    color: #f8f9fa !important;
-}
-
-.footer-link {
-    color: #ced4da !important;
-}
-
-.footer-link:hover {
-    color: #ffffff !important;
-    text-decoration: underline;
-}
-
-.footer-text {
-    color: #adb5bd !important;
-}
-
-/* =========================================
-   3. HERO SECTION
-   ========================================= */
-
-.hero-section {
-    background-color: #ffffff !important;
-    padding: 6rem 0 !important;
-    text-align: center;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.hero-title,
-.hero-subtitle {
-    color: #1e1e1e !important;
-}
-
-.hero-title span {
-    color: #600018 !important;
-}
-
-.hero-section .btn-outline-light {
-    color: #600018 !important;
-    border-color: #600018 !important;
-}
-
-.hero-section .btn-outline-light:hover {
-    background-color: #600018 !important;
-    color: #ffffff !important;
-}
-
-/* =========================================
-   4. FEATURES SECTION
-   ========================================= */
-
-.features-section {
-    background-color: #f4f6f8 !important;
-    padding: 60px 0 !important;
-}
-
-.features-section h2,
-.section-title {
-    color: #1e1e1e !important;
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+.features-section { background-color: #f4f6f8 !important; padding: 60px 0; }
+.features-section h2, .section-title { color: #1e1e1e !important; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 0 auto; max-width: 1200px; }
 
 .feature-card {
     background-color: #ffffff !important;
@@ -177,262 +65,202 @@ body, .body-bg {
     border-radius: 12px;
     padding: 30px 20px;
     text-align: center;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     height: 100%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(96, 0, 24, 0.1); border-color: #600018 !important; }
 
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(96, 0, 24, 0.1);
-    border-color: #600018 !important;
-}
-
-.feature-icon,
-.feature-card i {
+.feature-icon, .feature-card i {
     background-color: #600018 !important;
     color: #ffffff !important;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 20px !important;
+    font-size: 1.8rem !important;
     transition: transform 0.3s ease;
 }
-
-.feature-card:hover .feature-icon {
-    background-color: #800020 !important;
-    transform: scale(1.1);
-}
+.feature-card:hover .feature-icon { transform: scale(1.1); background-color: #800020 !important; }
 
 .feature-card h3 {
     color: #1e1e1e !important;
-    font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 10px;
+    background: none !important;
 }
-
-.feature-card p {
-    color: #666666 !important;
-    margin: 0;
-}
+.feature-card p { color: #666666 !important; margin: 0; }
 
 /* =========================================
-   5. CARDS / PROFILE
+   3. КАРТОЧКИ (ОБЩИЕ)
    ========================================= */
-
-.card {
+.card, .admin-card, .profile-card-wrapper {
     background-color: #ffffff !important;
-    color: #1e1e1e !important;
-    border: 1px solid #dee2e6 !important;
-}
-
-.card-header {
-    background-color: #f8f9fa !important;
-    border-bottom: 1px solid #dee2e6 !important;
-}
-
-.card * {
-    color: #1e1e1e;
-}
-
-.profile-card-wrapper {
-    background-color: #ffffff !important;
-    border: 1px solid #dee2e6 !important;
-}
-
-.profile-card-wrapper h2,
-.profile-card-wrapper .info-value {
-    color: #1e1e1e !important;
-}
-
-.profile-card-wrapper .text-muted,
-.profile-card-wrapper .info-label {
-    color: #6c757d !important;
-}
-
-/* =========================================
-   6. FORMS
-   ========================================= */
-
-.form-control,
-.form-select {
-    background-color: #ffffff !important;
-    color: #1e1e1e !important;
-    border: 1px solid #ced4da !important;
-}
-
-.form-control:focus {
-    border-color: #600018 !important;
-    box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.15) !important;
-}
-
-/* =========================================
-   7. BUTTONS
-   ========================================= */
-
-.btn-primary {
-    background-color: #600018 !important;
-    border-color: #600018 !important;
-    color: #ffffff !important;
-}
-
-.btn-outline-secondary {
-    color: #6c757d !important;
-    border-color: #6c757d !important;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #6c757d !important;
-    color: #ffffff !important;
-}
-
-/* =========================================
-   8. PAGINATION
-   ========================================= */
-
-.pagination {
-    --bs-pagination-color: #1e1e1e;
-    --bs-pagination-active-bg: #600018;
-    --bs-pagination-active-border-color: #600018;
-    --bs-pagination-hover-color: #600018;
-    --bs-pagination-disabled-color: #666666;
-}
-
-.page-link {
-    color: #1e1e1e !important;
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-}
-
-.page-item.active .page-link {
-    background-color: #600018 !important;
-    color: #ffffff !important;
-}
-
-/* =========================================
-   9. THEME TOGGLE
-   ========================================= */
-
-.theme-toggle-btn {
-    border-color: rgba(255,255,255,0.5) !important;
-    color: #ffffff !important;
-}
-
-/* =========================================
-   10. PRODUCT PAGE - FAVORITE BUTTON
-   ========================================= */
-
-.product-page-actions .btn-icon {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #dee2e6 !important;
-    color: #6c757d !important;
-    background-color: #ffffff !important;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.product-page-actions .btn-icon:hover {
-    border-color: #600018 !important;
-    background-color: #600018 !important;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-}
-
-/* =========================================
-   11. REVIEWS SECTION
-   ========================================= */
-
-/* Звезды рейтинга */
-.rating-area label {
-    color: #dee2e6 !important;
-}
-
-.rating-area label:hover,
-.rating-area label:hover ~ label,
-.rating-area input:checked ~ label {
-    color: #ffc107 !important;
-}
-
-/* Отзывы */
-.review-item p {
-    color: #1e1e1e !important;
-}
-
-.review-item strong {
-    color: #1e1e1e !important;
-}
-
-.review-item .text-muted {
-    color: #6c757d !important;
-}
-
-/* Пустое состояние */
-.reviews-list .text-muted {
-    color: #6c757d !important;
-}
-
-/* Отключаем анимацию для отдельных отзывов */
-.review-item {
-    transition: none !important;
-    transform: none !important;
-}
-
-.review-item:hover {
-    transform: none !important;
-}
-
-/* =========================================
-   12. CARDS HOVER EFFECTS
-   ========================================= */
-
-.card, .admin-card {
-    background-color: #ffffff !important;
-    color: #1e1e1e !important;
+    color: #212529 !important;
     border: 1px solid #dee2e6 !important;
     border-radius: 12px;
-    padding: 1.5rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important; border-color: #adb5bd !important; }
+.admin-card:hover { transform: none !important; }
+
+.card-header, .card-footer { background-color: #f8f9fa !important; border-color: #dee2e6 !important; }
+
+/* Принудительный черный текст */
+.card h1, .card h2, .card h3, .card h4, .card h5, .card h6,
+.card p, .card span, .card div, .card label, .card strong, .card small,
+.profile-card-wrapper h2, .profile-card-wrapper .info-value {
+    color: #212529 !important;
+}
+.card .text-muted { color: #6c757d !important; }
+.card .text-success { color: #28a745 !important; }
+
+/* =========================================
+   4. ФИКС СТРАНИЦЫ ОПЛАТЫ (СОСТАВ ЗАКАЗА)
+   ========================================= */
+.order-summary-card {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    border: 1px solid #dee2e6 !important;
 }
 
-.card:hover {
-    border-color: #adb5bd !important;
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+/* ГЛАВНОЕ ИСПРАВЛЕНИЕ: Делаем весь текст внутри черным */
+body .order-summary-card h6,
+body .order-summary-card .my-0,
+body .order-summary-card span, 
+body .order-summary-card div, 
+body .order-summary-card strong {
+    color: #212529 !important;
 }
 
-/* ИСКЛЮЧАЕМ карточку формы отзыва из анимации */
-.admin-card:hover {
-    transform: none !important;
-    box-shadow: none !important;
-    border-color: #dee2e6 !important;
+body .order-summary-card small.text-muted { color: #6c757d !important; }
+body .order-summary-price, body .order-summary-card .text-success { color: #28a745 !important; font-weight: 600; }
+
+.order-summary-card .list-group-item {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+.order-summary-img { background-color: #f8f9fa !important; border: 1px solid #dee2e6 !important; }
+
+/* Кнопка Оплатить */
+#submit-button {
+    color: #ffffff !important;
+    background-color: #600018 !important;
+    border-color: #600018 !important;
+}
+#submit-button:hover { background-color: #800020 !important; }
+
+/* Stripe */
+#payment-element { background-color: transparent !important; }
+
+/* =========================================
+   5. ФОРМЫ И ИНПУТЫ
+   ========================================= */
+.form-control, .form-select, textarea, input[type="text"], input[type="email"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ced4da !important;
+}
+.form-control::placeholder { color: #6c757d !important; opacity: 1; }
+.form-control:focus { border-color: #600018 !important; box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.15) !important; }
+
+select option { background-color: #ffffff !important; color: #000000 !important; }
+.custom-sort-select { background-color: #ffffff !important; color: #000000 !important; border-color: #ced4da !important; }
+
+.input-group-text {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+    border-color: #ced4da !important;
 }
 
-.admin-card .card-title,
-.admin-card h5 {
-    color: #1e1e1e !important;
+/* =========================================
+   6. КНОПКИ
+   ========================================= */
+.btn-primary, .btn-add-to-cart {
+    background-color: #600018 !important;
+    border-color: #600018 !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover, .btn-add-to-cart:hover { background-color: #800020 !important; }
+
+.btn-outline-secondary { color: #6c757d !important; border-color: #6c757d !important; }
+.btn-outline-secondary:hover { background-color: #6c757d !important; color: #ffffff !important; }
+
+.btn-icon, .product-page-actions .btn-icon {
+    width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+    border: 2px solid #ced4da !important; color: #600018 !important; background-color: #ffffff !important;
+    border-radius: 10px; transition: all 0.3s ease;
+}
+.btn-icon:hover, .product-page-actions .btn-icon:hover {
+    border-color: #600018 !important; background-color: #600018 !important; color: #ffffff !important;
 }
 
-.admin-card .form-label {
-    color: #1e1e1e !important;
-    font-weight: 500;
+.pc-card .btn-add-to-cart {
+    background: linear-gradient(135deg, #600018 0%, #8b0024 100%) !important;
+    color: #ffffff !important;
 }
 
-.card-header, .card-footer {
-    background-color: #f8f9fa !important;
-    border-color: #dee2e6 !important;
+/* =========================================
+   7. КОРЗИНА И ТОВАРЫ
+   ========================================= */
+.cart-item-card {
+    background-color: #ffffff !important; border: 1px solid #dee2e6 !important;
+    color: #212529 !important;
 }
+.cart-item-title { color: #212529 !important; }
+.cart-item-quantity { background-color: #f8f9fa !important; border: 1px solid #dee2e6; }
+.cart-item-quantity .btn { color: #212529 !important; }
+.cart-item-card .delete-btn { color: #adb5bd !important; }
+.cart-item-card .delete-btn:hover { color: #dc3545 !important; }
+
+.cart-summary-card {
+    background-color: #ffffff !important; border: 1px solid #dee2e6 !important;
+    color: #212529 !important;
+}
+.cart-summary-card h4, .cart-summary-card h5, .cart-summary-card span { color: #212529 !important; }
+#cart-grand-total { color: #28a745 !important; font-weight: bold; }
+
+/* =========================================
+   8. ПРОЧЕЕ
+   ========================================= */
+.hero-section { background-color: #ffffff !important; border-bottom: 1px solid #e9ecef; }
+.hero-title, .hero-subtitle { color: #212529 !important; }
+.hero-title span { color: #600018 !important; }
+.hero-section .btn-outline-light { color: #600018 !important; border-color: #600018 !important; }
+.hero-section .btn-outline-light:hover { background-color: #600018 !important; color: #ffffff !important; }
+
+.custom-footer { background-color: #212529 !important; border-top: 1px solid #343a40; color: #f8f9fa !important; }
+.footer-link { color: #ced4da !important; }
+.footer-link:hover { color: #ffffff !important; }
+
+.table { --bs-table-bg: #ffffff; color: #212529; border-color: #dee2e6; }
+.pagination { --bs-pagination-color: #212529; --bs-pagination-active-bg: #600018; --bs-pagination-active-border-color: #600018; }
+.page-link { background-color: #ffffff; border-color: #dee2e6; color: #212529 !important; }
+.page-item.active .page-link { background-color: #600018 !important; color: #ffffff !important; }
+
+.theme-toggle-btn { border-color: rgba(255,255,255,0.5) !important; color: #ffffff !important; }
+.review-item p, .review-item strong { color: #212529 !important; }
+.review-item .text-muted { color: #6c757d !important; }
+.empty-icon { color: #dee2e6 !important; }
+
+/* Фикс для страницы Детали доставки */
+.checkout-card {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    color: #212529 !important;
+}
+.checkout-card * { color: #212529 !important; }
+.checkout-card .input-group-text {
+    background-color: #212529 !important; color: #ffffff !important;
+}
+.checkout-card .form-control {
+    background-color: #ffffff !important; color: #000000 !important;
+}
+.checkout-card .btn { color: #ffffff !important; }
