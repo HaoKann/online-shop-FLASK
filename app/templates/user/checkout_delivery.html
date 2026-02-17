@@ -93,7 +93,12 @@
         .checkout-card .input-group-text {
             background-color: #2a2a2a;
             border-color: #444;
-            color: var(--accent, #600018);
+            color: #600018 !important; /* Принудительно красная иконка */
+        }
+
+        /* Дополнительно, чтобы наверняка перебить глобальные стили для иконок внутри */
+        .checkout-card .input-group-text i {
+            color: #600018 !important;
         }
 
         .checkout-card .form-control,

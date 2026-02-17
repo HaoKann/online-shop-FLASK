@@ -264,3 +264,349 @@ select option { background-color: #ffffff !important; color: #000000 !important;
     background-color: #ffffff !important; color: #000000 !important;
 }
 .checkout-card .btn { color: #ffffff !important; }
+
+
+/* =========================================
+   9. FAQ (ВОПРОСЫ И ОТВЕТЫ) - ФИКС ДЛЯ СВЕТЛОЙ ТЕМЫ
+   ========================================= */
+
+/* Заголовки категорий (Гарантия, Доставка...) делаем черными */
+.faq-category-title {
+    color: #212529 !important;
+    border-bottom: 2px solid #dee2e6 !important;
+}
+
+/* Сам блок аккордеона (рамка и фон) */
+.faq-accordion .accordion-item {
+    background-color: #ffffff !important; /* Белый фон */
+    border: 1px solid #dee2e6 !important; /* Светлая рамка */
+}
+
+/* Кнопка с вопросом (в закрытом состоянии) */
+.faq-accordion .accordion-button {
+    background-color: #ffffff !important;
+    color: #212529 !important; /* Черный текст */
+    box-shadow: none !important;
+}
+
+/* Кнопка при наведении */
+.faq-accordion .accordion-button:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Кнопка в открытом состоянии (активная) */
+.faq-accordion .accordion-button:not(.collapsed) {
+    background-color: #f1f3f5 !important; /* Светло-серый фон */
+    color: #600018 !important; /* Красный текст */
+    font-weight: bold;
+}
+
+/* Иконка вопроса слева (?) */
+.faq-accordion .accordion-button i {
+    color: #600018 !important;
+}
+
+/* Текст ответа внутри */
+.faq-accordion .accordion-body {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Стрелочка справа (шеврон) - делаем темной */
+.faq-accordion .accordion-button::after {
+    filter: none !important; /* Убираем инверсию цветов */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+/* Стрелочка для активного вопроса - красная */
+.faq-accordion .accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23600018'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+
+/* =========================================
+   10. СТРАНИЦА "О НАС" (ABOUT US) - ФИНАЛЬНЫЙ ФИКС
+   ========================================= */
+
+/* 1. Сбрасываем темный фон и картинки у Hero-секции */
+.about-hero, .about-section {
+    background: #ffffff !important; /* ВАЖНО: background удаляет и картинку, и градиент */
+    color: #212529 !important;
+    border-bottom: 1px solid #dee2e6;
+    padding-top: 80px; /* Добавляем воздух сверху */
+    padding-bottom: 80px; /* И снизу */
+}
+
+/* 2. Перекрашиваем белый текст (заголовки и описания) в темный */
+.about-hero h1,
+.about-hero .display-4,
+.about-hero .text-white,
+.about-hero .lead,
+.text-center h2.text-white,
+.text-center h3.text-white,
+.text-center .text-white {
+    color: #212529 !important;
+    text-shadow: none !important; /* Убираем тень, если она была на темном фоне */
+}
+
+/* Описания делаем серыми */
+.about-hero .text-white-50,
+.text-center .text-white-50,
+.text-center .text-muted {
+    color: #6c757d !important;
+}
+
+/* 3. Карточки статистики (2015, 5000+ ПК) */
+.stat-card {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    color: #212529 !important;
+}
+
+.stat-number {
+    color: #600018 !important; /* Красные цифры */
+    font-weight: bold;
+    display: block;
+    font-size: 2.5rem;
+}
+
+.stat-label {
+    color: #6c757d !important;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* 4. Карточки ценностей (Качество, Надежность...) */
+.value-card {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    height: 100%;
+    color: #212529 !important;
+}
+
+.value-card:hover {
+    border-color: #600018 !important;
+    transform: translateY(-5px);
+}
+
+/* Кружочки с иконками */
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background-color: #f8f9fa !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 1.8rem;
+    color: #600018 !important;
+    border: 1px solid #dee2e6;
+}
+
+.value-title {
+    color: #212529 !important;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.value-text {
+    color: #6c757d !important;
+}
+
+/* =========================================
+   ФИКС КНОПКИ "ОПЛАТИТЬ" (БЕЛЫЙ ТЕКСТ)
+   ========================================= */
+
+#submit-button {
+    color: #ffffff !important; /* Принудительно белый текст */
+    background-color: #600018 !important; /* Красный фон */
+    border-color: #600018 !important;
+}
+
+/* При наведении */
+#submit-button:hover {
+    background-color: #800020 !important;
+    color: #ffffff !important;
+}
+
+/* На всякий случай красим и вложенный span */
+#submit-button span {
+    color: #ffffff !important;
+}
+
+/* =========================================
+   11. МОИ ЗАКАЗЫ (MY ORDERS) - ФИНАЛЬНЫЙ ФИКС
+   ========================================= */
+
+/* 1. Блок аккордеона - фон и рамка */
+.admin-accordion .accordion-item {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+/* 2. Заголовок аккордеона (кнопка) */
+.admin-accordion .accordion-button {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    box-shadow: none !important;
+}
+
+/* ПРИНУДИТЕЛЬНО КРАСИМ ВЕСЬ ТЕКСТ В ШАПКЕ ЗАКАЗА В ЧЕРНЫЙ */
+.admin-accordion .accordion-button span,
+.admin-accordion .accordion-button strong,
+.admin-accordion .accordion-button i,
+.admin-accordion .accordion-button div {
+    color: #212529 !important;
+}
+
+/* Исключение: Бейджи статусов */
+.admin-accordion .accordion-button .badge { color: #ffffff !important; }
+.admin-accordion .accordion-button .badge.text-dark { color: #212529 !important; }
+
+/* 3. Внутренности (выпадающий список) */
+.admin-accordion .accordion-body {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+.admin-accordion .accordion-body h6,
+.admin-accordion .accordion-body li,
+.admin-accordion .accordion-body span,
+.admin-accordion .accordion-body div {
+    color: #212529 !important;
+}
+
+.admin-accordion .accordion-body .text-muted { color: #6c757d !important; }
+
+.admin-accordion .list-group-item {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+}
+
+/* 4. КНОПКИ ДЕЙСТВИЙ (ОТМЕНА И ДЕТАЛИ) - ИСПРАВЛЕНИЕ ИКОНОК */
+/* Кнопка отмены (красная) */
+.admin-accordion .btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #ffffff !important; /* Белый текст */
+}
+/* Принудительно красим иконку внутри красной кнопки в белый */
+.admin-accordion .btn-danger i {
+    color: #ffffff !important;
+}
+
+/* Кнопка детали (синяя/красная) */
+.admin-accordion .btn-primary {
+    color: #ffffff !important;
+}
+.admin-accordion .btn-primary i {
+    color: #ffffff !important;
+}
+
+/* 5. Стрелочка аккордеона (справа) - делаем темной */
+.admin-accordion .accordion-button::after {
+    filter: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+/* =========================================
+   12. ДЕТАЛИ ЗАКАЗА (ORDER DETAILS) - ФИНАЛЬНЫЙ ФИКС
+   ========================================= */
+
+/* 1. Заголовок страницы и Кнопка "Назад" */
+.page-header h1 {
+    color: #212529 !important;
+}
+
+/* Исправляем невидимую кнопку "К моим заказам" (которая была белой) */
+.page-header .btn-outline-light {
+    color: #600018 !important; /* Делаем текст красным */
+    border-color: #600018 !important; /* И рамку красной */
+}
+.page-header .btn-outline-light:hover {
+    background-color: #600018 !important;
+    color: #ffffff !important;
+}
+
+/* 2. Основной контейнер заказа (был черным) */
+.order-details-card {
+    background-color: #ffffff !important; /* Белый фон */
+    border: 1px solid #dee2e6 !important; /* Светлая рамка */
+    border-radius: 12px; /* Скругление */
+    padding: 20px; /* Внутренний отступ, если его не было */
+    color: #212529 !important; /* Весь текст внутри черный */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Легкая тень */
+}
+
+/* Заголовки внутри (Состав заказа, Детали доставки) */
+.order-details-card h5 {
+    color: #212529 !important;
+    font-weight: bold;
+}
+
+/* 3. Список товаров */
+.order-item {
+    border-bottom: 1px solid #dee2e6 !important; /* Светлая линия между товарами */
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+/* Название товара */
+.order-item-title {
+    color: #212529 !important;
+    font-weight: 600;
+}
+.order-item-title:hover {
+    color: #600018 !important;
+}
+
+/* Цена за шт. и кол-во */
+.order-item-meta {
+    color: #6c757d !important; /* Серый цвет */
+}
+
+/* Общая цена товара */
+.order-item-total {
+    color: #212529 !important;
+}
+
+/* 4. Правый блок (Детали доставки) */
+.delivery-summary-box {
+    background-color: #f8f9fa !important; /* Светло-серый фон для выделения */
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px;
+    padding: 20px;
+    color: #212529 !important;
+}
+
+/* Список параметров (Адрес, Способ...) */
+.specs-list li {
+    border-bottom: 1px solid #dee2e6 !important;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.specs-list li span:first-child {
+    color: #6c757d !important; /* Название поля - серое */
+}
+.specs-list li span:last-child {
+    color: #212529 !important; /* Значение - темное */
+    text-align: right;
+    font-weight: 500;
+}
+
+/* Итоговая цена (зеленая) */
+.delivery-summary-box .text-success {
+    color: #28a745 !important;
+    font-weight: bold;
+}
