@@ -82,6 +82,38 @@
                                 <a href="{{ url_for('ready_pc.ready_pc_details', build_id=ready_pc.id) }}" class="pc-card-link">
                                     <h5 class="pc-card-title">{{ ready_pc.name }}</h5>
                                 </a>
+
+                                {# --- ДОБАВЛЕННЫЙ БЛОК РЕЙТИНГА ДЛЯ СБОРОК --- #}
+                                <div class="product-card-rating mb-2">
+                                    {% set avg_rating = ready_pc.average_rating if ready_pc.average_rating is not none else 0 %}
+                                    {% if avg_rating > 0 %}
+                                        <div class="stars text-warning" style="font-size: 0.85rem;">
+                                            {# Закрашенные звезды #}
+                                            {% for i in range(avg_rating | int) %}
+                                                <i class="bi bi-star-fill"></i>
+                                            {% endfor %}
+                                            
+                                            {# Частично закрашенная звезда (если рейтинг дробный, например 4.5) #}
+                                            {% if avg_rating % 1 >= 0.5 %}
+                                                <i class="bi bi-star-half"></i>
+                                            {% endif %}
+
+                                            {# Пустые звезды до 5 #}
+                                            {% for i in range(5 - (avg_rating | round(0, 'ceil') | int)) %}
+                                                <i class="bi bi-star text-muted"></i>
+                                            {% endfor %}
+                                            
+                                            <span class="rating-count text-muted ms-1" style="font-size: 0.75rem;">
+                                                ({{ ready_pc.reviews_count | default(0) }})
+                                            </span>
+                                        </div>
+                                    {% else %}
+                                        <div class="stars text-muted" style="font-size: 0.75rem;">
+                                            <i class="bi bi-star me-1"></i> <span>Нет отзывов</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {# ------------------------------------------- #}
                                 
                                 {# Specs List #}
                                 <div class="pc-specs">
@@ -100,21 +132,35 @@
                                 </div>
                             </div>
                             
+                         
                             {# Footer Section #}
-                            <div class="pc-card-footer mt-auto">
-                                <div class="price-wrapper">
-                                    <span class="price-label">Цена</span>
-                                    <span class="price-value">{{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸</span>
+                            <div class="pc-card-footer mt-auto pt-2">
+                                <div class="price-wrapper mb-3">
+                                    <span class="price-label" style="font-size: 0.8rem; color: #777;">Цена</span>
+                                    <span class="price-value" style="display: block;">
+                                        {{ "{:,.0f}".format(ready_pc.price).replace(",", " ") }} ₸
+                                    </span>
                                 </div>
                                 
-                                <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST">
-                                    {{ csrf_form.hidden_tag() }}
+                                <div class="d-flex gap-2 align-items-stretch">
+                                    {# Кнопка избранного #}
+                                    {# ВАЖНО: Проверь, правильный ли здесь url_for для добавления сборки в избранное. 
+                                       Если у тебя для сборок отдельная функция в python, поменяй 'favourites.add_to_favourites' на нее #}
+                                    <form action="{{ url_for('favourites.add_to_favourites', product_id=ready_pc.id) }}" method="POST">
+                                        {{ csrf_form.hidden_tag() }}
+                                        <button type="submit" class="btn-add-to-cart d-flex align-items-center justify-content-center h-100 px-3" title="В избранное" style="background-color: transparent; border: 1px solid var(--accent, #600018); color: var(--accent, #600018);">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </form>
 
-                                    <button type="submit" class="btn-add-to-cart">
-                                        <i class="bi bi-cart-plus me-2"></i>
-                                        В корзину
-                                    </button>
-                                </form>
+                                    {# Кнопка корзины #}
+                                    <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=ready_pc.id) }}" method="POST" class="flex-grow-1">
+                                        {{ csrf_form.hidden_tag() }}
+                                        <button type="submit" class="btn-add-to-cart w-100 d-flex align-items-center justify-content-center h-100" title="В корзину">
+                                            <i class="bi bi-cart-plus-fill me-2"></i> В корзину
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

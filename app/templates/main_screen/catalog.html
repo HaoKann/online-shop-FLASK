@@ -126,8 +126,9 @@
         </a>
         
         {# Блок 2: Футер (Цена и Кнопки) #}
-        <div class="pc-card-footer mt-auto">
-            <div class="price-wrapper">
+        {# Блок 2: Футер (Цена и Кнопки) #}
+        <div class="pc-card-footer mt-auto pt-2"> {# Добавили pt-2 для отступа #}
+            <div class="price-wrapper mb-3"> {# Добавили mb-3 для отступа от кнопок #}
                 {% if product.discount %}
                     <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
                         {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
@@ -136,23 +137,26 @@
                         {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
                     </span>
                 {% else %}
-                    <span class="price-label">Цена</span>
-                    <span class="price-value">
+                    <span class="price-label" style="font-size: 0.8rem; color: #777;">Цена</span>
+                    <span class="price-value" style="display: block;">
                         {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
                     </span>
                 {% endif %}
             </div>
             
-            <div class="d-flex gap-2">
+            {# Добавили align-items-stretch, чтобы кнопки тянулись на одну высоту #}
+            <div class="d-flex gap-2 align-items-stretch">
                 <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
                     {{ csrf_form.hidden_tag() }}
-                    <button type="submit" class="btn-add-to-cart" title="В избранное" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                    {# Добавили h-100, px-3, border: 1px solid и центрирование #}
+                    <button type="submit" class="btn-add-to-cart d-flex align-items-center justify-content-center h-100 px-3" title="В избранное" style="background-color: transparent; border: 1px solid var(--accent, #600018); color: var(--accent, #600018);">
                         <i class="bi bi-heart-fill"></i>
                     </button>
                 </form>
                 <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
                     {{ csrf_form.hidden_tag() }}
-                    <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                    {# Добавили h-100 и центрирование #}
+                    <button type="submit" class="btn-add-to-cart w-100 d-flex align-items-center justify-content-center h-100" title="В корзину">
                         <i class="bi bi-cart-plus-fill me-2"></i> В корзину
                     </button>
                 </form>

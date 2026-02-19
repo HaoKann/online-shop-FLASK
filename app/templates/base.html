@@ -97,14 +97,22 @@
                 </ul>
                 
                 <div class="d-flex align-items-center">
-                    <form class="d-flex me-2" role="search" action="{{ url_for('search.search') }}" method="GET">
-                        <input class="form-control me-2" name="q" placeholder="Искать" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
-                    </form>
-                    <button id="theme-toggle" class="btn btn-outline-secondary theme-toggle-btn" title="Переключить тему">
-                        <i class="bi {{ 'bi-moon' if request.cookies.get('theme') == 'dark' else 'bi-brightness-high' }}"></i>
+                <form class="d-flex me-2" role="search" action="{{ url_for('search.search') }}" method="GET">
+                    {# Чуть скруглил строку поиска для эстетики #}
+                    <input class="form-control me-2 border-0 shadow-sm" style="border-radius: 8px;" name="q" placeholder="Искать" aria-label="Search">
+                    
+                    {# Убрал btn-outline-success, поставил clean-icon-btn #}
+                    <button class="clean-icon-btn" type="submit" title="Найти">
+                        <i class="bi bi-search"></i>
                     </button>
-                </div>
+                </form>
+    
+    {# Убрал btn-outline-secondary, поставил clean-icon-btn #}
+    <button id="theme-toggle" class="clean-icon-btn ms-2" title="Переключить тему">
+        <i class="bi {{ 'bi-moon' if request.cookies.get('theme') == 'dark' else 'bi-brightness-high' }}"></i>
+    </button>
+</div>
+                
             </div>
         </div>
     </nav>

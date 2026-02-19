@@ -610,3 +610,34 @@ select option { background-color: #ffffff !important; color: #000000 !important;
     color: #28a745 !important;
     font-weight: bold;
 }
+
+/* Стили для счетчика в корзине */
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa; /* Светло-серый фон плашки */
+    border-radius: 8px;
+    padding: 5px;
+    border: 1px solid #eee;
+}
+
+.quantity-value {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #212529 !important; /* Явно задаем темно-серый/черный цвет */
+    min-width: 30px;
+    text-align: center;
+    display: inline-block;
+}
+
+.quantity-change-btn {
+    color: #600018; /* Твой фирменный бордовый */
+    background: transparent;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.quantity-change-btn:hover {
+    color: #800020;
+    transform: scale(1.1);
+}

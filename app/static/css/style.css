@@ -4057,3 +4057,32 @@ input:focus, textarea:focus, select:focus {
 .thumb-item.active .thumb-overlay {
     opacity: 1;
 }
+
+
+/* Чистые кнопки-иконки в навигации */
+.clean-icon-btn {
+    background: transparent;
+    border: none;
+    color: #ffffff; /* Белый цвет иконок для твоей бордовой шапки */
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    border-radius: 8px; /* Легкое скругление для эффекта при наведении */
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Убираем рамки при нажатии (фокусе) */
+.clean-icon-btn:focus,
+.clean-icon-btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Эффект при наведении курсора */
+.clean-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1); /* Полупрозрачный белый фон */
+    color: #ffffff;
+    cursor: pointer;
+}

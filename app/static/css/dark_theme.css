@@ -373,3 +373,23 @@ a:hover {
     box-shadow: 0 2px 6px rgba(96, 0, 24, 0.3);
 }
 
+
+
+/* Делаем строку поиска белой в темной теме */
+.custom-navbar .form-control {
+    background-color: #ffffff !important; /* Белый фон */
+    color: #212529 !important;            /* Темно-серый текст, чтобы было видно, что печатаешь */
+}
+
+/* Настраиваем цвет слова "Искать" (плейсхолдер) */
+.custom-navbar .form-control::placeholder {
+    color: #6c757d !important;            /* Приятный серый цвет для подсказки */
+}
+
+/* Поведение при клике (фокусе) на строку поиска */
+.custom-navbar .form-control:focus {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    /* Легкое белое/серое свечение вместо стандартного синего кольца Bootstrap */
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important; 
+}
