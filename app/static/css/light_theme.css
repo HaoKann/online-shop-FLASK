@@ -460,18 +460,20 @@ select option { background-color: #ffffff !important; color: #000000 !important;
     box-shadow: none !important;
 }
 
-/* ПРИНУДИТЕЛЬНО КРАСИМ ВЕСЬ ТЕКСТ В ШАПКЕ ЗАКАЗА В ЧЕРНЫЙ */
-.admin-accordion .accordion-button span,
-.admin-accordion .accordion-button strong,
-.admin-accordion .accordion-button i,
-.admin-accordion .accordion-button div {
-    color: #212529 !important;
+/* НОВОЕ: Убираем изменение цвета (красный текст/фон) при нажатии и раскрытии */
+.admin-accordion .accordion-button:not(.collapsed) {
+    background-color: #ffffff !important; /* Оставляем фон белым */
+    color: #212529 !important; /* Оставляем текст темным */
+    box-shadow: none !important; /* Убираем свечение */
 }
 
-/* Исключение: Бейджи статусов */
-.admin-accordion .accordion-button .badge { color: #ffffff !important; }
-.admin-accordion .accordion-button .badge.text-dark { color: #212529 !important; }
+/* Убираем рамку фокуса при самом моменте клика */
+.admin-accordion .accordion-button:focus {
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+}
 
+/* ПРИНУДИТЕЛЬНО КРАСИМ ВЕСЬ ТЕКСТ В ШАПКЕ ЗАКАЗА В ЧЕРНЫЙ */
 /* 3. Внутренности (выпадающий список) */
 .admin-accordion .accordion-body {
     background-color: #ffffff !important;
@@ -519,99 +521,69 @@ select option { background-color: #ffffff !important; color: #000000 !important;
 }
 
 /* =========================================
-   12. ДЕТАЛИ ЗАКАЗА (ORDER DETAILS) - ФИНАЛЬНЫЙ ФИКС
+   12. ДЕТАЛИ ЗАКАЗА (ORDER DETAILS) - НОВЫЙ ДИЗАЙН
    ========================================= */
 
-/* 1. Заголовок страницы и Кнопка "Назад" */
-.page-header h1 {
+/* 1. Заголовки, основной текст и итоговые суммы */
+.order-details-wrapper h1,
+.order-details-wrapper h4,
+.order-details-wrapper .fw-bold,
+.item-total-price,
+.delivery-text,
+.total-box span {
+    color: #212529 !important; /* Принудительно делаем текст темно-серым (почти черным) */
+}
+
+/* 2. Название товара (оно является ссылкой) */
+.order-product-title {
     color: #212529 !important;
+    transition: color 0.2s ease;
+}
+.order-product-title:hover {
+    color: #600018 !important; /* При наведении становится бордовым */
 }
 
-/* Исправляем невидимую кнопку "К моим заказам" (которая была белой) */
-.page-header .btn-outline-light {
-    color: #600018 !important; /* Делаем текст красным */
-    border-color: #600018 !important; /* И рамку красной */
-}
-.page-header .btn-outline-light:hover {
-    background-color: #600018 !important;
-    color: #ffffff !important;
+/* 3. Вспомогательный текст (кол-во, цены за шт., ярлыки "Адрес") */
+.order-details-wrapper .text-muted {
+    color: #6c757d !important;
 }
 
-/* 2. Основной контейнер заказа (был черным) */
-.order-details-card {
-    background-color: #ffffff !important; /* Белый фон */
-    border: 1px solid #dee2e6 !important; /* Светлая рамка */
-    border-radius: 12px; /* Скругление */
-    padding: 20px; /* Внутренний отступ, если его не было */
-    color: #212529 !important; /* Весь текст внутри черный */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Легкая тень */
+/* Зеленый цвет для финальной цены */
+.order-details-wrapper .text-success {
+    color: #28a745 !important;
 }
 
-/* Заголовки внутри (Состав заказа, Детали доставки) */
-.order-details-card h5 {
+/* 4. Карточки (Фон и рамки) */
+.order-details-wrapper .card {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+/* Исправляем цвет линий-разделителей между товарами */
+.order-details-wrapper .border-bottom {
+    border-color: #dee2e6 !important;
+}
+
+/* 5. Иконки заголовков */
+.order-details-wrapper .bi-box-seam,
+.order-details-wrapper .bi-truck {
+    color: #600018 !important; /* Фирменный бордовый */
+}
+
+/* 6. Кнопка "К заказам" в светлой теме */
+.order-details-wrapper .btn-outline-secondary {
     color: #212529 !important;
-    font-weight: bold;
+    border-color: #ced4da !important;
 }
-
-/* 3. Список товаров */
-.order-item {
-    border-bottom: 1px solid #dee2e6 !important; /* Светлая линия между товарами */
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
-
-/* Название товара */
-.order-item-title {
-    color: #212529 !important;
-    font-weight: 600;
-}
-.order-item-title:hover {
+.order-details-wrapper .btn-outline-secondary:hover {
+    background-color: #e9ecef !important;
     color: #600018 !important;
 }
 
-/* Цена за шт. и кол-во */
-.order-item-meta {
-    color: #6c757d !important; /* Серый цвет */
-}
 
-/* Общая цена товара */
-.order-item-total {
-    color: #212529 !important;
-}
-
-/* 4. Правый блок (Детали доставки) */
-.delivery-summary-box {
-    background-color: #f8f9fa !important; /* Светло-серый фон для выделения */
-    border: 1px solid #dee2e6 !important;
-    border-radius: 12px;
-    padding: 20px;
-    color: #212529 !important;
-}
-
-/* Список параметров (Адрес, Способ...) */
-.specs-list li {
-    border-bottom: 1px solid #dee2e6 !important;
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-}
-
-.specs-list li span:first-child {
-    color: #6c757d !important; /* Название поля - серое */
-}
-.specs-list li span:last-child {
-    color: #212529 !important; /* Значение - темное */
-    text-align: right;
-    font-weight: 500;
-}
-
-/* Итоговая цена (зеленая) */
-.delivery-summary-box .text-success {
-    color: #28a745 !important;
-    font-weight: bold;
-}
-
-/* Стили для счетчика в корзине */
+/* =========================================
+   Стили для счетчика в корзине (ОСТАВЛЯЕМ КАК БЫЛО)
+   ========================================= */
 .cart-item-quantity {
     display: flex;
     align-items: center;
@@ -640,4 +612,88 @@ select option { background-color: #ffffff !important; color: #000000 !important;
 .quantity-change-btn:hover {
     color: #800020;
     transform: scale(1.1);
+}
+
+/* =========================================
+   13. ПРОФИЛЬ И НАСТРОЙКИ (ПРОФИЛЬ, ДАННЫЕ, ПАРОЛЬ)
+   ========================================= */
+
+/* --- Главная страница профиля (userpage.html) --- */
+.profile-card-wrapper {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    color: #212529 !important;
+}
+
+.profile-card-wrapper h2, 
+.profile-card-wrapper .info-value {
+    color: #212529 !important;
+    font-weight: 600;
+}
+
+/* Серый цвет для подписей (Эл. почта, Телефон и т.д.) */
+.profile-card-wrapper .text-muted, 
+.profile-card-wrapper .info-label {
+    color: #6c757d !important;
+}
+
+/* Иконки в профиле делаем красными для акцента */
+.profile-card-wrapper .info-label i {
+    color: #600018 !important; 
+    margin-right: 8px;
+}
+
+/* --- Страницы изменения данных и пароля --- */
+
+/* Перебиваем инлайн-стиль background-color: #1e1e1e */
+.edit-card {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+
+/* Перебиваем белый текст у заголовков над формой и внутри */
+h1[style*="color: #ffffff"], 
+.edit-card h4[style*="color: #ffffff"],
+.edit-card-title,
+.container h1 {
+    color: #212529 !important;
+}
+
+/* Ярлыки полей ввода (Имя, Старый пароль, Новый пароль и т.д.) */
+.edit-card .form-label {
+    color: #212529 !important;
+    font-weight: 500;
+}
+
+/* Поля ввода (чтобы текст внутри был черным) */
+.edit-card .form-control {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ced4da !important;
+}
+
+/* Текст ошибок под полями */
+.edit-card .text-danger,
+.edit-card span.text-danger {
+    color: #dc3545 !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+/* =========================================
+   14. СТРАНИЦА ГОТОВОЙ СБОРКИ (READY PC)
+   ========================================= */
+
+/* Делаем ссылки на комплектующие черными */
+.specs-list a {
+    color: #000000 !important;
+}
+
+/* При наведении можно оставить легкий фирменный оттенок для понимания, что это ссылка */
+.specs-list a:hover {
+    color: #600018 !important;
 }

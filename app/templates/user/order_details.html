@@ -1,54 +1,131 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="page-header">
-        <h1>Детали заказа #{{ user_order.id }}</h1>
-        <a href="{{ url_for('user_order.show_orders') }}" class="btn btn-outline-light">
-            <i class="bi bi-arrow-left"></i> К моим заказам
+<div class="container py-5 order-details-wrapper">
+    
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-5 border-bottom pb-3 gap-3">
+        <div class="d-flex align-items-center flex-wrap gap-3">
+            <h1 class="mb-0 fw-bold">Заказ #{{ user_order.id }}</h1>
+            
+            {% if user_order.status == 'pending' %}
+                <span class="badge bg-warning text-dark fs-6 rounded-pill px-3 py-2 shadow-sm">Обрабатывается</span>
+            {% elif user_order.status == 'shipped' %}
+                <span class="badge bg-info fs-6 rounded-pill px-3 py-2 shadow-sm">Отправлен</span>
+            {% elif user_order.status == 'delivered' %}
+                <span class="badge bg-success fs-6 rounded-pill px-3 py-2 shadow-sm">Доставлен</span>
+            {% elif user_order.status == 'canceled' %}
+                <span class="badge bg-danger fs-6 rounded-pill px-3 py-2 shadow-sm">Отменен</span>
+            {% else %}
+                <span class="badge bg-secondary fs-6 rounded-pill px-3 py-2 shadow-sm">Неизвестно</span>
+            {% endif %}
+        </div>
+        
+        <a href="{{ url_for('user_order.show_orders') }}" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i> К заказам
         </a>
     </div>
 
-    <div class="order-details-card">
-        <div class="row g-5">
-            <div class="col-lg-7">
-                <h5 class="mb-4">Состав заказа</h5>
-                <div class="order-items-list">
-                    {% for item in user_order.products_in_order %}
-                        <div class="order-item">
-                            <img src="{{ item.product.get_first_photo() }}" class="order-item-img">
-                            <div class="order-item-info">
-                                <a href="{{ url_for('catalog.show_prod_details', prod_id=item.product.id) }}" class="order-item-title">{{ item.product.name }}</a>
-                                <div class="order-item-meta">
-                                    {{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸ x {{ item.amount }} шт.
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 rounded-4 mb-4" style="background-color: var(--card-bg);">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="fw-bold mb-4"><i class="bi bi-box-seam me-2" style="color: #600018;"></i> Состав заказа</h4>
+                    
+                    <div class="order-items-list">
+                        {% for item in user_order.products_in_order %}
+                            <div class="d-flex align-items-center py-3 {% if not loop.last %}border-bottom{% endif %}">
+                                
+                                <div class="flex-shrink-0">
+                                    <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" 
+                                         class="rounded-3 border object-fit-contain p-2" 
+                                         style="width: 120px; height: 120px; background-color: #fff;">
+                                </div>
+                                
+                                <div class="flex-grow-1 ms-3 ms-md-4">
+                                    <a href="{{ url_for('catalog.show_prod_details', prod_id=item.product.id) }}" 
+                                       class="text-decoration-none fw-bold d-block mb-2 fs-5 order-product-title">
+                                       {{ item.product.name }}
+                                    </a>
+                                    <div class="text-muted small fs-6">
+                                        {{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸ <span class="mx-1">×</span> {{ item.amount }} шт.
+                                    </div>
+                                </div>
+                                
+                                <div class="flex-shrink-0 text-end ms-3">
+                                    <div class="fw-bold fs-5 text-nowrap item-total-price">
+                                        {{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸
+                                    </div>
                                 </div>
                             </div>
-                            <div class="order-item-total">
-                                {{ "{:,.0f}".format(item.amount * item.product.get_discount_price()).replace(",", " ") }} ₸
-                            </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-lg-5">
-                <div class="delivery-summary-box">
-                    <h5 class="mb-4">Детали доставки</h5>
-                    <dl class="specs-list">
-                        <li><span>Адрес</span><span>{{ user_order.delivery.address }}</span></li>
-                        <li><span>Способ</span><span>{{ user_order.delivery.way_of_delivery }}</span></li>
-                        <li><span>Время</span><span>{{ user_order.delivery.time_of_arrival }}</span></li>
-                    </dl>
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 rounded-4" style="position: sticky; top: 100px; background-color: var(--card-bg);">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="fw-bold mb-4"><i class="bi bi-truck me-2" style="color: #600018;"></i> Детали доставки</h4>
                     
-                    <hr class="my-4">
-
-                    <div class="d-flex justify-content-between fs-5 fw-bold">
-                        <span>Итого:</span>
-                        <span class="text-success">{{ "{:,.0f}".format(user_order.price).replace(",", " ") }} ₸</span>
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 bg-transparent py-3">
+                            <span class="text-muted"><i class="bi bi-geo-alt me-2"></i>Адрес:</span>
+                            <span class="fw-semibold text-end ms-3 delivery-text" style="max-width: 60%;">{{ user_order.delivery.address }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent py-3">
+                            <span class="text-muted"><i class="bi bi-box me-2"></i>Способ:</span>
+                            <span class="fw-semibold text-end delivery-text">{{ user_order.delivery.way_of_delivery }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-bottom-0 bg-transparent py-3">
+                            <span class="text-muted"><i class="bi bi-clock me-2"></i>Время:</span>
+                            <span class="fw-semibold text-end delivery-text">{{ user_order.delivery.time_of_arrival }}</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="total-box rounded-3 p-4 mt-2 d-flex justify-content-between align-items-center" style="background-color: var(--total-bg); border: 1px solid var(--total-border);">
+                        <span class="fs-5 text-muted fw-bold">Итого:</span>
+                        <span class="fs-3 fw-bold text-success">{{ "{:,.0f}".format(user_order.price).replace(",", " ") }} ₸</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* ПЕРЕМЕННЫЕ ЦВЕТОВ: автоматическая адаптация под светлую и темную тему */
+    body {
+        --card-bg: #ffffff;
+        --text-main: #212529; /* Темный текст для светлой темы */
+        --border-color: #dee2e6;
+    }
+    .body-bg, [data-bs-theme="dark"] body {
+        --card-bg: #1e1e1e;
+        --text-main: #f8f9fa; /* Светлый текст для темной темы */
+        --border-color: #333333;
+    }
+
+    /* ПРИНУДИТЕЛЬНЫЕ ЦВЕТА ДЛЯ ТЕКСТА (чтобы 100% не пропадал) */
+    .order-details-wrapper h1,
+    .order-details-wrapper h4,
+    .item-total-price,
+    .delivery-text {
+        color: var(--text-main) !important;
+    }
+
+    /* Название товара: базовый цвет и цвет при наведении */
+    .order-product-title { 
+        color: var(--text-main) !important;
+        transition: color 0.2s; 
+    }
+    .order-product-title:hover { 
+        color: #600018 !important; 
+    }
+    
+    /* Исправление цвета разделителей */
+    .order-details-wrapper .border-bottom {
+        border-color: var(--border-color) !important;
+    }
+</style>
 {% endblock %}
