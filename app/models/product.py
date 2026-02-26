@@ -24,7 +24,7 @@ class Product(db.Model):
                                     cascade='all, delete-orphan', passive_deletes=True)
     product_in_carts = db.relationship('ProductInCart', backref='product', lazy='dynamic',
                                      cascade='all, delete-orphan', passive_deletes=True)
-    favourite_by_users = db.relationship('FavouriteProduct', backref='product', lazy='dynamic',
+    favourite_by_users = db.relationship('FavouriteProduct', back_populates='product', lazy='dynamic',
                                        cascade='all, delete-orphan', passive_deletes=True)
     product_in_ready_pcs = db.relationship('ProductInReadyPC', backref='product', lazy='dynamic',
                                            cascade='all, delete-orphan')
@@ -96,8 +96,10 @@ class ReadyPC(db.Model):
 
     products_in_readypc = db.relationship('ProductInReadyPC', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan' )
     reviews = db.relationship('Review', backref='ready_pc', lazy='dynamic', cascade='all, delete-orphan')
+    favourited_by = db.relationship('FavouriteProduct', back_populates='ready_pc', cascade='all, delete-orphan')
 
-     # --- НАЧАЛО НОВЫХ МЕТОДОВ ---
+
+    # --- НАЧАЛО НОВЫХ МЕТОДОВ ---
 
     def update_rating(self):
         approved_reviews = self.reviews.filter_by(is_approved=True)

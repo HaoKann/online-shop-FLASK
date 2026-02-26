@@ -11,12 +11,17 @@ favourites_bp = Blueprint('favourites', __name__)
 @favourites_bp.route('/favourites')
 @login_required
 def favourites():
-    favourite_items = FavouriteProduct.query.outerjoin(Product).filter(FavouriteProduct.user_id == current_user.id, 
-                                                                    (Product.is_active == True) | (FavouriteProduct.product_id == None))
-    
+    # 1. Добавляем .all(), чтобы выполнить запрос и получить список
+    # 2. Оптимизируем запрос, чтобы он подтягивал и Product, и ReadyPC
+    favourite_items_list = FavouriteProduct.query.outerjoin(Product).filter(
+        FavouriteProduct.user_id == current_user.id,
+        (Product.is_active == True) | (FavouriteProduct.product_id == None)
+    ).all()
+
     csrf_form = EmptyForm()
     
-    return render_template('user/favourites.html', sub_title='Избранное', favourite_items=favourite_items, csrf_form=csrf_form)
+    # 3. ВАЖНО: передаем переменную под тем именем, которое ждет HTML-шаблон (favourite_products)
+    return render_template('user/favourites.html', sub_title='Избранное', favourite_products=favourite_items_list, csrf_form=csrf_form)
 
 
 # --- УНИВЕРСАЛЬНЫЙ МАРШРУТ ДОБАВЛЕНИЯ ---
@@ -28,20 +33,23 @@ def add_to_favourites(product_id = None, ready_pc_id = None):
     if product_id:
         item = Product.query.get_or_404(product_id)
         already_in_favourite = FavouriteProduct.query.filter_by(user_id=current_user.id, product_id=product_id).first()
-        new_fav = FavouriteProduct(user_id=current_user.id, product_id=product_id)
+        # Готовим объект для сохранения (только если нет в избранном)
+        if not already_in_favourite:
+            new_fav = FavouriteProduct(user_id=current_user.id, product_id=product_id)
 
     elif ready_pc_id:
         item = ReadyPC.query.get_or_404(ready_pc_id)
         # Проверяем наличие именно сборки в избранном
         already_in_favourite = FavouriteProduct.query.filter_by(user_id=current_user.id, ready_pc_id=ready_pc_id).first()
-        new_fav = FavouriteProduct(user_id=current_user.id, ready_pc_id=ready_pc_id)
+        if not already_in_favourite:
+            new_fav = FavouriteProduct(user_id=current_user.id, ready_pc_id=ready_pc_id)
 
     else:
         flash('Товар не найден', 'danger')
         return redirect(url_for('catalog.catalog'))
     
     if already_in_favourite:
-        flash(f'Товар {item.name} уже добавлен в избранное', 'warning')
+        flash(f'{item.name} уже добавлен в избранное', 'warning')
         return redirect(request.referrer or url_for('favourites.favourites'))
 
     db.session.add(new_fav)

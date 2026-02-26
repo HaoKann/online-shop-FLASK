@@ -19,64 +19,113 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 
                 {% for favourite_product in favourite_products %}
-                    <div class="col">
-                        <div class="pc-card h-100 d-flex flex-column">
-                            
-                            {# Блок 1: Кликабельная часть (Изображение и Название) #}
-                            <a href="{{ url_for('catalog.show_prod_details', prod_id=favourite_product.product.id) }}" class="pc-card-link">
-                                <div class="pc-card-image-wrapper">
-                                    {% if favourite_product.product.discount %}
-                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                                            -{{ favourite_product.product.discount }}%
-                                        </span>
-                                    {% endif %}
-                                    <img src="{{ favourite_product.product.get_first_photo() }}" class="pc-card-image" alt="{{ favourite_product.product.name }}">
-                                    <div class="pc-card-overlay">
-                                        <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                    
+                    {# ==============================================
+                       ВАРИАНТ 1: ЭТО ОБЫЧНЫЙ ТОВАР
+                       ============================================== #}
+                    {% if favourite_product.product %}
+                        <div class="col">
+                            <div class="pc-card h-100 d-flex flex-column">
+                                <a href="{{ url_for('catalog.show_prod_details', prod_id=favourite_product.product.id) }}" class="pc-card-link">
+                                    <div class="pc-card-image-wrapper">
+                                        {% if favourite_product.product.discount %}
+                                            <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
+                                                -{{ favourite_product.product.discount }}%
+                                            </span>
+                                        {% endif %}
+                                        <img src="{{ favourite_product.product.get_first_photo() }}" class="pc-card-image" alt="{{ favourite_product.product.name }}">
+                                        <div class="pc-card-overlay">
+                                            <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="pc-card-body">
-                                    <h5 class="pc-card-title">{{ favourite_product.product.name }}</h5>
-                                </div>
-                            </a>
-                            
-                            {# Блок 2: Футер (Цена и Кнопки) #}
-                            <div class="pc-card-footer mt-auto">
-                                <div class="price-wrapper">
-                                    {# Логика отображения скидки #}
-                                    {% if favourite_product.product.discount %}
-                                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
-                                            {{ "{:,.0f}".format(favourite_product.product.price).replace(",", " ") }} ₸
-                                        </span>
-                                        <span class="price-value" style="color: #28a745;">
-                                            {{ "{:,.0f}".format(favourite_product.product.get_discount_price()).replace(",", " ") }} ₸
-                                        </span>
-                                    {% else %}
-                                        <span class="price-label">Цена</span>
-                                        <span class="price-value">
-                                            {{ "{:,.0f}".format(favourite_product.product.price).replace(",", " ") }} ₸
-                                        </span>
-                                    {% endif %}
-                                </div>
+                                    <div class="pc-card-body">
+                                        <h5 class="pc-card-title">{{ favourite_product.product.name }}</h5>
+                                    </div>
+                                </a>
                                 
-                                {# Две кнопки: "Удалить" и "В корзину" #}
-                                <div class="d-flex gap-2">
-                                    <form action="{{ url_for('favourites.delete_product_from_favourites', product_id=favourite_product.product.id) }}" method="POST">
-                                        {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart" title="Удалить из избранного" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ url_for('cart.add_products', product_id=favourite_product.product.id) }}" method="POST" class="flex-grow-1">
-                                        {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
-                                            <i class="bi bi-cart-plus-fill me-2"></i> В корзину
-                                        </button>
-                                    </form>
+                                <div class="pc-card-footer mt-auto">
+                                    <div class="price-wrapper">
+                                        {% if favourite_product.product.discount %}
+                                            <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
+                                                {{ "{:,.0f}".format(favourite_product.product.price).replace(",", " ") }} ₸
+                                            </span>
+                                            <span class="price-value" style="color: #28a745;">
+                                                {{ "{:,.0f}".format(favourite_product.product.get_discount_price()).replace(",", " ") }} ₸
+                                            </span>
+                                        {% else %}
+                                            <span class="price-label">Цена</span>
+                                            <span class="price-value">
+                                                {{ "{:,.0f}".format(favourite_product.product.price).replace(",", " ") }} ₸
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2">
+                                        <form action="{{ url_for('favourites.delete_product_from_favourites', product_id=favourite_product.product.id) }}" method="POST">
+                                            {{ csrf_form.hidden_tag() }}
+                                            <button type="submit" class="btn-add-to-cart" title="Удалить из избранного" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ url_for('cart.add_products', product_id=favourite_product.product.id) }}" method="POST" class="flex-grow-1">
+                                            {{ csrf_form.hidden_tag() }}
+                                            <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                                                <i class="bi bi-cart-plus-fill me-2"></i> В корзину
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                    {# ==============================================
+                       ВАРИАНТ 2: ЭТО ГОТОВАЯ СБОРКА
+                       ============================================== #}
+                    {% elif favourite_product.ready_pc %}
+                        <div class="col">
+                            <div class="pc-card h-100 d-flex flex-column" style="border: 2px solid #ffc107;"> {# Желтая рамка, чтобы отличать сборки #}
+                                <a href="{{ url_for('ready_pc.ready_pc_details', build_id=favourite_product.ready_pc.id) }}" class="pc-card-link">
+                                    <div class="pc-card-image-wrapper">
+                                        <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 fs-6">
+                                            Готовая сборка
+                                        </span>
+                                        <img src="{{ favourite_product.ready_pc.get_build_image() }}" class="pc-card-image" alt="{{ favourite_product.ready_pc.name }}">
+                                        <div class="pc-card-overlay">
+                                            <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="pc-card-body">
+                                        <h5 class="pc-card-title">{{ favourite_product.ready_pc.name }}</h5>
+                                    </div>
+                                </a>
+                                
+                                <div class="pc-card-footer mt-auto">
+                                    <div class="price-wrapper">
+                                        <span class="price-label">Цена</span>
+                                        <span class="price-value">
+                                            {{ "{:,.0f}".format(favourite_product.ready_pc.price).replace(",", " ") }} ₸
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2">
+                                        <form action="{{ url_for('favourites.delete_product_from_favourites', ready_pc_id=favourite_product.ready_pc.id) }}" method="POST">
+                                            {{ csrf_form.hidden_tag() }}
+                                            <button type="submit" class="btn-add-to-cart" title="Удалить из избранного" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ url_for('cart.add_ready_pc_to_cart', ready_pc_id=favourite_product.ready_pc.id) }}" method="POST" class="flex-grow-1">
+                                            {{ csrf_form.hidden_tag() }}
+                                            <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                                                <i class="bi bi-cart-plus-fill me-2"></i> В корзину
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 {% endfor %}
             </div>
             

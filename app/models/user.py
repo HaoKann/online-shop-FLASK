@@ -52,5 +52,9 @@ class FavouriteProduct(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False )
-    product_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
+    product_id = db.Column(db.Integer(), db.ForeignKey('products.id', ondelete='CASCADE'), nullable=True)
+    ready_pc_id = db.Column(db.Integer(), db.ForeignKey('readypc.id', ondelete='CASCADE'), nullable=True)
+
+    product = db.relationship('Product', back_populates='favourite_by_users')
+    ready_pc = db.relationship('ReadyPC', back_populates='favourited_by')
     
