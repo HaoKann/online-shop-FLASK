@@ -3,15 +3,15 @@
 
 {% block content %}
 <div class="ready-pc-catalog">
-    {# Hero Section: Используем 'sub_title', которую вы передаёте из контроллера #}
+    {# Hero Section #}
     <div class="catalog-hero">
-    <div class="container">
-        <div class="hero-content text-center">
-            <h1 class="hero-title mb-3">Каталог</h1>
-            <p class="hero-subtitle">Лучшие комплектующие для вашего компьютера</p>
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title mb-3">{{ sub_title|default('Каталог') }}</h1>
+                <p class="hero-subtitle">Лучшие комплектующие для вашего компьютера</p>
+            </div>
         </div>
     </div>
-</div>
 
     {# --- Улучшенный блок сортировки --- #}
     <div class="d-flex justify-content-end mb-4 container">
@@ -28,24 +28,24 @@
                 </select>
             </div>
 
-            {# Сохраняем текущий поисковый запрос, если он есть (опционально) #}
+            {# Сохраняем текущий поисковый запрос, если он есть #}
             {% if request.args.get('q') %}
                 <input type="hidden" name="q" value="{{ request.args.get('q') }}">
             {% endif %}
         </form>
     </div>
 
-    {# --- CSS стили (можно добавить в style.css) --- #}
+    {# --- CSS стили --- #}
     <style>
         .custom-sort-select {
-            background-color: #2a2a2a; /* Темный фон, чуть светлее основного */
+            background-color: #2a2a2a;
             color: #ffffff;
             border: 1px solid #444;
-            border-radius: 8px; /* Скругленные углы */
-            padding: 0.4rem 2rem 0.4rem 1rem; /* Отступы для текста и стрелочки */
+            border-radius: 8px;
+            padding: 0.4rem 2rem 0.4rem 1rem;
             cursor: pointer;
             font-size: 0.9rem;
-            appearance: none; /* Убираем стандартную стрелочку браузера */
+            appearance: none;
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.75rem center;
@@ -55,12 +55,12 @@
         }
 
         .custom-sort-select:focus {
-            box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25); /* Красная тень при фокусе */
+            box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25);
             border-color: #600018;
         }
 
         .custom-sort-select:hover {
-            background-color: #333; /* Подсветка при наведении */
+            background-color: #333;
             border-color: #555;
         }
     </style>
@@ -68,102 +68,77 @@
 
     <div class="container py-5">
         {% if products.items %}
-            {# Products Grid: Используем новую сетку #}
+            {# Products Grid #}
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 {% for product in products.items %}
-                    {# --- ВСТАВИТЬ ВНУТРИ ЦИКЛА for product in products.items --- #}
-
-<div class="col">
-    <div class="pc-card h-100 d-flex flex-column">
-        {# Блок 1: Кликабельная часть (Изображение и Название) #}
-        <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
-            <div class="pc-card-image-wrapper">
-                {% if product.discount %}
-                    <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                        -{{ product.discount }}%
-                    </span>
-                {% endif %}
-                <img src="{{ product.get_first_photo() }}" class="pc-card-image" alt="{{ product.name }}">
-                <div class="pc-card-overlay">
-                    <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
-                </div>
-            </div>
-            
-            <div class="pc-card-body">
-                <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
-                
-                {# --- ИСПРАВЛЕННЫЙ БЛОК РЕЙТИНГА --- #}
-                <div class="product-card-rating mb-2">
-                    {% set avg_rating = product.average_rating if product.average_rating is not none else 0 %}
-                    
-                    <div class="d-flex align-items-center" style="font-size: 0.85rem;">
-                        {% if avg_rating > 0 %}
-                            <div class="stars text-warning me-2">
-                                {# Закрашенные звезды #}
-                                {% for i in range(avg_rating | int) %}
-                                    <i class="bi bi-star-fill"></i>
-                                {% endfor %}
-                                {# Пустые звезды #}
-                                {% for i in range(5 - (avg_rating | int)) %}
-                                    <i class="bi bi-star text-secondary opacity-25"></i>
-                                {% endfor %}
+                    <div class="col">
+                        <div class="pc-card h-100 d-flex flex-column">
+                            
+                            {# Блок 1: Кликабельная часть (Изображение, Название, Рейтинг) #}
+                            <a href="{{ url_for('catalog.show_prod_details', prod_id=product.id) }}" class="pc-card-link">
+                                <div class="pc-card-image-wrapper">
+                                    {% if product.discount %}
+                                        <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
+                                            -{{ product.discount }}%
+                                        </span>
+                                    {% endif %}
+                                    <img src="{{ product.get_first_photo() }}" class="pc-card-image" alt="{{ product.name }}">
+                                    <div class="pc-card-overlay">
+                                        <span class="view-details">Подробнее <i class="bi bi-arrow-right ms-2"></i></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="pc-card-body">
+                                    <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
+                                    
+                                    {# --- КОМПАКТНЫЙ БЛОК РЕЙТИНГА (КАК В ИЗБРАННОМ) --- #}
+                                    <div class="product-rating mt-2 mb-1">
+                                        <span class="text-warning fw-bold" style="font-size: 1.1rem;">
+                                            {{ product.average_rating|default(0.0) }} <i class="bi bi-star-fill"></i>
+                                        </span>
+                                        <span class="text-muted small ms-1">
+                                            ({{ product.reviews_count|default(0) }})
+                                        </span>
+                                    </div>
+                                    {# --------------------------------------------------- #}
+                                </div>
+                            </a>
+                            
+                            {# Блок 2: Футер (Цена и Кнопки) #}
+                            <div class="pc-card-footer mt-auto pt-2">
+                                <div class="price-wrapper mb-3">
+                                    {% if product.discount %}
+                                        <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
+                                            {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                        </span>
+                                        <span class="price-value" style="color: #28a745;">
+                                            {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
+                                        </span>
+                                    {% else %}
+                                        <span class="price-label" style="font-size: 0.8rem; color: #777;">Цена</span>
+                                        <span class="price-value" style="display: block;">
+                                            {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="d-flex gap-2 align-items-stretch">
+                                    <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
+                                        {{ csrf_form.hidden_tag() }}
+                                        <button type="submit" class="btn-add-to-cart d-flex align-items-center justify-content-center h-100 px-3" title="В избранное" style="background-color: transparent; border: 1px solid var(--accent, #600018); color: var(--accent, #600018);">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
+                                        {{ csrf_form.hidden_tag() }}
+                                        <button type="submit" class="btn-add-to-cart w-100 d-flex align-items-center justify-content-center h-100" title="В корзину">
+                                            <i class="bi bi-cart-plus-fill me-2"></i> В корзину
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                            {# Счетчик отзывов: Сделал цвет более явным (text-secondary вместо text-muted) и убрал прозрачность #}
-                            <span class="text-secondary fw-medium" style="font-size: 0.8rem;">
-                                ({{ product.reviews_count | default(0) }})
-                            </span>
-                        {% else %}
-                            {# Если нет отзывов #}
-                            <div class="text-secondary opacity-50" style="font-size: 0.8rem;">
-                                <i class="bi bi-star me-1"></i> Нет отзывов
-                            </div>
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
-                {# ----------------------------------- #}
-                
-            </div>
-        </a>
-        
-        {# Блок 2: Футер (Цена и Кнопки) #}
-        {# Блок 2: Футер (Цена и Кнопки) #}
-        <div class="pc-card-footer mt-auto pt-2"> {# Добавили pt-2 для отступа #}
-            <div class="price-wrapper mb-3"> {# Добавили mb-3 для отступа от кнопок #}
-                {% if product.discount %}
-                    <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
-                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
-                    </span>
-                    <span class="price-value" style="color: #28a745;">
-                        {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
-                    </span>
-                {% else %}
-                    <span class="price-label" style="font-size: 0.8rem; color: #777;">Цена</span>
-                    <span class="price-value" style="display: block;">
-                        {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
-                    </span>
-                {% endif %}
-            </div>
-            
-            {# Добавили align-items-stretch, чтобы кнопки тянулись на одну высоту #}
-            <div class="d-flex gap-2 align-items-stretch">
-                <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
-                    {{ csrf_form.hidden_tag() }}
-                    {# Добавили h-100, px-3, border: 1px solid и центрирование #}
-                    <button type="submit" class="btn-add-to-cart d-flex align-items-center justify-content-center h-100 px-3" title="В избранное" style="background-color: transparent; border: 1px solid var(--accent, #600018); color: var(--accent, #600018);">
-                        <i class="bi bi-heart-fill"></i>
-                    </button>
-                </form>
-                <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
-                    {{ csrf_form.hidden_tag() }}
-                    {# Добавили h-100 и центрирование #}
-                    <button type="submit" class="btn-add-to-cart w-100 d-flex align-items-center justify-content-center h-100" title="В корзину">
-                        <i class="bi bi-cart-plus-fill me-2"></i> В корзину
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
                 {% endfor %}
             </div>
 

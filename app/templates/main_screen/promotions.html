@@ -13,25 +13,60 @@
         </div>
     </div>
 
-    {# --- Блок сортировки (Скопировано из catalog.html) --- #}
-    <div class="d-flex justify-content-end mb-4 container"> {# Added 'container' class for alignment #}
-        <form method="GET" action="" class="d-flex align-items-center">
-            <label for="sort" class="me-2 text-muted">Сортировать:</label>
-            <select name="sort" id="sort" class="form-select form-select-sm" style="width: auto; background-color: #1e1e1e; color: #fff; border-color: #444;" onchange="this.form.submit()">
-                <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Сначала новые</option>
-                <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Сначала дешевые</option>
-                <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Сначала дорогие</option>
-            </select>
+    {# --- Улучшенный блок сортировки --- #}
+    <div class="d-flex justify-content-end mb-4 container">
+        <form method="GET" action="" class="d-flex align-items-center sort-form">
+            
+            <i class="bi bi-sort-down me-2" style="font-size: 1.2rem; color: #888;"></i>
+            
+            <div class="position-relative">
+                <select name="sort" id="sort" class="form-select form-select-sm custom-sort-select" onchange="this.form.submit()">
+                    <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Сначала новые</option>
+                    <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Дешевые ↑</option>
+                    <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Дорогие ↓</option>
+                </select>
+            </div>
+
+            {% if request.args.get('q') %}
+                <input type="hidden" name="q" value="{{ request.args.get('q') }}">
+            {% endif %}
         </form>
     </div>
+
+    {# CSS стили для сортировки #}
+    <style>
+        .custom-sort-select {
+            background-color: #2a2a2a; 
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 8px; 
+            padding: 0.4rem 2rem 0.4rem 1rem; 
+            cursor: pointer;
+            font-size: 0.9rem;
+            appearance: none; 
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 10px 6px;
+            transition: all 0.2s ease;
+            min-width: 160px;
+        }
+        .custom-sort-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(96, 0, 24, 0.25);
+            border-color: #600018;
+        }
+        .custom-sort-select:hover {
+            background-color: #333;
+            border-color: #555;
+        }
+    </style>
     {# --- Конец блока сортировки --- #}
 
     <div class="container py-5">
         {% if discounted_products %}
-            {# Products Grid (структура от сборок) #}
+            {# Сетка товаров #}
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 
-                {# ВАЖНО: цикл по 'discounted_products', а не 'products.items' #}
                 {% for product in discounted_products %} 
                     <div class="col">
                         <div class="pc-card h-100 d-flex flex-column">
@@ -48,14 +83,24 @@
                                     </div>
                                 </div>
                                 <div class="pc-card-body">
-                                    <h5 class="pc-card-title">{{ product.name }}</h5>
+                                    <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
+                                    
+                                    {# --- КОМПАКТНЫЙ БЛОК РЕЙТИНГА --- #}
+                                    <div class="product-rating mt-2 mb-1">
+                                        <span class="text-warning fw-bold" style="font-size: 1.1rem;">
+                                            {{ product.average_rating|default(0.0) }} <i class="bi bi-star-fill"></i>
+                                        </span>
+                                        <span class="text-muted small ms-1">
+                                            ({{ product.reviews_count|default(0) }})
+                                        </span>
+                                    </div>
+                                    {# ------------------------------- #}
                                 </div>
                             </a>
                             
                             {# Блок 2: Футер (Цена и Кнопки) #}
-                            <div class="pc-card-footer mt-auto">
-                                <div class="price-wrapper">
-                                    {# Логика отображения скидки #}
+                            <div class="pc-card-footer mt-auto pt-2">
+                                <div class="price-wrapper mb-3">
                                     <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
                                         {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
                                     </span>
@@ -64,17 +109,16 @@
                                     </span>
                                 </div>
                                 
-                                {# Две кнопки: "В избранное" и "В корзину" #}
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 align-items-stretch">
                                     <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
                                         {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart" title="В избранное" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                                        <button type="submit" class="btn-add-to-cart d-flex align-items-center justify-content-center h-100 px-3" title="В избранное" style="background-color: transparent; border: 1px solid var(--accent, #600018); color: var(--accent, #600018);">
                                             <i class="bi bi-heart-fill"></i>
                                         </button>
                                     </form>
                                     <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
                                         {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                                        <button type="submit" class="btn-add-to-cart w-100 d-flex align-items-center justify-content-center h-100" title="В корзину">
                                             <i class="bi bi-cart-plus-fill me-2"></i> В корзину
                                         </button>
                                     </form>
@@ -84,8 +128,6 @@
                     </div>
                 {% endfor %}
             </div>
-
-            {# На этой странице нет пагинации, так как вы загружаете .all() #}
 
         {% else %}
             <div class="empty-state text-center py-5">

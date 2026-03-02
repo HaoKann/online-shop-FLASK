@@ -409,3 +409,15 @@ a:hover {
     color: #cccccc !important;
     text-shadow: none !important;
 }
+
+/* ===============================
+   PAYMENT PAGE - DARK THEME
+   =============================== */
+
+.payment-section {
+    color: #ffffff !important;
+}
+
+.order-item {
+    color: #ffffff !important;
+}

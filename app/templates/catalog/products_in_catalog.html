@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    {# --- Улучшенный блок сортировки (Скопирован для единого стиля) --- #}
+    {# --- Улучшенный блок сортировки --- #}
     <div class="d-flex justify-content-end mb-4 container">
         <form method="GET" action="" class="d-flex align-items-center sort-form">
             
@@ -32,7 +32,7 @@
         </form>
     </div>
 
-    {# CSS стили для сортировки (можно вынести в style.css, но пока оставим здесь) #}
+    {# CSS стили для сортировки #}
     <style>
         .custom-sort-select {
             background-color: #2a2a2a; 
@@ -61,7 +61,6 @@
     </style>
     {# --- Конец блока сортировки --- #}
 
-
     <div class="container py-5">
         {% if products.items %}
             {# Сетка товаров #}
@@ -86,38 +85,22 @@
                                 <div class="pc-card-body">
                                     <h5 class="pc-card-title mb-1">{{ product.name }}</h5>
                                     
-                                    {# --- ДОБАВЛЕННЫЙ БЛОК РЕЙТИНГА --- #}
-                                    <div class="product-card-rating mb-2">
-                                        {% set avg_rating = product.average_rating if product.average_rating is not none else 0 %}
-                                        {% if avg_rating > 0 %}
-                                            <div class="stars text-warning" style="font-size: 0.85rem;">
-                                                {# Закрашенные звезды #}
-                                                {% for i in range(avg_rating | int) %}
-                                                    <i class="bi bi-star-fill"></i>
-                                                {% endfor %}
-                                                
-                                                {# Пустые звезды до 5 #}
-                                                {% for i in range(5 - (avg_rating | int)) %}
-                                                    <i class="bi bi-star text-muted"></i>
-                                                {% endfor %}
-                                                
-                                                <span class="rating-count" style="font-size: 0.75rem;">
-                                                    ({{ product.reviews_count | default(0) }})
-                                                </span>
-                                            </div>
-                                        {% else %}
-                                            <div class="stars text-muted" style="font-size: 0.75rem;">
-                                                <i class="bi bi-star me-1"></i> <span>Нет отзывов</span>
-                                            </div>
-                                        {% endif %}
+                                    {# --- КОМПАКТНЫЙ БЛОК РЕЙТИНГА --- #}
+                                    <div class="product-rating mt-2 mb-1">
+                                        <span class="text-warning fw-bold" style="font-size: 1.1rem;">
+                                            {{ product.average_rating|default(0.0) }} <i class="bi bi-star-fill"></i>
+                                        </span>
+                                        <span class="text-muted small ms-1">
+                                            ({{ product.reviews_count|default(0) }})
+                                        </span>
                                     </div>
                                     {# ------------------------------- #}
                                 </div>
                             </a>
                             
                             {# Футер (Цена и Кнопки) #}
-                            <div class="pc-card-footer mt-auto">
-                                <div class="price-wrapper">
+                            <div class="pc-card-footer mt-auto pt-2">
+                                <div class="price-wrapper mb-3">
                                     {% if product.discount %}
                                         <span class="text-muted text-decoration-line-through me-2" style="font-size: 0.9rem; display: block;">
                                             {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
@@ -126,23 +109,23 @@
                                             {{ "{:,.0f}".format(product.get_discount_price()).replace(",", " ") }} ₸
                                         </span>
                                     {% else %}
-                                        <span class="price-label">Цена</span>
-                                        <span class="price-value">
+                                        <span class="price-label" style="font-size: 0.8rem; color: #777;">Цена</span>
+                                        <span class="price-value" style="display: block;">
                                             {{ "{:,.0f}".format(product.price).replace(",", " ") }} ₸
                                         </span>
                                     {% endif %}
                                 </div>
                                 
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 align-items-stretch">
                                     <form action="{{ url_for('favourites.add_to_favourites', product_id=product.id) }}" method="POST">
                                         {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart" title="В избранное" style="background-color: transparent; border-color: var(--accent, #600018); color: var(--accent, #600018); padding: 0.6rem 0.8rem;">
+                                        <button type="submit" class="btn-add-to-cart d-flex align-items-center justify-content-center h-100 px-3" title="В избранное" style="background-color: transparent; border: 1px solid var(--accent, #600018); color: var(--accent, #600018);">
                                             <i class="bi bi-heart-fill"></i>
                                         </button>
                                     </form>
                                     <form action="{{ url_for('cart.add_products', product_id=product.id) }}" method="POST" class="flex-grow-1">
                                         {{ csrf_form.hidden_tag() }}
-                                        <button type="submit" class="btn-add-to-cart w-100" title="В корзину">
+                                        <button type="submit" class="btn-add-to-cart w-100 d-flex align-items-center justify-content-center h-100" title="В корзину">
                                             <i class="bi bi-cart-plus-fill me-2"></i> В корзину
                                         </button>
                                     </form>

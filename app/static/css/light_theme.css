@@ -697,3 +697,16 @@ h1[style*="color: #ffffff"],
 .specs-list a:hover {
     color: #600018 !important;
 }
+
+
+/* ===============================
+   PAYMENT PAGE - LIGHT THEME
+   =============================== */
+
+.payment-section {
+    color: #212529 !important;
+}
+
+.order-item {
+    color: #212529 !important;
+}

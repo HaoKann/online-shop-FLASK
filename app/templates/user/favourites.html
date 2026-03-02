@@ -40,6 +40,17 @@
                                     </div>
                                     <div class="pc-card-body">
                                         <h5 class="pc-card-title">{{ favourite_product.product.name }}</h5>
+                                        
+                                        {# БЛОК РЕЙТИНГА ДЛЯ ТОВАРА #}
+                                        <div class="product-rating mt-2 mb-1">
+                                            <span class="text-warning fw-bold" style="font-size: 1.1rem;">
+                                                {{ favourite_product.product.average_rating }} <i class="bi bi-star-fill"></i>
+                                            </span>
+                                            <span class="text-muted small ms-1">
+                                                ({{ favourite_product.product.reviews_count }})
+                                            </span>
+                                        </div>
+
                                     </div>
                                 </a>
                                 
@@ -83,7 +94,7 @@
                        ============================================== #}
                     {% elif favourite_product.ready_pc %}
                         <div class="col">
-                            <div class="pc-card h-100 d-flex flex-column" style="border: 2px solid #ffc107;"> {# Желтая рамка, чтобы отличать сборки #}
+                            <div class="pc-card h-100 d-flex flex-column" style="border: 2px solid #ffc107;">
                                 <a href="{{ url_for('ready_pc.ready_pc_details', build_id=favourite_product.ready_pc.id) }}" class="pc-card-link">
                                     <div class="pc-card-image-wrapper">
                                         <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 fs-6">
@@ -96,6 +107,17 @@
                                     </div>
                                     <div class="pc-card-body">
                                         <h5 class="pc-card-title">{{ favourite_product.ready_pc.name }}</h5>
+                                        
+                                        {# БЛОК РЕЙТИНГА ДЛЯ СБОРКИ #}
+                                        <div class="product-rating mt-2 mb-1">
+                                            <span class="text-warning fw-bold" style="font-size: 1.1rem;">
+                                                {{ favourite_product.ready_pc.average_rating }} <i class="bi bi-star-fill"></i>
+                                            </span>
+                                            <span class="text-muted small ms-1">
+                                                ({{ favourite_product.ready_pc.reviews_count }})
+                                            </span>
+                                        </div>
+
                                     </div>
                                 </a>
                                 
@@ -128,8 +150,6 @@
 
                 {% endfor %}
             </div>
-            
-            {# На этой странице нет пагинации, так как вы загружаете .all() #}
             
         {% else %}
             <div class="empty-state text-center py-5">
