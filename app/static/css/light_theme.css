@@ -225,7 +225,7 @@ select option { background-color: #ffffff !important; color: #000000 !important;
     color: #212529 !important;
 }
 .cart-summary-card h4, .cart-summary-card h5, .cart-summary-card span { color: #212529 !important; }
-#cart-grand-total { color: #28a745 !important; font-weight: bold; }
+#cart-grand-total { color: #600018 !important; font-weight: bold; }
 
 /* =========================================
    8. ПРОЧЕЕ
@@ -709,4 +709,90 @@ h1[style*="color: #ffffff"],
 
 .order-item {
     color: #212529 !important;
+}
+
+
+/* =========================================
+   ВИДИМЫЕ ГРАНИЦЫ КНОПОК +/- В КОРЗИНЕ (СВЕТЛАЯ ТЕМА)
+   ========================================= */
+
+/* =========================================
+   ЧЕТКИЕ ГРАНИЦЫ КНОПОК +/- В КОРЗИНЕ
+   ========================================= */
+
+.cart-item-quantity {
+    background-color: #ffffff !important;
+    border: 3px solid #600018 !important; /* Толще рамка: 3px вместо 2px */
+    border-radius: 25px !important;
+    padding: 6px 16px !important; /* Больше отступы */
+    box-shadow: 0 2px 8px rgba(96, 0, 24, 0.2) !important; /* Добавлена тень */
+}
+
+.cart-item-quantity .btn {
+    color: #600018 !important;
+    font-weight: bold;
+    font-size: 1.2rem; /* Больше иконки +/- */
+    padding: 4px 8px;
+}
+
+.cart-item-quantity .btn:hover {
+    background-color: #600018 !important;
+    color: #ffffff !important;
+    border-radius: 50%;
+    transform: scale(1.1); /* Увеличение при наведении */
+}
+
+.quantity-value {
+    color: #212529 !important;
+    min-width: 40px; /* Шире */
+    text-align: center;
+    font-size: 1.1rem; /* Больше текст */
+    font-weight: 600;
+}
+
+.cart-item-quantity .btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+}
+
+.cart-item-quantity .btn:active {
+    background-color: #600018 !important;
+    color: #ffffff !important;
+    border-radius: 50% !important;
+}
+
+
+/* =========================================
+   КНОПКА "ВЕРНУТЬСЯ В КОРЗИНУ" (СВЕТЛАЯ ТЕМА)
+   ========================================= */
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d !important;
+    color: #6c757d !important;
+    background-color: transparent !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    color: #ffffff !important;
+    border-color: #6c757d !important;
+    transform: translateX(-5px);
+}
+
+.btn-outline-secondary:active {
+    transform: translateX(-3px) scale(0.98);
+}
+
+.btn-outline-secondary:hover i {
+    animation: arrowBounce 0.6s ease infinite;
+}
+
+@keyframes arrowBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-5px); }
 }

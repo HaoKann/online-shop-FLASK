@@ -82,7 +82,11 @@
             border-radius: 16px;
             color: #fff;
         }
-
+        .checkout-card .form-control::placeholder,
+        .checkout-card .form-select::placeholder {
+            color: black !important; /* Яркий белый вместо приглушенного */
+            opacity: 1 !important; /* Полная непрозрачность */
+        }
         /* Стили для полей ввода на темном фоне */
         .checkout-card .form-label {
             color: #ccc;
@@ -91,14 +95,14 @@
         }
 
         .checkout-card .input-group-text {
-            background-color: #2a2a2a;
-            border-color: #444;
-            color: #600018 !important; /* Принудительно красная иконка */
-        }
+        background-color: #ffffff !important; /* БЕЛЫЙ ФОН */
+        border-color: #444;
+        color: #600018 !important;
+}
 
         /* Дополнительно, чтобы наверняка перебить глобальные стили для иконок внутри */
         .checkout-card .input-group-text i {
-            color: #600018 !important;
+            color: #600018 !important; /* Красная иконка */
         }
 
         .checkout-card .form-control,
@@ -179,5 +183,8 @@
         .step-line.completed {
             background-color: #198754;
         }
+
+        
+
     </style>
     {% endblock %}
