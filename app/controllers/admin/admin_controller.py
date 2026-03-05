@@ -75,7 +75,7 @@ def admin_product(id):
     add_photo_form = AddPhotoForm()
     
 
-    if edit_product_form.validate_on_submit() and edit_product_form.submit.data:
+    if edit_product_form.validate_on_submit():
         # Обновляем его поля данными из формы
         product.name = edit_product_form.name.data
         product.category_id = edit_product_form.category_id.data 
@@ -117,7 +117,7 @@ def admin_product(id):
             db.session.add(new_photo_record)
             
         db.session.commit()
-        flash('Фото успешно заменено', 'success')
+        flash('Данные товара успешно обновлены!', 'success')
         return redirect(url_for('admin.admin_product', id=id))
 
     

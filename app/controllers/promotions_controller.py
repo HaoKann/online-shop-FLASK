@@ -9,8 +9,14 @@ promotions_bp = Blueprint('promotions', __name__)
 def promotions():
 
     query = Product.query.filter(Product.is_active == True, Product.discount > 0)
+
+    raw_count = query.count()
+    print(f"DEBUG: Найдено товаров со скидкой (без сортировки): {raw_count}")
+
     query = apply_sorting(query)
     discounted_products = query.all()
+
+    print(f"DEBUG: Найдено товаров после сортировки: {len(discounted_products)}")
 
     current_sort = request.args.get('sort', 'newest')
     csrf_form = EmptyForm() 

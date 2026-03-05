@@ -18,7 +18,7 @@
                     {% for item in current_user.cart.products_in_cart %}
                         {% if item.amount > 0 %}
                             <div class="cart-item-card d-flex align-items-center mb-3 p-3 shadow-sm" data-product-id="{{ item.id }}" style="background-color: #1e1e1e; border-radius: 12px; border: 1px solid #333;">
-                                <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="cart-item-img" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                                <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" class="cart-item-img" style="width: 80px; height: 80px; object-fit: contain; border-radius: 8px; background-color: #ffffff; padding: 5px;">
                                 
                                 <div class="cart-item-details ms-3 flex-grow-1">
                                     <a href="{{ url_for('catalog.show_prod_details', prod_id=item.product.id) }}" class="cart-item-title text-decoration-none text-white fw-bold">{{ item.product.name }}</a>

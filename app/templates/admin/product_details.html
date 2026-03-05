@@ -52,6 +52,10 @@
                     <div class="p-3 rounded border border-secondary bg-dark bg-opacity-50">
                         <form method="POST" enctype="multipart/form-data">
                             {{ edit_form.hidden_tag() }}
+                            <div class="d-none">
+                                {{ edit_form.category_id }}
+                            </div>
+
                             <div class="mb-3">
                                 <label class="form-label small text-secondary">Название</label>
                                 {{ edit_form.name(class="form-control form-control-sm bg-dark text-light border-secondary shadow-none") }}

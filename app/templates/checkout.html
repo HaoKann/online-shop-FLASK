@@ -46,7 +46,7 @@
                             
                             <div class="ms-4 flex-grow-1">
                                 <h6 class="mb-1 fw-bold ">{{ item.product.name }}</h6>
-                                <small class="text-muted">{{ item.amount }} шт. × {{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸</small>
+                                <small>{{ item.amount }} шт. × {{ "{:,.0f}".format(item.product.get_discount_price()).replace(",", " ") }} ₸</small>
                             </div>
                             
                             <div class="fw-bold">
