@@ -134,70 +134,100 @@ a:hover {
     color: rgba(255, 255, 255, 0.5) !important;
 }
 
-/* --- 4. КАРТОЧКИ ПРЕИМУЩЕСТВ --- */
-.features-section {
-    background-color: rgb(15, 15, 15) !important;
-    padding: 60px 0 !important;
+/* =========================================
+   2. СЕКЦИЯ "ПОЧЕМУ МЫ" - ТЕМНАЯ ТЕМА (Синхронизация)
+   ========================================= */
+.features-section { 
+    background-color: #121212 !important; /* Глубокий темный фон секции */
+    padding: 80px 0 !important; 
 }
+
+/* Заголовок: выравниваем по левому краю, крупный и жирный */
+.features-section h2,
 .section-title {
-    color: white !important;
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
+    color: #ffffff !important;
+    text-align: center !important;
+    font-size: 2.5rem !important;
+    font-weight: 800 !important;
+    margin: 0 auto 40px auto !important;
+    width: 100% !important;
+    display: block !important;
 }
 
+.features-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; 
+    margin: 0 auto; 
+    max-width: 1200px; 
+}
+
+/* Карточка (Темная) */
 .feature-card {
-    background-color: #2a2a2a !important;
-    border: 1px solid #444444 !important;
-    border-radius: 10px;
-    padding: 30px 20px;
+    background-color: #1e1e1e !important; /* Цвет самой карточки */
+    border: 1px solid #333333 !important; /* Темная граница */
+    border-radius: 16px !important; 
+    padding: 40px 20px;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); /* Базовая тень потемнее */
     height: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+    /* Та самая "пружинистая" анимация */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; 
 }
 
-.feature-card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 10px 25px rgba(96, 0, 24, 0.4);
-    border-color: #600018 !important;
-    background-color: #333333 !important;
+/* Анимация карточки при наведении (эффект подъема) */
+.feature-card:hover { 
+    transform: translateY(-10px) scale(1.02) !important; 
+    box-shadow: 0 15px 35px rgba(96, 0, 24, 0.4) !important; /* Яркое бордовое свечение на темном */
+    border-color: #600018 !important; 
+    z-index: 2; 
 }
 
+/* Контейнер для иконки (бордовый круг) */
 .feature-icon {
     background-color: #600018 !important;
-    color: white !important;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 1.5rem;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    color: #ffffff !important;
+    width: 80px !important; 
+    height: 80px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 20px auto !important;
+    font-size: 2.2rem !important;
+    transition: transform 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease !important;
 }
 
-.feature-card:hover .feature-icon {
-    background-color: #800020 !important;
-    transform: scale(1.15) rotate(5deg);
+.feature-icon i {
+    background: transparent !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
 }
 
+/* Анимация иконки при наведении (увеличение + поворот) */
+.feature-card:hover .feature-icon { 
+    transform: scale(1.1) rotate(5deg) !important; 
+    background-color: #800020 !important; 
+    box-shadow: 0 8px 20px rgba(96, 0, 24, 0.6) !important; 
+}
+
+/* Текст внутри карточки */
 .feature-card h3 {
-    color: white !important;
-    font-size: 1.25rem;
-    font-weight: bold;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
+    margin-bottom: 12px;
 }
-.feature-card p {
-    color: #cccccc !important;
+
+.feature-card p { 
+    color: #aaaaaa !important; /* Светло-серый текст, чтобы не бил по глазам */
+    font-size: 1rem !important;
+    margin: 0; 
 }
 
 /* --- 5. ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ --- */

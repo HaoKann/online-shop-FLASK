@@ -42,7 +42,7 @@
                 <div class="d-flex flex-column gap-3">
                     {% for item in current_user.cart.products_in_cart.all() %}
                         <div class="d-flex align-items-center p-3 order-item">
-                            <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
+                            <img src="{{ item.product.get_first_photo() }}" alt="{{ item.product.name }}" style="width: 70px; height: 70px; object-fit: contain; background-color: #ffffff; padding: 4px; border-radius: 8px;">
                             
                             <div class="ms-4 flex-grow-1">
                                 <h6 class="mb-1 fw-bold ">{{ item.product.name }}</h6>

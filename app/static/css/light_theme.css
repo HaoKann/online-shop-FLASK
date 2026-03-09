@@ -53,49 +53,101 @@ a:hover { color: #900025; }
 .dropdown-item:hover { background-color: #f8f9fa !important; color: #600018 !important; }
 
 /* =========================================
-   2. СЕКЦИЯ "ПОЧЕМУ МЫ"
+   2. СЕКЦИЯ "ПОЧЕМУ МЫ" (Синхронизация стилей и анимаций)
    ========================================= */
-.features-section { background-color: #f4f6f8 !important; padding: 60px 0; }
-.features-section h2, .section-title { color: #1e1e1e !important; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 0 auto; max-width: 1200px; }
+.features-section { 
+    background-color: var(--bs-body-bg, #f4f6f8) !important; 
+    padding: 80px 0; /* Добавили немного воздуха сверху и снизу */
+}
 
+/* Заголовок: выравниваем по левому краю, делаем крупным и жирным, как на темной теме */
+.features-section h2,
+.section-title {
+    color: #000000 !important;
+    text-align: center !important;
+    font-size: 2.5rem !important;
+    font-weight: 800 !important;
+    margin: 0 auto 40px auto !important;
+    width: 100% !important;
+    display: block !important;
+}
+
+.features-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; 
+    margin: 0 auto; 
+    max-width: 1200px; 
+}
+
+/* Карточка */
 .feature-card {
-    background-color: #ffffff !important;
-    border: 1px solid #dee2e6 !important;
-    border-radius: 12px;
-    padding: 30px 20px;
+    background-color: var(--bs-card-bg, #ffffff) !important;
+    border: 1px solid var(--bs-border-color, #dee2e6) !important;
+    border-radius: 16px !important; /* Делаем скругления более современными */
+    padding: 40px 20px;
     text-align: center;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    justify-content: center !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     height: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Добавляем "пружинистую" анимацию для крутого эффекта при наведении */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; 
 }
-.feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(96, 0, 24, 0.1); border-color: #600018 !important; }
 
-.feature-icon, .feature-card i {
+/* Анимация карточки при наведении (эффект подъема и масштабирования) */
+.feature-card:hover { 
+    transform: translateY(-10px) scale(1.02) !important; /* Приподнимаем и слегка увеличиваем */
+    box-shadow: 0 15px 35px rgba(96, 0, 24, 0.15) !important; /* Добавляем бордовое свечение */
+    border-color: #600018 !important; 
+    z-index: 2; /* Чтобы карточка визуально выходила на передний план */
+}
+
+/* Контейнер для иконки (бордовый круг) */
+.feature-icon {
     background-color: #600018 !important;
     color: #ffffff !important;
-    width: 70px !important;
-    height: 70px !important;
+    width: 80px !important; /* Чуть увеличили, чтобы соответствовать темной теме */
+    height: 80px !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-bottom: 20px !important;
-    font-size: 1.8rem !important;
-    transition: transform 0.3s ease;
+    margin: 0 auto 20px auto !important;
+    font-size: 2.2rem !important;
+    transition: transform 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease !important;
 }
-.feature-card:hover .feature-icon { transform: scale(1.1); background-color: #800020 !important; }
 
-.feature-card h3 {
-    color: #1e1e1e !important;
-    font-weight: bold;
-    margin-bottom: 10px;
-    background: none !important;
+/* Убираем стили круга с самого тега <i> */
+.feature-icon i {
+    background: transparent !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
 }
-.feature-card p { color: #666666 !important; margin: 0; }
+
+/* Анимация иконки при наведении (увеличение + легкий наклон/поворот) */
+.feature-card:hover .feature-icon { 
+    transform: scale(1.1) rotate(5deg) !important; /* Тот самый эффект наклона */
+    background-color: #800020 !important; 
+    box-shadow: 0 8px 20px rgba(96, 0, 24, 0.4) !important; /* Тень от самой иконки */
+}
+
+/* Текст внутри карточки */
+.feature-card h3 {
+    color: var(--bs-body-color, #1e1e1e) !important;
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
+    margin-bottom: 12px;
+}
+
+.feature-card p { 
+    color: var(--bs-secondary-color, #666666) !important; 
+    font-size: 1rem !important;
+    margin: 0; 
+}
 
 /* =========================================
    3. КАРТОЧКИ (ОБЩИЕ)
