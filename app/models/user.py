@@ -9,7 +9,7 @@ from flask_login import UserMixin
 # будет иппользована чтобы получить авторизованного юзера из БД по id 
 @login_manager.user_loader
 def load_user(id):
-    return User.query.get(int(id))
+    return db.session.get(User, int(id))
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
