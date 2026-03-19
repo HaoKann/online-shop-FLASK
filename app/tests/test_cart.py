@@ -1,7 +1,8 @@
 from app.models.product import Product, Category, ReadyPC, ProductInReadyPC
-from app.models.cart import ProductInCart
+from app.models.cart import ProductInCart, Cart
 from app.models.user import User
 from app import db
+from datetime import date
 
 def test_add_product_to_cart(auth_client, app):
     """Тест: Авторизованный юзер может добавить товар в корзину."""
@@ -194,6 +195,53 @@ def test_delete_product_from_cart(auth_client, app):
     with app.app_context():
         deleted_item = db.session.get(ProductInCart, item_id)
         assert deleted_item is None
+
+
+def test_hacker_cannot_modify_other_cart(auth_client, app):
+    """Тест на безопасность: Юзер не может изменять чужую корзину (ошибка 403 Forbidden)."""
+
+    with app.app_context():
+        # 1. ПОДГОТОВКА: Создаем "Жертву" (совершенно другого пользователя)
+        victim = User(
+            name='Жертва',
+            nickname='victim',
+            email='victim@mail.ru',
+            date_of_birth=date(1995, 5, 5)
+        )
+        victim.set_password('password123')
+        db.session.add(victim)
+        db.session.commit()
+
+        # Создаем корзину для Жертвы
+        victim_cart = Cart(user_id=victim.id)
+        db.session.add(victim_cart)
+        db.session.commit()
+
+        # Создаем товар
+        category = Category(name='Мониторы', slug='monitors')
+        db.session.add(category)
+        db.session.commit()
+
+        product = Product(name='LG UltraGear', price=25000, category_id=category.id, is_active=True)
+        db.session.add(product)
+        db.session.commit()
+
+        # Кладем товар ИМЕННО В КОРЗИНУ ЖЕРТВЫ
+        victim_item = ProductInCart(amount=1, product_id=product.id, cart_id=victim_cart.id)
+        db.session.add(victim_item)
+        db.session.commit()
+
+        # Запоминаем ID чужого товара
+        target_item_id = victim_item.id
+
+        # 2. ДЕЙСТВИЕ (АТАКА): 
+        # Наш auth_client (который залогинен как test_buyer) пытается увеличить количество товара Жертвы!
+        response = auth_client.post(f'/cart/increase_amount/{target_item_id}')
+
+        # 3. ПРОВЕРКА: Сервер должен ударить хакера по рукам!
+        # Код 403 означает "Forbidden" (Запрещено: я знаю кто ты, но тебе туда нельзя)
+        assert response.status_code == 403
+
     
     
 
