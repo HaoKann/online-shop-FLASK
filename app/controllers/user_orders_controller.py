@@ -2,7 +2,7 @@ from app import db
 from flask import flash, render_template, redirect, session, url_for, current_app, Blueprint
 from flask_login import login_required, current_user
 from app.models.order import Order, ProductInOrder, Delivery
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_wtf import FlaskForm
 from app.forms.order_form import UserOrderForm
 from app.forms.empty_form import EmptyForm
@@ -73,7 +73,7 @@ def order_success():
             user_id=current_user.id,
             price=current_user.cart.sum_of_products_in_cart(),
             status='pending', # Начальный статус "в обработке"
-            date=datetime.utcnow()
+            date=datetime.now(timezone.utc)
         )
         db.session.add(new_order)
         db.session.flush() # Это нужно, чтобы получить new_order.id до коммита
