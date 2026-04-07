@@ -1,5 +1,5 @@
 from app.models.user import User
-from app.models.product import Category, Product, Review
+from app.models.product import Category, Product, Review, Characteristic, ReadyPC
 from app.models.order import Order
 from app.models.faq import FAQ
 from app import db
@@ -161,3 +161,131 @@ def test_admin_approve_reviews(auth_client, app):
 
     with app.app_context():
         assert db.session.get(Review, review_id).is_approved == True
+
+
+def test_admin_faq_management_cycle(auth_client, app):
+    """Комплексный тест: Создание, редактирование и удаление FAQ администратором."""
+
+    # 1. ПОДГОТОВКА: Делаем юзера админом
+    with app.app_context():
+        admin_user = User.query.filter_by(nickname='test_buyer').first()
+        admin_user.is_admin = True
+        db.session.commit()
+
+    # 2. ДОБАВЛЕНИЕ: Создаем новый вопрос
+    response_add = auth_client.post('/admin/admin/faqs/add', data={
+        'question': 'Как проверить статус сборки?',
+        'answer': 'В личном кабинете в разделе Заказы',
+        'category': 'Общие вопросы'
+    }, follow_redirects=True)
+
+    assert response_add.status_code == 200
+    assert 'Новый вопрос успешно добавлен!' in response_add.data.decode('utf-8')
+
+    with app.app_context():
+        faq = FAQ.query.filter_by(question='Как проверить статус сборки?').first()
+        assert faq is not None
+        assert faq.answer == 'В личном кабинете в разделе Заказы'
+        faq_id = faq.id
+
+    # 3. РЕДАКТИРОВАНИЕ: Изменяем созданный вопрос
+    response_edit = auth_client.post(f'/admin/admin/faqs/edit/{faq_id}', data={
+        'question': 'Как проверить статус?',
+        'answer': 'Изменено: через бота или сайт',
+        'category': 'Доставка'
+    }, follow_redirects=True)
+
+    assert response_edit.status_code == 200
+    assert 'Вопрос успешно обновлен!' in response_edit.data.decode('utf-8')
+
+    with app.app_context():
+        updated_faq = db.session.get(FAQ, faq_id)
+        assert updated_faq.question == 'Как проверить статус?'
+        assert updated_faq.category == 'Доставка'
+
+
+    # 4. СПИСОК: Проверяем отображение в общем списке
+    response_list = auth_client.get('/admin/admin/faqs')
+    assert response_list.status_code == 200
+    assert 'Как проверить статус?' in response_list.data.decode('utf-8')
+
+
+    # 5. УДАЛЕНИЕ: Проверяем удаление вопроса
+    response_delete = auth_client.post(f'/admin/admin/faqs/delete/{faq_id}', follow_redirects=True)
+    assert response_delete.status_code == 200
+    assert 'Вопрос удален' in response_delete.data.decode('utf-8')
+
+    with app.app_context():
+        delete_faq = db.session.get(FAQ, faq_id)
+        assert delete_faq is None
+
+
+def test_admin_add_and_delete_characteristic(auth_client, app):
+    """Тест: Добавление и удаление характеристики у конкретного товара."""
+    with app.app_context():
+        admin_user = User.query.filter_by(nickname='test_buyer').first()
+        admin_user.is_admin = True
+
+        cat = Category(name='Комплектующие', slug='components')
+        db.session.add(cat)
+        db.session.commit()
+
+        prod = Product(name='Процессор', price=10000, category_id=cat.id)
+        db.session.add(prod)
+        db.session.commit()
+        prod_id = prod.id
+
+    # 1. ДОБАВЛЕНИЕ ХАРАКТЕРИСТИКИ
+    # Имитируем отправку формы characteristics_form (важно передать submit_characteristics)
+    response_add = auth_client.post(f'/admin/admin/products/{prod_id}', data={
+        'characteristics_form-name': 'Сокет',
+        'characteristics_form-value': 'AM4',
+        'characteristics_form-value_type': 'string',
+        'characteristics_form-submit_characteristics': 'Добавить'
+    }, follow_redirects=True)
+
+    assert response_add.status_code == 200
+
+    with app.app_context():
+        char = Characteristic.query.filter_by(prod_id=prod_id, name='Сокет').first()
+        assert char is not None
+        char_id = char.id
+
+    # 2. УДАЛЕНИЕ ХАРАКТЕРИСТИКИ
+    response_delete = auth_client.post(f'/admin/characteristic/delete/{char_id}', follow_redirects=True)
+    assert response_delete.status_code == 200
+
+    with app.app_context():
+        assert db.session.get(Characteristic, char_id) is None
+
+
+def test_admin_add_and_delete_readypc(auth_client, app):
+    """Тест: Создание и удаление Готовой Сборки ПК."""
+    with app.app_context():
+        admin_user = User.query.filter_by(nickname='test_buyer').first()
+        admin_user.is_admin = True
+        db.session.commit()
+
+    # 1. ДОБАВЛЕНИЕ СБОРКИ
+    response_add = auth_client.post('/admin/admin/add/ready-pc', data={
+        'name': 'Игровой ПК',
+        'category': 'gaming',
+        'price': '500000'
+    }, follow_redirects=True)
+
+    assert response_add.status_code == 200
+    assert 'Готовая сборка создана!' in response_add.data.decode('utf-8')
+
+    with app.app_context():
+        ready_pc = ReadyPC.query.filter_by(name='Игровой ПК').first()
+        assert ready_pc is not None
+        pc_id = ready_pc.id
+
+    # 2. УДАЛЕНИЕ СБОРКИ
+    response_delete = auth_client.post(f'/admin/admin/ready-pc/delete/{pc_id}', follow_redirects=True)
+    assert response_delete.status_code == 200
+
+    with app.app_context():
+        assert db.session.get(ReadyPC, pc_id) is None
+
+    
