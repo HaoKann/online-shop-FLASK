@@ -1,8 +1,10 @@
 from app.models.user import User
-from app.models.product import Category, Product, Review, Characteristic, ReadyPC
+from app.models.product import Category, Product, Review, Characteristic, ReadyPC, Photo
 from app.models.order import Order
 from app.models.faq import FAQ
 from app import db
+import io
+
 
 def test_admin_access_denied_for_regular_users(auth_client):
     """Тест: Обычный юзер получает 403 при попытке зайти в админку."""
@@ -287,5 +289,49 @@ def test_admin_add_and_delete_readypc(auth_client, app):
 
     with app.app_context():
         assert db.session.get(ReadyPC, pc_id) is None
+
+
+def test_admin_add_and_delete_photo(auth_client, app):
+    """Тест: Имитация загрузки и удаления фотографии товара администратором."""
+    with app.app_context():
+        admin_user = User.query.filter_by(nickname='test_buyer').first()
+        admin_user.is_admin = True
+        db.session.commit()
+
+        cat = Category(name='ФотоТест', slug='photo_test')
+        db.session.add(cat)
+        db.session.commit()
+
+        prod = Product(name='Товар для фото', price=100, category_id=cat.id)
+        db.session.add(prod)
+        db.session.commit()
+        prod_id = prod.id
+    
+    # 1. ЗАГРУЗКА ФОТО
+    # Создаем фейковый файл в памяти
+    fake_file = (io.BytesIO(b"fake image data"), 'test_image.jpg')
+
+    # Отправляем форму (важно указать content_type='multipart/form-data' для файлов)
+    response_add = auth_client.post(
+        f'/admin/admin/products/{prod_id}/add_photo',
+        data={'photo': fake_file},
+        content_type='multipart/form-data',
+        follow_redirects=True
+    )
+
+    assert response_add.status_code == 200
+    assert 'Фото успешно добавлено!' in response_add.data.decode('utf-8')
+
+    with app.app_context():
+        photo = Photo.query.filter_by(prod_id=prod_id).first()
+        assert photo is not None
+        photo_id = photo.id
+
+    # 2. УДАЛЕНИЕ ФОТО
+    response_del = auth_client.post(f'/admin/admin/photo/delete/{photo_id}', follow_redirects=True)
+    assert response_del.status_code == 200
+
+    with app.app_context():
+        assert db.session.get(Photo, photo_id) is None
 
     

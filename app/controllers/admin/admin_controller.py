@@ -168,7 +168,7 @@ def admin_product(id):
 def admin_delete_photo(photo_id):
     """Удаляет фотографию и соответствующий файл с диска."""
     photo = Photo.query.get_or_404(photo_id)
-    product_id = photo.product_id
+    product_id = photo.prod_id
 
     # 1. Удаляем физический файл с диска
     photo_path = os.path.join(
