@@ -1,5 +1,5 @@
 from app.models.user import User
-from app.models.product import Category, Product, Review, Characteristic, ReadyPC, Photo
+from app.models.product import Category, Product, Review, Characteristic, ReadyPC, Photo, ProductInReadyPC
 from app.models.order import Order
 from app.models.faq import FAQ
 from app import db
@@ -334,4 +334,57 @@ def test_admin_add_and_delete_photo(auth_client, app):
     with app.app_context():
         assert db.session.get(Photo, photo_id) is None
 
-    
+
+def test_admin_edit_readypc(auth_client, app):
+    """Тест: Редактирование состава готовой сборки ПК."""
+    # 1. Отключаем CSRF только для этого теста, чтобы форма точно "пролезла"
+    app.config['WTF_CSRF_ENABLED'] = False
+
+    with app.app_context():
+        admin_user = User.query.filter_by(nickname='test_buyer').first()
+        admin_user.is_admin = True
+
+        # 1. Создаем ВСЕ необходимые категории комплектующих
+        slugs = ['cpu', 'gpu', 'motherboard', 'ram', 'psu', 'cooler', 'storage', 'pc_case']
+        cat_map = {}
+        for s in slugs:
+            c = Category(name=s.upper(), slug=s)
+            db.session.add(c)
+            db.session.flush() # Получаем ID не прерывая транзакцию
+            cat_map[s] = c.id
+
+        # 2. Создаем по одному товару для каждой категории
+        product_ids = {}
+        for s in slugs:
+            p = Product(name=f'Test {s}', price=1000, category_id=cat_map[s], is_active=True)
+            db.session.add(p)
+            db.session.flush()
+            product_ids[s] = str(p.id)
+
+        rpc = ReadyPC(name='Старая сборка', price=50000, category='gaming')
+        db.session.add(rpc)
+        db.session.commit()
+        
+        rpc_id = rpc.id
+        
+    # 3. Отправляем ПОЛНЫЙ набор данных (все поля SelectField)
+    form_data = {
+        'name': 'Обновленная сборка',
+        'price': 60000,
+        'category': 'gaming'
+    }
+    form_data.update(product_ids) # Добавляем cpu, gpu, ram и т.д.
+
+    response = auth_client.post(f'/admin/admin/ready-pc/edit/{rpc_id}', data=form_data, follow_redirects=True)
+
+    assert response.status_code == 200
+
+    with app.app_context():
+        # Делаем refresh, чтобы SQLAlchemy точно подтянула новые данные из БД
+        db.session.expire_all()
+        updated_pc = db.session.get(ReadyPC, rpc_id)
+        assert updated_pc.name == 'Обновленная сборка'
+
+        # Проверяем, что хотя бы процессор привязался
+        component = ProductInReadyPC.query.filter_by(ready_pc_id=rpc_id).first()
+        assert component is not None
