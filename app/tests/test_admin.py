@@ -1,5 +1,5 @@
 from app.models.user import User
-from app.models.product import Category, Product, Review, Characteristic, ReadyPC, Photo, ProductInReadyPC
+from app.models.product import Category, Product, Review, Characteristic, ReadyPC, Photo, ProductInReadyPC, CategoryCharacteristic
 from app.models.order import Order
 from app.models.faq import FAQ
 from app import db
@@ -388,3 +388,34 @@ def test_admin_edit_readypc(auth_client, app):
         # Проверяем, что хотя бы процессор привязался
         component = ProductInReadyPC.query.filter_by(ready_pc_id=rpc_id).first()
         assert component is not None
+
+
+def test_admin_create_category_with_template(auth_client, app):
+    """Тест: Создание категории с шаблоном характеристик."""
+
+    # Отключаем проверку CSRF для этого теста
+    app.config['WTF_CSRF_ENABLED'] = False
+
+    with app.app_context():
+        admin_user = User.query.filter_by(nickname='test_buyer').first()
+        admin_user.is_admin = True
+
+        cat = Category(name='Мониторы', slug='monitors')
+        db.session.add(cat)
+        db.session.commit()
+
+        cat_id = cat.id
+
+    # Отправляем POST запрос на добавление характеристики в шаблон
+    response = auth_client.post(f'/admin/admin/categories/{cat_id}', data={
+        'name': 'Герцовка',
+        'value_type': 'int',
+        'submit': 'Добавить'
+    }, follow_redirects=True)
+
+    assert response.status_code == 200
+
+    with app.app_context():
+        template = CategoryCharacteristic.query.filter_by(category_id=cat.id, name='Герцовка').first()
+        assert template is not None
+        assert template.value_type == 'int'
