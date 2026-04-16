@@ -409,13 +409,13 @@ def test_admin_create_category_with_template(auth_client, app):
     # Отправляем POST запрос на добавление характеристики в шаблон
     response = auth_client.post(f'/admin/admin/categories/{cat_id}', data={
         'name': 'Герцовка',
-        'value_type': 'int',
+        'value_type': 'string',
         'submit': 'Добавить'
     }, follow_redirects=True)
 
     assert response.status_code == 200
 
     with app.app_context():
-        template = CategoryCharacteristic.query.filter_by(category_id=cat.id, name='Герцовка').first()
+        template = CategoryCharacteristic.query.filter_by(category_id=cat_id, name='Герцовка').first()
         assert template is not None
-        assert template.value_type == 'int'
+        assert template.value_type == 'string'

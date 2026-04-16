@@ -1,0 +1,62 @@
+name: Flask Shop CI
+
+# Запускать пайплайн при каждом push в ветку main (или master)
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs: 
+  test:
+    runs-on: ubuntu-latest
+
+    # Поднимаем "соседний" контейнер с Postgres специально для тестов
+    services: 
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: online_shop_db
+        ports:
+          - 5432:5432
+        # Ждем, пока база точно запустится, прежде чем гонять тесты
+        options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+    
+    steps:
+    # 1. Скачиваем твой код из репозитория
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    # 2. Устанавливаем Python 3.12
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    # 3. Устанавливаем системные библиотеки
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y gcc libpq-dev
+    
+    # 4. Устанавливаем пакеты Python
+    - name: Install Python dependencies
+      run : |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+
+    # 5. Запускаем тесты
+    - name: Run Pytest
+      env:
+        # Подкидываем переменные окружения, чтобы Flask нашел тестовую базу
+        SQLALCHEMY_DATABASE_URI: postgresql://postgres:password@db:5432/online_shop_db
+        SECRET_KEY: 'test_secret_for_ci'
+        FLASK_ENV: testing
+      run: |
+        pytest --cov=app
+    
